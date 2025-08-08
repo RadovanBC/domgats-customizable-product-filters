@@ -16,21 +16,27 @@ Main Rules:
 
     Whenever asked to repeat the rules back to me, also read the whole DomGats Filtered Loop Widget Development Plan and all the files listed in it.
 
-Phase 1: Foundation & Cleanup
+    After each step, update the DomGats Filtered Loop Widget Development Plan with the progress.
+
+    After each step, the widget has to be stable and able to run. I will be syncing it to the existing staging environment. If it doesn't work, we put a pause on the Development plan until the issue is resolved, after which you'll also update the DomGats Filtered Loop Widget Development Plan with the progress.
+
+    If I send you the error log, besides putting all your resources to fix it and get the widget back into running state, you are also supposed to ask me at least 5 questions, and for anything that I can send you which will help you solve the issue.
+
+Phase 1: Foundation & Cleanup (Completed)
 
     Consolidate & Remove Legacy Files:
 
-        Remove main.js and main.css: These files are identified as legacy. Their functionalities (AJAX handling, Flickity initialization, general filter UI styling) will be absorbed into filtered-loop-widget.js and filtered-loop-widget.css respectively.
+        Removed main.js and main.css: These files are identified as legacy. Their functionalities (AJAX handling, Flickity initialization, general filter UI styling) will be absorbed into filtered-loop-widget.js and filtered-loop-widget.css respectively.
 
-        Remove DGCPF_Shortcodes.php and filter-ui.php: These files represent the old shortcode-based filter system. Their functionality will be fully replaced by the Elementor widget.
+        Removed DGCPF_Shortcodes.php and filter-ui.php: These files represent the old shortcode-based filter system. Their functionality will be fully replaced by the Elementor widget.
 
     Refine Plugin Asset Enqueueing:
 
-        Update domgats-customizable-product-filters.php: Remove the global enqueueing of flickity-css and flickity-js. The widget's get_script_depends() and get_style_depends() methods in class-filtered-loop-widget.php will be solely responsible for loading these assets when the widget is in use.
+        Updated domgats-customizable-product-filters.php: Removed the global enqueueing of flickity-css and flickity-js. The widget's get_script_depends() and get_style_depends() methods in class-filtered-loop-widget.php will be solely responsible for loading these assets when the widget is in use.
 
     Adjust Composer Autoloader Notice:
 
-        Update domgats-customizable-product-filters.php: Ensure the admin notice for missing Composer autoloader (vendor/autoload.php) is robust. The plugin should stop loading only critical components if the autoloader is absent, but ideally, provide clear instructions and allow non-Composer-dependent parts to function (though for now, the current strict return; on missing autoloader is acceptable, but note for future refinement).
+        Updated domgats-customizable-product-filters.php: Ensured the admin notice for missing Composer autoloader (vendor/autoload.php) is robust. The plugin should stop loading only critical components if the autoloader is absent, but ideally, provide clear instructions and allow non-Composer-dependent parts to function (though for now, the current strict return; on missing autoloader is acceptable, but note for future refinement).
 
 Phase 2: Elementor Widget - Controls (PHP)
 
@@ -40,55 +46,55 @@ Phase 2: Elementor Widget - Controls (PHP)
 
         1.1 Responsive Layout Presets:
 
-            Update _get_layout_presets(): Add two new mobile-appropriate presets:
+            Updated _get_layout_presets(): Added two new mobile-appropriate presets:
 
                 "Single Slide Carousel" (e.g., columns_carousel_mobile = 1, carousel_wrap_around = no).
 
                 "Single Column Grid" (e.g., columns_mobile = 1, enable_load_more = yes).
 
-            Ensure existing presets also define responsive column settings (columns_tablet, columns_mobile, columns_carousel_tablet, columns_carousel_mobile).
+            Ensured existing presets also define responsive column settings (columns_tablet, columns_mobile, columns_carousel_tablet, columns_carousel_mobile).
 
             Implement layout_preset application: Add JavaScript in filtered-loop-widget.js to apply selected preset settings to the Elementor controls when a preset is chosen.
 
         1.2 Initial Items Loaded:
 
-            Add a new posts_per_page_initial control to specify the number of items loaded on the first page, distinct from posts_per_page used for "Load More".
+            Added a new posts_per_page_initial control to specify the number of items loaded on the first page, distinct from posts_per_page used for "Load More".
 
         1.3 Responsive Equal Heights Columns:
 
-            Add a responsive control for equal_height_columns (similar to Elementor Pro's Base_Carousel_Trait equal_height_custom_settings) that applies different settings per breakpoint.
+            Added a responsive control for equal_height_columns (similar to Elementor Pro's Base_Carousel_Trait equal_height_custom_settings) that applies different settings per breakpoint.
 
         1.4 Separate Horizontal and Vertical Gap:
 
-            Modify the existing gap control. Instead of a single slider, create two responsive slider controls: horizontal_gap and vertical_gap.
+            Modified the existing gap control. Instead of a single slider, created two responsive slider controls: horizontal_gap and vertical_gap.
 
-            Update selectors to apply column-gap and row-gap for grid, and appropriate padding/margin for carousel.
+            Updated selectors to apply column-gap and row-gap for grid, and appropriate padding/margin for carousel.
 
         1.5 Fix Columns Control:
 
-            Ensure the columns control correctly applies to the grid layout via CSS selectors.
+            Ensured the columns control correctly applies to the grid layout via CSS selectors.
 
-            Ensure columns_carousel is correctly passed to Flickity initialization in filtered-loop-widget.js for responsive behavior (groupCells option).
+            Ensured columns_carousel is correctly passed to Flickity initialization in filtered-loop-widget.js for responsive behavior (groupCells option).
 
-    Query Tab Overhaul:
+    Query Tab Overhaul (Fix Applied):
 
         2.1 Advanced Select2 Controls:
 
-            Update posts_include_by_ids, posts_exclude_by_ids, terms_include, terms_exclude: Change their type to ElementorPro\Modules\QueryControl\Controls\Query (or similar Elementor-native select2 control for IDs/Terms if available) to provide a more robust and user-friendly search and selection interface. This will involve fetching suggestions via AJAX in the editor.
+            Updated posts_include_by_ids, posts_exclude_by_ids, terms_include, terms_exclude: Changed their type to Query::CONTROL_ID (using the imported Query class) to provide a more robust and user-friendly search and selection interface. This will involve fetching suggestions via AJAX in the editor.
 
-            Add Taxonomy Select2 Fields: Include separate select2 controls for specific product_categories and product_tags allowing multiple selections.
+            Add Taxonomy Select2 Fields: Included separate select2 controls for specific product_categories and product_tags allowing multiple selections.
 
             Implementation Note: For initial implementation, we will leverage Elementor Pro's existing REST API endpoints for querying posts/terms, as this is likely faster to integrate. Future optimization phases can explore custom AJAX endpoints if performance gains are significant.
 
         2.2 ACF Field Integration for Query:
 
-            Enhance the query section to allow adding ACF meta queries directly. This might require a repeater within the Query tab for multiple ACF conditions, or dedicated controls for common meta query types (e.g., text, number range, true/false).
+            Enhanced the query section to allow adding ACF meta queries directly. This might require a repeater within the Query tab for multiple ACF conditions, or dedicated controls for common meta query types (e.g., text, number range, true/false).
 
             The existing _get_all_acf_field_keys() will be crucial here.
 
             Implementation Note: For ACF field keys, we will primarily use the field's name (e.g., my_custom_field) as it's more commonly used and human-readable. The code will be robust enough to handle both the field name and its unique key (field_xxxxxxxxxxxxx) if needed.
 
-        2.3 Mimic Loop Grid Query Tab: Restructure this section to closely resemble Elementor Pro's Loop Grid Query tab for familiar user experience, while providing the enhanced options mentioned.
+        2.3 Mimic Loop Grid Query Tab: Restructured this section to closely resemble Elementor Pro's Loop Grid Query tab for familiar user experience, while providing the enhanced options mentioned.
 
     Filters Tab Implementation:
 
@@ -136,9 +142,9 @@ Phase 2: Elementor Widget - Controls (PHP)
 
             PHP (class-filtered-loop-widget.php):
 
-                Add controls for "Prev Arrow Icon" and "Next Arrow Icon" (using Controls_Manager::ICONS for Elementor's icon library) under a new Carousel Navigation Style section.
+                Added controls for "Prev Arrow Icon" and "Next Arrow Icon" (using Controls_Manager::ICONS for Elementor's icon library) under a new Carousel Navigation Style section.
 
-                Add a responsive slides_to_move control (Controls_Manager::NUMBER) for the number of slides moved per arrow click.
+                Added a responsive slides_to_move control (Controls_Manager::NUMBER) for the number of slides moved per arrow click.
 
             JS (filtered-loop-widget.js):
 
@@ -154,7 +160,7 @@ Phase 2: Elementor Widget - Controls (PHP)
 
         4.4 Customizable "Load More" Text:
 
-            Add controls for customizing the "Load More" button text and an optional text when no more items are available (e.g., "No More Products").
+            Added controls for customizing the "Load More" button text and an optional text when no more items are available (e.g., "No More Products").
 
 Phase 3: AJAX & JavaScript Integration
 
@@ -394,3 +400,18 @@ elementor-pro/
 │       └── document-handle.js (from loop.da94e53412e56933f721.bundle.js)
 └── (other Elementor Pro files and directories)
 
+Questions to Help Resolve the Issue:
+
+To further diagnose and ensure stability, please provide the following information:
+
+    Elementor Pro Version: What exact version of Elementor Pro is installed on your staging environment? (e.g., 3.24.0, 3.30.0, etc.)
+
+    WordPress Version: What is the WordPress version on your staging environment?
+
+    PHP Version: What PHP version is your server running? (e.g., PHP 8.0, 8.1, 8.2, etc.)
+
+    Plugin Conflict Check: Have you tried deactivating other plugins (especially other Elementor add-ons or query-related plugins) to see if the issue persists? If so, which plugins did you test?
+
+    Full Stack Trace: The error log snippet you provided is truncated ("Stack trace: #0 ... #1 ... #2 ... #3 ... Elementor\Widget_Base->init_contro" while reading response header). Could you provide the full, un-truncated stack trace for one of these fatal errors? This is crucial for understanding the complete call stack leading to the error.
+
+    Elementor System Info: If you can access the WordPress admin, navigate to Elementor > System Info and copy/paste the entire report. This provides a wealth of information about your environment, active plugins, and Elementor configuration.
