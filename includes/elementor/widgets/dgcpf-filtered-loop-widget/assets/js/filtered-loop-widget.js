@@ -1,5 +1,5 @@
 /*
- * START: DomGats Filtered Loop Elementor Widget Frontend Handler
+ * START: DomGats Filtered Loop Elementor Widget Frontend Handler v1.3.1
  */
 (function ($, elementor) {
 
@@ -315,9 +315,11 @@
                 let hasOurParams = false;
                 self.$filtersWrapper.find('.dgcpf-filter-group [data-filter-name]').each(function() {
                     const filterName = $(this).data('filter-name');
-                    if (urlParams.has(filterName)) {
-                        hasOurParams = true;
-                        return false; // Break loop
+                    if (filterName) { // Check if filterName exists before trying to use it
+                        if (urlParams.has(filterName)) {
+                            hasOurParams = true;
+                            return false; // Break loop
+                        }
                     }
                 });
 
@@ -476,7 +478,7 @@
                             const $input = $label.find('input');
                             const termSlug = $input.val();
 
-                            if (termSlug === '') { // "All" option for radio
+                            if (termSlug === '' && displayAs === 'radio') { // "All" option for radio
                                 $label.removeClass('disabled');
                                 $input.prop('disabled', false);
                                 return true;
@@ -509,7 +511,7 @@
                     const acfFieldType = $groupInner.data('acf-field-type');
                     const availableAcfOptions = availableFilterOptions[acfFieldKey] || {};
 
-                    if (displayAs === 'dropdown' && (acfFieldType === 'select' || acfFieldType === 'radio' || acfFieldType === 'checkbox')) {
+                    if (displayAs === 'dropdown' && (acfFieldType === 'select' || acfFieldType === 'radio' || acfFieldType === 'checkbox' || acfFieldType === 'true_false')) {
                         $groupInner.find('option').each(function() {
                             const $option = $(this);
                             const value = $option.val();
@@ -681,5 +683,5 @@
     });
 })(jQuery, window.elementor);
 /*
- * END: DomGats Filtered Loop Elementor Widget Frontend Handler
+ * END: DomGats Filtered Loop Elementor Widget Frontend Handler v1.3.1
  */
