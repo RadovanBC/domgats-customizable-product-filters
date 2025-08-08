@@ -1,0 +1,218 @@
+DomGats Filtered Loop Widget: Detailed Project Plan
+
+This report outlines the comprehensive plan for developing the "DomGats Filtered Loop" Elementor widget, integrating feedback from our previous discussion and suggestions for a high-quality, performant, and user-friendly product.
+
+1. Project Goals
+
+The overarching goal is to create a powerful, all-in-one Elementor widget that functions as a superior alternative to Elementor Pro's Loop Grid. The new widget, named "DomGats Filtered Loop," will seamlessly integrate live AJAX filtering and carousel functionality, delivering a fast, native-feeling experience.
+
+Key objectives include:
+
+    Seamless Elementor Integration: The widget will use Elementor's UI controls and architecture to feel like a native tool.
+
+
+    Superior Performance: AJAX filtering will eliminate page reloads, and the system will be optimized for fast queries and seamless rendering.
+
+
+    Maximum Customizability: Users will have granular control over layouts, queries, and styling, with deep ACF integration.
+
+
+    Leverage Existing Assets: The widget will utilize Elementor's Loop Item templates for card design, allowing for visual editing.
+
+2. Features & Capabilities
+
+The "DomGats Filtered Loop" widget will have the following controls in the Elementor editor:
+
+Content Tab:
+
+    Layout:
+
+
+        Template Source: A dropdown to select any existing Elementor Loop Item template.
+
+
+        Render As: A responsive control to switch between a Grid or Carousel layout for Desktop, Tablet, and Mobile.
+
+
+        Grid/Carousel Columns & Gap: Responsive controls for the number of columns and spacing between items.
+
+
+    Query:
+
+
+        Query Control: A custom query builder that provides all standard options (Posts, Products, Pages, etc.). It will also include
+
+Include/Exclude controls for terms and individual posts, as well as support for ACF meta queries. The widget will implement its own robust query system that does not rely on Elementor's native query, providing greater flexibility.
+
+Filters:
+
+    Repeater Control: A control to create multiple filters.
+
+
+    Filter By: A dropdown to select the filter type (e.g., Taxonomy, Custom Field). This dropdown will be dynamic and populate with available ACF field keys if Custom Field is selected.
+
+
+    Taxonomy: A dropdown to select the specific taxonomy (e.g., Product Category, Product Tag).
+
+
+        Display As: A dropdown to select the UI element (Dropdown, Checkboxes, Radio Buttons).
+
+
+        Filter Logic: A global option to set the relationship between all active filters as AND or OR. The system will also be capable of handling more complex combinations of AND/OR logic.
+
+
+    Carousel & Load More Options:
+
+
+        A dedicated section to configure carousel behavior, including enabling/disabling "Load More" functionality.
+
+
+        An option to load all matching items at once or load a specific number of items for the carousel.
+
+Style Tab:
+
+    Filter Bar: Comprehensive styling options for all filter elements, including labels, dropdowns, and buttons, with controls for typography, colors, borders, and spacing. This will include styling for hover, active, and disabled states for all buttons and filters.
+
+
+    Grid/Carousel: Controls for the columns, gap, and other responsive settings, aligning with Elementor's global styling options.
+
+
+    Active Filters: Styling for the tags that appear when a filter is selected.
+
+
+    Pagination: Styling for the "Load More" button.
+
+3. Technologies & Conventions
+
+   Plugin Structure: The widget will be developed as a dedicated Elementor Add-on within the existing plugin directory structure (/includes/elementor/).
+
+   PHP: A new PHP class will extend \Elementor\Widget_Base to define the widget's controls and initial rendering logic. The existing DGCPF_Ajax class will be refactored to handle the new, more complex query and filter data.
+
+   JavaScript: The existing main.js will be rewritten as a proper Elementor Frontend Handler, managing state, AJAX calls, and client-side rendering without page reloads.
+
+   CSS: A dedicated CSS file for the widget's base styles will be loaded only when the widget is in use, leveraging Elementor's built-in styling options where possible.
+
+4. Refinements & Enhancements
+
+The following suggestions will be implemented to create a truly exceptional product:
+
+    Dynamic Filter Counts: The UI will display the number of products matching each filter option in real-time.
+
+
+    Filter Dependencies: The system will enable filter dependencies, allowing the available options in one filter (e.g., tags) to dynamically update based on the selection in another (e.g., categories).
+
+
+    Micro-interactions: A micro-interaction will be added to provide visual feedback during AJAX calls, such as a subtle animation on the filter buttons. A progress bar will also be considered to show slider movement.
+
+
+    History API Integration: A toggleable option will allow the URL to update with filter parameters, enabling sharing and browser navigation.
+
+
+    Advanced Performance:
+
+
+        Images will be dynamically scaled based on screen size.
+
+
+        The next set of slides will be preloaded for seamless carousel transitions.
+
+
+        The DGCPF_Shortcodes.php class already uses transients to cache tag queries, which is a good performance practice.
+
+
+    Accessibility: The widget will be built with accessibility in mind, including keyboard navigation, swiping support for carousels, and proper ARIA labels.
+
+
+    Third-Party Plugin Compatibility: The widget will be designed to be compatible with other major WordPress and WooCommerce plugins, including but not limited to:
+
+
+        Advanced Custom Fields (ACF).
+
+
+        WooCommerce Subscriptions.
+
+
+        WooCommerce Product Add-ons.
+
+
+
+        Official WooCommerce Addons generally
+
+
+        WPML (for multilingual sites).
+
+
+        Polylang (for multilingual sites).
+
+
+        Yoast SEO.
+
+
+        Rank Math SEO.
+
+
+        Elementor Pro (for its templates and other widgets).
+
+
+        Slider Revolution.
+
+
+        The Events Calendar.
+
+
+        Gravity Forms.
+
+
+    User Interface: The filter UI will be highly customizable for all screen sizes, allowing the user to select the number of columns and the layout for desktop, tablet, and mobile. Elementor's condition property will be used to create a clean, intuitive editor experience. All controls will include clear descriptions and tooltips.
+
+
+    Global vs. Widget Settings: The widget will have its own granular settings while also respecting Elementor's global styling options.
+
+5. Development Plan: Step-by-Step
+
+Phase 1: Foundation & Widget Registration
+
+    Create the necessary file structure for the Elementor add-on.
+
+
+    Create a new file to register the "DomGats Widgets" category and the "Filtered Loop" widget.
+
+
+    Build the basic widget class, extending \Elementor\Widget_Base, to define the widget's name, title, and icon.
+
+Phase 2: Building the Controls
+
+4.  Implement the \_register_controls() method in the widget's PHP class.
+
+5.  Add the Layout controls (Template selector, responsive Grid/Carousel toggle).
+
+6.  Build the custom Query Control for the Content tab.
+
+7.  Create the Filter Repeater control for users to build their filter bar.
+
+Phase 3: Initial Render
+
+8.  Implement the render() method in PHP, which will use the user-defined query to render the initial set of products using Elementor\Plugin::instance()->frontend->get_builder_content_for_display().
+
+9.  Output the initial filter UI based on the settings from the Filter Repeater.
+
+Phase 4: AJAX & JavaScript Integration
+
+10. Refactor the DGCPF_Ajax class to accept and process the new, detailed query and filter settings. It will also use Elementor's should_print_css filter to prevent inline CSS from being printed during AJAX requests.
+
+11. Rewrite main.js as an Elementor JavaScript Handler that attaches to the widget instance.
+
+12. The JavaScript will manage filter interactions, send data to the updated AJAX endpoint, and dynamically replace the rendered HTML in the grid or carousel.
+
+13. Implement client-side logic to ensure a fast, seamless update with no page reload.
+
+14. Integrate the History API functionality as a toggleable option.
+
+Phase 5: Styling & Polish
+
+15. Add comprehensive controls to the Style Tab for the filter bar, grid, and pagination.
+
+16. Write the necessary CSS, leveraging Elementor's CSS variables, to support these styling options.
+
+17. Thoroughly test for performance, responsiveness, cross-browser compatibility, and accessibility.
+

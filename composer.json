@@ -1,0 +1,24 @@
+{
+    "name": "domgats/customizable-product-filters",
+    "description": "A custom product filter for WooCommerce and more to come.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "DomGats\\ProductFilter\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Radovan Gataric"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "php-stubs/wordpress-stubs": "^6.8",
+        "php-stubs/woocommerce-stubs": "^10.0",
+        "php-stubs/acf-pro-stubs": "^6.4",
+        "arifpavel/elementor-stubs": "^3.1",
+        "php-stubs/wp-cli-stubs": "^2.12"
+    }
+}
