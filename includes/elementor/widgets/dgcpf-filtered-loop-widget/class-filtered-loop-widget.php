@@ -8,11 +8,9 @@ use \Elementor\Group_Control_Box_Shadow;
 use \Elementor\Group_Control_Typography;
 use \Elementor\Repeater;
 use \Elementor\Widget_Base;
-use ElementorPro\Modules\QueryControl\Module as QueryControlModule;
-use ElementorPro\Modules\QueryControl\Controls\Query;
 
-// Added: Import QueryControl Module for constants
-
+// No direct 'use' for Query or QueryControlModule here,
+// as we will check for class existence before using them.
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
@@ -279,107 +277,116 @@ class Filtered_Loop_Widget extends Widget_Base {
             ]
         );
 
-        $this->add_control(
-            'posts_include_by_ids',
-            [
-                'label'       => esc_html__( 'Include Posts by ID', 'custom-product-filters' ),
-                // Changed to Query Control for Select2 functionality
-                'type'        => Query::CONTROL_ID, // Fixed: Using imported Query class
-                'label_block' => true,
-                'multiple'    => true,
-                'autocomplete' => [
-                    'object' => QueryControlModule::QUERY_OBJECT_POST,
-                    'query'  => [ 'post_type' => 'any' ], // Will be dynamically updated by JS if needed
-                ],
-                'description' => esc_html__( 'Select specific posts to include.', 'custom-product-filters' ),
-            ]
-        );
+        // Check if Elementor Pro's Query Control is available before adding these controls
+        if ( class_exists( '\ElementorPro\Modules\QueryControl\Controls\Query' ) && class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
+            $this->add_control(
+                'posts_include_by_ids',
+                [
+                    'label'       => esc_html__( 'Include Posts by ID', 'custom-product-filters' ),
+                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'label_block' => true,
+                    'multiple'    => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_POST,
+                        'query'  => [ 'post_type' => 'any' ], // Will be dynamically updated by JS if needed
+                    ],
+                    'description' => esc_html__( 'Select specific posts to include.', 'custom-product-filters' ),
+                ]
+            );
 
-        $this->add_control(
-            'posts_exclude_by_ids',
-            [
-                'label'       => esc_html__( 'Exclude Posts by ID', 'custom-product-filters' ),
-                // Changed to Query Control for Select2 functionality
-                'type'        => Query::CONTROL_ID, // Fixed: Using imported Query class
-                'label_block' => true,
-                'multiple'    => true,
-                'autocomplete' => [
-                    'object' => QueryControlModule::QUERY_OBJECT_POST,
-                    'query'  => [ 'post_type' => 'any' ], // Will be dynamically updated by JS if needed
-                ],
-                'description' => esc_html__( 'Select specific posts to exclude.', 'custom-product-filters' ),
-            ]
-        );
+            $this->add_control(
+                'posts_exclude_by_ids',
+                [
+                    'label'       => esc_html__( 'Exclude Posts by ID', 'custom-product-filters' ),
+                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'label_block' => true,
+                    'multiple'    => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_POST,
+                        'query'  => [ 'post_type' => 'any' ], // Will be dynamically updated by JS if needed
+                    ],
+                    'description' => esc_html__( 'Select specific posts to exclude.', 'custom-product-filters' ),
+                ]
+            );
 
-        $this->add_control(
-            'terms_include',
-            [
-                'label'       => esc_html__( 'Include Terms', 'custom-product-filters' ),
-                // Changed to Query Control for Select2 functionality
-                'type'        => Query::CONTROL_ID, // Fixed: Using imported Query class
-                'label_block' => true,
-                'multiple'    => true,
-                'autocomplete' => [
-                    'object' => QueryControlModule::QUERY_OBJECT_TAX,
-                    'query'  => [ 'taxonomy' => 'category' ], // Default, will be dynamically updated
-                ],
-                'description' => esc_html__( 'Select terms (categories, tags, etc.) to include.', 'custom-product-filters' ),
-            ]
-        );
+            $this->add_control(
+                'terms_include',
+                [
+                    'label'       => esc_html__( 'Include Terms', 'custom-product-filters' ),
+                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'label_block' => true,
+                    'multiple'    => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query'  => [ 'taxonomy' => 'category' ], // Default, will be dynamically updated
+                    ],
+                    'description' => esc_html__( 'Select terms (categories, tags, etc.) to include.', 'custom-product-filters' ),
+                ]
+            );
 
-        $this->add_control(
-            'terms_exclude',
-            [
-                'label'       => esc_html__( 'Exclude Terms', 'custom-product-filters' ),
-                // Changed to Query Control for Select2 functionality
-                'type'        => Query::CONTROL_ID, // Fixed: Using imported Query class
-                'label_block' => true,
-                'multiple'    => true,
-                'autocomplete' => [
-                    'object' => QueryControlModule::QUERY_OBJECT_TAX,
-                    'query'  => [ 'taxonomy' => 'category' ], // Default, will be dynamically updated
-                ],
-                'description' => esc_html__( 'Select terms (categories, tags, etc.) to exclude.', 'custom-product-filters' ),
-            ]
-        );
+            $this->add_control(
+                'terms_exclude',
+                [
+                    'label'       => esc_html__( 'Exclude Terms', 'custom-product-filters' ),
+                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'label_block' => true,
+                    'multiple'    => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query'  => [ 'taxonomy' => 'category' ], // Default, will be dynamically updated
+                    ],
+                    'description' => esc_html__( 'Select terms (categories, tags, etc.) to exclude.', 'custom-product-filters' ),
+                ]
+            );
 
-        // New: Separate Select2 for Product Categories
-        $this->add_control(
-            'product_categories_query',
-            [
-                'label'       => esc_html__( 'Product Categories', 'custom-product-filters' ),
-                'type'        => Query::CONTROL_ID, // Fixed: Using imported Query class
-                'label_block' => true,
-                'multiple'    => true,
-                'autocomplete' => [
-                    'object' => QueryControlModule::QUERY_OBJECT_TAX,
-                    'query'  => [ 'taxonomy' => 'product_cat' ],
-                ],
-                'condition' => [
-                    'post_type' => 'product',
-                ],
-                'description' => esc_html__( 'Filter by specific product categories.', 'custom-product-filters' ),
-            ]
-        );
+            // New: Separate Select2 for Product Categories
+            $this->add_control(
+                'product_categories_query',
+                [
+                    'label'       => esc_html__( 'Product Categories', 'custom-product-filters' ),
+                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'label_block' => true,
+                    'multiple'    => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query'  => [ 'taxonomy' => 'product_cat' ],
+                    ],
+                    'condition' => [
+                        'post_type' => 'product',
+                    ],
+                    'description' => esc_html__( 'Filter by specific product categories.', 'custom-product-filters' ),
+                ]
+            );
 
-        // New: Separate Select2 for Product Tags
-        $this->add_control(
-            'product_tags_query',
-            [
-                'label'       => esc_html__( 'Product Tags', 'custom-product-filters' ),
-                'type'        => Query::CONTROL_ID, // Fixed: Using imported Query class
-                'label_block' => true,
-                'multiple'    => true,
-                'autocomplete' => [
-                    'object' => QueryControlModule::QUERY_OBJECT_TAX,
-                    'query'  => [ 'taxonomy' => 'product_tag' ],
-                ],
-                'condition' => [
-                    'post_type' => 'product',
-                ],
-                'description' => esc_html__( 'Filter by specific product tags.', 'custom-product-filters' ),
-            ]
-        );
+            // New: Separate Select2 for Product Tags
+            $this->add_control(
+                'product_tags_query',
+                [
+                    'label'       => esc_html__( 'Product Tags', 'custom-product-filters' ),
+                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'label_block' => true,
+                    'multiple'    => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query'  => [ 'taxonomy' => 'product_tag' ],
+                    ],
+                    'condition' => [
+                        'post_type' => 'product',
+                    ],
+                    'description' => esc_html__( 'Filter by specific product tags.', 'custom-product-filters' ),
+                ]
+            );
+        } else {
+            $this->add_control(
+                'elementor_pro_query_control_notice',
+                [
+                    'type' => Controls_Manager::RAW_HTML,
+                    'raw' => esc_html__( 'Elementor Pro\'s Query Control is not active or loaded. Advanced query options are unavailable. Please ensure Elementor Pro is installed and active.', 'custom-product-filters' ),
+                    'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
+                ]
+            );
+        }
+
 
         // New: ACF Meta Query Repeater
         $acf_repeater = new Repeater();
