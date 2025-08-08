@@ -7,10 +7,9 @@ use \Elementor\Group_Control_Border;
 use \Elementor\Group_Control_Box_Shadow;
 use \Elementor\Group_Control_Typography;
 use \Elementor\Repeater;
-use \Elementor\Widget_Base;
 
 // No direct 'use' for Query or QueryControlModule here,
-// as we will check for class existence before using them.
+// as we will check for class/constant existence before using them.
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
@@ -66,6 +65,34 @@ class Filtered_Loop_Widget extends Widget_Base {
             'dgcpf-filtered-loop-widget-css', // Our new CSS file
             'flickity-css', // Flickity CSS, if not already enqueued globally
         ];
+    }
+
+    /**
+     * Helper method to safely get Elementor Pro Query Control ID.
+     * Prevents fatal errors if the constant is not yet defined.
+     *
+     * @return string The Query Control ID or a fallback text control ID.
+     */
+    private function _get_query_control_type() {
+        // Check if the class and its constant are defined before attempting to use.
+        if ( defined( '\ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID' ) ) {
+            return \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID;
+        }
+        // Fallback to a standard text control if Elementor Pro Query Control is not fully loaded.
+        // This prevents fatal errors and allows the editor to load, though functionality will be limited.
+        return Controls_Manager::TEXT;
+    }
+
+    /**
+     * Helper method to safely get Elementor Pro Query Control Module for autocomplete objects.
+     *
+     * @return string The QueryControl Module class name or empty string.
+     */
+    private function _get_query_control_module_class() {
+        if ( class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
+            return \ElementorPro\Modules\QueryControl\Module::class;
+        }
+        return '';
     }
 
     /**
@@ -278,16 +305,19 @@ class Filtered_Loop_Widget extends Widget_Base {
         );
 
         // Check if Elementor Pro's Query Control is available before adding these controls
-        if ( class_exists( '\ElementorPro\Modules\QueryControl\Controls\Query' ) && class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
+        $query_control_type = $this->_get_query_control_type();
+        $query_control_module_class = $this->_get_query_control_module_class();
+
+        if ( $query_control_type !== Controls_Manager::TEXT && ! empty( $query_control_module_class ) ) {
             $this->add_control(
                 'posts_include_by_ids',
                 [
                     'label'       => esc_html__( 'Include Posts by ID', 'custom-product-filters' ),
-                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'type'        => $query_control_type,
                     'label_block' => true,
                     'multiple'    => true,
                     'autocomplete' => [
-                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_POST,
+                        'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_POST',
                         'query'  => [ 'post_type' => 'any' ], // Will be dynamically updated by JS if needed
                     ],
                     'description' => esc_html__( 'Select specific posts to include.', 'custom-product-filters' ),
@@ -298,11 +328,11 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'posts_exclude_by_ids',
                 [
                     'label'       => esc_html__( 'Exclude Posts by ID', 'custom-product-filters' ),
-                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'type'        => $query_control_type,
                     'label_block' => true,
                     'multiple'    => true,
                     'autocomplete' => [
-                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_POST,
+                        'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_POST',
                         'query'  => [ 'post_type' => 'any' ], // Will be dynamically updated by JS if needed
                     ],
                     'description' => esc_html__( 'Select specific posts to exclude.', 'custom-product-filters' ),
@@ -313,11 +343,11 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'terms_include',
                 [
                     'label'       => esc_html__( 'Include Terms', 'custom-product-filters' ),
-                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'type'        => $query_control_type,
                     'label_block' => true,
                     'multiple'    => true,
                     'autocomplete' => [
-                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX',
                         'query'  => [ 'taxonomy' => 'category' ], // Default, will be dynamically updated
                     ],
                     'description' => esc_html__( 'Select terms (categories, tags, etc.) to include.', 'custom-product-filters' ),
@@ -328,11 +358,11 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'terms_exclude',
                 [
                     'label'       => esc_html__( 'Exclude Terms', 'custom-product-filters' ),
-                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'type'        => $query_control_type,
                     'label_block' => true,
                     'multiple'    => true,
                     'autocomplete' => [
-                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX',
                         'query'  => [ 'taxonomy' => 'category' ], // Default, will be dynamically updated
                     ],
                     'description' => esc_html__( 'Select terms (categories, tags, etc.) to exclude.', 'custom-product-filters' ),
@@ -344,11 +374,11 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'product_categories_query',
                 [
                     'label'       => esc_html__( 'Product Categories', 'custom-product-filters' ),
-                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'type'        => $query_control_type,
                     'label_block' => true,
                     'multiple'    => true,
                     'autocomplete' => [
-                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX',
                         'query'  => [ 'taxonomy' => 'product_cat' ],
                     ],
                     'condition' => [
@@ -363,11 +393,11 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'product_tags_query',
                 [
                     'label'       => esc_html__( 'Product Tags', 'custom-product-filters' ),
-                    'type'        => \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID,
+                    'type'        => $query_control_type,
                     'label_block' => true,
                     'multiple'    => true,
                     'autocomplete' => [
-                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX',
                         'query'  => [ 'taxonomy' => 'product_tag' ],
                     ],
                     'condition' => [
@@ -381,7 +411,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'elementor_pro_query_control_notice',
                 [
                     'type' => Controls_Manager::RAW_HTML,
-                    'raw' => esc_html__( 'Elementor Pro\'s Query Control is not active or loaded. Advanced query options are unavailable. Please ensure Elementor Pro is installed and active.', 'custom-product-filters' ),
+                    'raw' => esc_html__( 'Elementor Pro\'s Query Control is not active or fully loaded. Advanced query options are unavailable. Please ensure Elementor Pro is installed and active.', 'custom-product-filters' ),
                     'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
                 ]
             );
