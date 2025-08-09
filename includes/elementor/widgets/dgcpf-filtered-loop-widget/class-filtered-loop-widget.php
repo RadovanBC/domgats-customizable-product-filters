@@ -1469,10 +1469,11 @@ class Filtered_Loop_Widget extends Widget_Base { // Using the imported Widget_Ba
 
     /**
      * Define and retrieve layout presets.
+     * Changed from private to public to be accessible for wp_localize_script.
      *
      * @return array
      */
-    private function _get_layout_presets() {
+    public function _get_layout_presets() {
         return [
             'default_grid' => [
                 'label' => esc_html__( 'Default Grid (3 Columns)', 'custom-product-filters' ),

@@ -4,149 +4,147 @@ This comprehensive plan delineates the structured sequence of tasks essential fo
 
 Main Operational Directives:
 
-    Code Versioning Protocol: Each substantive modification or aggregation of changes shall necessitate the assignment of a new version identifier to the affected files. This systematic approach ensures the establishment of a transparent historical record, allowing for precise tracking of all alterations throughout the development lifecycle. Furthermore, this protocol facilitates the capability to revert to prior stable states, a critical safeguard if unforeseen issues or feature adjustments are deemed necessary. This disciplined approach is indispensable for maintaining project integrity, particularly within collaborative development environments.
+Code Versioning Protocol: Each substantive modification or aggregation of changes shall necessitate the assignment of a new version identifier to the affected files. This systematic approach ensures the establishment of a transparent historical record, allowing for precise tracking of all alterations throughout the development lifecycle. Furthermore, this protocol facilitates the capability to revert to prior stable states, a critical safeguard if unforeseen issues or feature adjustments are deemed necessary. This disciplined approach is indispensable for maintaining project integrity, particularly within collaborative development environments.
 
-    Complete File Transmittal: Upon the alteration of any file, the entirety of the updated file, rather than mere excerpts or partial modifications, shall be transmitted. This stringent requirement is implemented to preclude the occurrence of incomplete deployments, which can lead to unpredictable behavior, runtime errors, or inconsistencies across different environments. By ensuring complete transmittal, the protocol rigorously maintains codebase consistency across all development iterations and deployment stages, thereby minimizing potential integration complications.
+Complete File Transmittal: Upon the alteration of any file, the entirety of the updated file, rather than mere excerpts or partial modifications, shall be transmitted. This stringent requirement is implemented to preclude the occurrence of incomplete deployments, which can lead to unpredictable behavior, runtime errors, or inconsistencies across different environments. By ensuring complete transmittal, the protocol rigorously maintains codebase consistency across all development iterations and deployment stages, thereby minimizing potential integration complications.
 
-    Prohibition of Placeholder Functions: All functional components and logical constructs shall be implemented in their complete and operational form. Should the deferment of a function's implementation become unavoidable due to dependencies or phased development, such instances shall be meticulously documented within a numbered compendium of unimplemented functions, ensuring full transparency regarding development progress.
+Prohibition of Placeholder Functions: All functional components and logical constructs shall be implemented in their complete and operational form. Should the deferment of a function's implementation become unavoidable due to dependencies or phased development, such instances shall be meticulously documented within a numbered compendium of unimplemented functions, ensuring full transparency regarding development progress.
 
-    Documentation of Deferred Implementations: In scenarios where a comment must temporarily substitute for a fully functional component, a numbered list detailing all such instances shall be consistently provided at the conclusion of each subsequent communication. This list will adhere to the format: "1. //comment -> function() -> file it needs to be made in," thereby maintaining a clear and actionable backlog of pending work.
+Documentation of Deferred Implementations: In scenarios where a comment must temporarily substitute for a fully functional component, a numbered list detailing all such instances shall be consistently provided at the conclusion of each subsequent communication. This list will adhere to the format: "1. //comment -> function() -> file it needs to be made in," thereby maintaining a clear and actionable backlog of pending work.
 
-    Adherence to Directives: When a request for the reiteration of these operational directives is issued, all aforementioned rules shall be restated in their entirety. This practice reinforces unwavering commitment to the established developmental and communication protocols, ensuring that all parties involved operate under a consistent and understood framework. Consistent adherence to these directives is fundamental for the successful and predictable progression of the project.
+Adherence to Directives: When a request for the reiteration of these operational directives is issued, all aforementioned rules shall be restated in their entirety. This practice reinforces unwavering commitment to the established developmental and communication protocols, ensuring that all parties involved operate under a consistent and understood framework. Consistent adherence to these directives is fundamental for the successful and predictable progression of the project.
 
-    Comprehensive Contextual Review: Any directive to reiterate these rules shall concurrently obligate a thorough review of the entire "DomGats Filtered Loop Widget Development Plan" and all associated files enumerated within it. This ensures a holistic understanding of the project's current status, historical context, and all pertinent technical specifications. Such a comprehensive review is vital for preventing misinterpretations, ensuring alignment on objectives, and fostering a shared understanding of the project's intricate details among all contributors.
+Comprehensive Contextual Review: Any directive to reiterate these rules shall concurrently obligate a thorough review of the entire "DomGats Filtered Loop Widget Development Plan" and all associated files enumerated within it. This ensures a holistic understanding of the project's current status, historical context, and all pertinent technical specifications. Such a comprehensive review is vital for preventing misinterpretations, ensuring alignment on objectives, and fostering a shared understanding of the project's intricate details among all contributors.
 
-    Progressive Documentation of Development: Following the completion of each discrete development step, the "DomGats Filtered Loop Widget Development Plan" shall be updated to reflect the achieved progress. This continuous documentation provides a real-time overview of completed tasks, offering stakeholders immediate insight into the project's advancement. Furthermore, it clearly delineates the immediate subsequent objectives, fostering clarity, accountability, and enabling agile adaptation to evolving requirements.
+Progressive Documentation of Development: Following the completion of each discrete development step, the "DomGats Filtered Loop Widget Development Plan" shall be updated to reflect the achieved progress. This continuous documentation provides a real-time overview of completed tasks, offering stakeholders immediate insight into the project's advancement. Furthermore, it clearly delineates the immediate subsequent objectives, fostering clarity, accountability, and enabling agile adaptation to evolving requirements.
 
-    Mandatory Operational Stability: Subsequent to the conclusion of each development step, the implemented widget must demonstrate full operational stability and functionality. This entails successful deployment to the designated staging environment without introducing regressions or errors. In the event of operational failure or the introduction of regressions, all further developmental activities shall be suspended until the issue is comprehensively resolved. Concurrently, the "DomGats Filtered Loop Widget Development Plan" shall be updated to reflect the status of this critical issue resolution, emphasizing that stability is paramount and takes precedence over feature development.
+Mandatory Operational Stability: Subsequent to the conclusion of each development step, the implemented widget must demonstrate full operational stability and functionality. This entails successful deployment to the designated staging environment without introducing regressions or errors. In the event of operational failure or the introduction of regressions, all further developmental activities shall be suspended until the issue is comprehensively resolved. Concurrently, the "DomGats Filtered Loop Widget Development Plan" shall be updated to reflect the status of this critical issue resolution, emphasizing that stability is paramount and takes precedence over feature development.
 
-    Protocol for Error Log Analysis: Should an error log be provided, the primary imperative shall be to dedicate all available resources to diagnose and rectify the reported issue, thereby restoring the widget to a fully operational state. This rapid response is critical for maintaining project momentum and minimizing downtime. Furthermore, a minimum of five pertinent questions shall be posed to the reporter, along with requests for any supplementary information or resources that could facilitate the efficient resolution of the problem. This systematic approach ensures thorough debugging, encourages collaborative problem-solving, and expedites the return to a stable operational state.
+Protocol for Error Log Analysis: Should an error log be provided, the primary imperative shall be to dedicate all available resources to diagnose and rectify the reported issue, thereby restoring the widget to a fully operational state. This rapid response is critical for maintaining project momentum and minimizing downtime. Furthermore, a minimum of five pertinent questions shall be posed to the reporter, along with requests for any supplementary information or resources that could facilitate the efficient resolution of the problem. This systematic approach ensures thorough debugging, encourages collaborative problem-solving, and expedites the return to a stable operational state.
 
 Phase 1: Foundation & Cleanup (Completed)
 
 This foundational phase was strategically executed to optimize the plugin's architectural integrity through the systematic removal of outdated or redundant components and the judicious optimization of asset loading mechanisms. These actions collectively contribute significantly to a leaner, more efficient, and ultimately more maintainable codebase, laying a solid groundwork for future development.
 
-    Consolidate & Remove Legacy Files:
+Consolidate & Remove Legacy Files:
 
-        Elimination of main.js and main.css: These files, which historically managed general filter logic and styling within non-Elementor contexts, have been entirely superseded. Their functionalities are now comprehensively integrated into the widget-specific filtered-loop-widget.js and filtered-loop-widget.css. This strategic consolidation ensures that JavaScript and CSS resources are loaded exclusively when and where the Elementor widget is actively utilized, thereby substantially reducing superfluous HTTP requests and minimizing page weight across the entire website. This contributes directly to a more streamlined user experience and improved site performance metrics.
+    Elimination of main.js and main.css: These files, which historically managed general filter logic and styling within non-Elementor contexts, have been entirely superseded. Their functionalities are now comprehensively integrated into the widget-specific filtered-loop-widget.js and filtered-loop-widget.css. This strategic consolidation ensures that JavaScript and CSS resources are loaded exclusively when and where the Elementor widget is actively utilized, thereby substantially reducing superfluous HTTP requests and minimizing page weight across the entire website. This contributes directly to a more streamlined user experience and improved site performance metrics.
 
-        Deprecation of DGCPF_Shortcodes.php and filter-ui.php: These files, which constituted the plugin's former shortcode-based filtering system, have been rendered obsolete by the development of the dedicated Elementor widget. Their removal simplifies the plugin's codebase by eliminating redundant functionality, mitigates potential conflicts with newer, more integrated functionalities, and enhances overall code clarity and maintainability by reducing the surface area for bugs and security vulnerabilities.
+    Deprecation of DGCPF_Shortcodes.php and filter-ui.php: These files, which constituted the plugin's former shortcode-based filtering system, have been rendered obsolete by the development of the dedicated Elementor widget. Their removal simplifies the plugin's codebase by eliminating redundant functionality, mitigates potential conflicts with newer, more integrated functionalities, and enhances overall code clarity and maintainability by reducing the surface area for bugs and security vulnerabilities.
 
-    Refine Plugin Asset Enqueueing:
+Refine Plugin Asset Enqueueing:
 
-        Revision of domgats-customizable-product-filters.php: The practice of globally enqueuing flickity-css and flickity-js has been discontinued. This represents a critical performance optimization, particularly for websites where the widget may not be present on every page. Instead, these assets are now conditionally loaded solely when the DomGats Filtered Loop widget is present on a given page. The widget's get_script_depends() and get_style_depends() methods are explicitly tasked with ensuring that Flickity is enqueued precisely when a carousel layout is employed, resulting in demonstrably faster page load times for end-users due to reduced initial payload and a more efficient overall resource utilization profile.
+    Revision of domgats-customizable-product-filters.php: The practice of globally enqueuing flickity-css and flickity-js has been discontinued. This represents a critical performance optimization, particularly for websites where the widget may not be present on every page. Instead, these assets are now conditionally loaded solely when the DomGats Filtered Loop widget is present on a given page. The widget's get_script_depends() and get_style_depends() methods are explicitly tasked with ensuring that Flickity is enqueued precisely when a carousel layout is employed, resulting in demonstrably faster page load times for end-users due to reduced initial payload and a more efficient overall resource utilization profile.
 
-    Adjust Composer Autoloader Notice:
+Adjust Composer Autoloader Notice:
 
-        Modification of domgats-customizable-product-filters.php: The Composer autoloader verification process has been refined. While the current strict return; statement upon the absence of vendor/autoload.php effectively prevents fatal errors stemming from undefined classes, future enhancements could explore a more nuanced approach. This might involve implementing a graceful degradation mechanism that permits non-Composer-dependent functionalities of the plugin to operate, while simultaneously providing clear and persistent administrative notifications regarding the Composer dependency. This approach underscores the pivotal role of Composer in managing PHP dependencies within contemporary plugin development paradigms, ensuring that critical components are available without completely disabling the plugin if optional dependencies are missing.
+    Modification of domgats-customizable-product-filters.php: The Composer autoloader verification process has been refined. While the current strict return; statement upon the absence of vendor/autoload.php effectively prevents fatal errors stemming from undefined classes, future enhancements could explore a more nuanced approach. This might involve implementing a graceful degradation mechanism that permits non-Composer-dependent functionalities of the plugin to operate, while simultaneously providing clear and persistent administrative notifications regarding the Composer dependency. This approach underscores the pivotal role of Composer in managing PHP dependencies within contemporary plugin development paradigms, ensuring that critical components are available without completely disabling the plugin if optional dependencies are missing.
 
-Phase 2: Elementor Widget - Controls (PHP) (Fix Applied, Continuing with Enhancements)
+Phase 2: Elementor Widget - Controls (PHP) (Continuing with Enhancements)
 
 This pivotal phase is exclusively dedicated to the meticulous construction of the robust control panel for the "DomGats Filtered Loop" widget within the Elementor editor interface. This endeavor is designed to empower users with extensive customization capabilities, ensuring granular control over the widget's appearance and behavior, thereby providing a highly flexible and intuitive design experience.
 
 (All modifications are confined to class-filtered-loop-widget.php unless explicitly stated otherwise)
 
-    Layout Tab Enhancements:
+Layout Tab Enhancements (Completed):
 
-        1.1 Responsive Layout Presets:
+    1.1 Responsive Layout Presets (Completed):
 
-            Refinement of _get_layout_presets(): This method has been augmented with the inclusion of two new mobile-optimized presets: "Single Slide Carousel" and "Single Column Grid." These additions provide designers with readily available configurations specifically tailored for smaller screen dimensions, thereby facilitating the rapid application of responsive designs without the need for laborious manual adjustments. For instance, a single-column grid preset can ensure optimal readability on mobile phones, while a single-slide carousel can provide a focused content presentation. Furthermore, all existing presets have undergone comprehensive updates to incorporate responsive column settings (columns_tablet, columns_mobile, columns_carousel_tablet, columns_carousel_mobile). This ensures that a singular preset selection can effectively configure the layout across the entire spectrum of device breakpoints, from desktop to mobile, significantly reducing repetitive manual configuration.
+        Refinement of _get_layout_presets(): This method has been augmented with the inclusion of two new mobile-optimized presets: "Single Slide Carousel" and "Single Column Grid." These additions provide designers with readily available configurations specifically tailored for smaller screen dimensions, thereby facilitating the rapid application of responsive designs without the need for laborious manual adjustments. For instance, a single-column grid preset can ensure optimal readability on mobile phones, while a single-slide carousel can provide a focused content presentation. Furthermore, all existing presets have undergone comprehensive updates to incorporate responsive column settings (columns_tablet, columns_mobile, columns_carousel_tablet, columns_carousel_mobile). This ensures that a singular preset selection can effectively configure the layout across the entire spectrum of device breakpoints, from desktop to mobile, significantly reducing repetitive manual configuration.
 
-            Implementation of layout_preset application: The underlying JavaScript logic within filtered-loop-widget.js is slated for development to dynamically apply the settings of the chosen preset to the corresponding Elementor controls within the editor. This functionality is crucial for providing immediate visual feedback to the user, allowing them to instantly preview the impact of a preset selection, and for significantly streamlining the overall design workflow by automating multiple control adjustments simultaneously.
+        Implementation of layout_preset application (Completed): A new editor-specific JavaScript file, `assets/js/filtered-loop-widget-editor.js`, has been created and enqueued. This script listens for changes to the `layout_preset` control and dynamically applies the chosen preset's settings to the corresponding Elementor controls within the editor. This provides immediate visual feedback and significantly streamlines the design workflow.
 
-        1.2 Initial Items Loaded:
+    1.2 Initial Items Loaded (Completed):
 
-            A new control, posts_per_page_initial, has been introduced. This distinct setting empowers users to precisely define the number of items displayed on the initial page load, operating independently from the posts_per_page setting, which now exclusively governs items loaded via subsequent "Load More" actions. This granular control is of paramount importance for optimizing the perceived performance of the initial page render, as loading an excessive number of items upfront can negatively impact page load times and user engagement. It allows for a balance between immediate content availability and overall page speed.
+        A new control, posts_per_page_initial, has been introduced. This distinct setting empowers users to precisely define the number of items displayed on the initial page load, operating independently from the posts_per_page setting, which now exclusively governs items loaded via subsequent "Load More" actions. This granular control is of paramount importance for optimizing the perceived performance of the initial page render.
 
-        1.3 Responsive Equal Heights Columns:
+    1.3 Responsive Equal Heights Columns (Completed):
 
-            A responsive SWITCHER control for equal_height_columns has been incorporated. This feature is instrumental in ensuring visual consistency across the displayed content by enforcing uniform heights for all loop items, whether rendered in a grid or a carousel format. This prevents the occurrence of visually disruptive uneven layouts, which can detract from a polished and professional aesthetic, particularly when content items have varying lengths. The responsive nature of this control allows designers the flexibility to activate or deactivate this feature on a per-breakpoint basis, adapting to diverse design requirements and ensuring optimal presentation across all devices.
+        A responsive SWITCHER control for equal_height_columns has been incorporated. This feature is instrumental in ensuring visual consistency across the displayed content by enforcing uniform heights for all loop items, whether rendered in a grid or a carousel format. The responsive nature of this control allows designers the flexibility to activate or deactivate this feature on a per-breakpoint basis.
 
-        1.4 Separate Horizontal and Vertical Gap:
+    1.4 Separate Horizontal and Vertical Gap (Completed):
 
-            The monolithic gap control has been replaced with independent horizontal_gap and vertical_gap responsive slider controls. This architectural refinement provides designers with significantly finer control over the spacing between elements in both grid and carousel layouts. For instance, a designer may now specify a greater vertical separation between rows in a grid to improve readability, compared to a tighter horizontal spacing between columns for a more compact design. This granular control over spatial relationships allows for highly customized and aesthetically pleasing layouts.
+        The monolithic gap control has been replaced with independent horizontal_gap and vertical_gap responsive slider controls. This architectural refinement provides designers with significantly finer control over the spacing between elements in both grid and carousel layouts. The associated CSS selectors have been meticulously updated to correctly apply these settings.
 
-            The associated CSS selectors have been meticulously updated to correctly apply column-gap and row-gap properties for grid layouts, and appropriate padding or margin values for carousel items. This ensures an accurate and consistent visual representation of these precise spacing settings across all display configurations, from desktop monitors to mobile screens.
+    1.5 Column Control Refinement (Completed):
 
-        1.5 Column Control Refinement:
+        The columns and columns_carousel controls have been re-labeled with more descriptive terminology to enhance clarity for the user, differentiating between grid and carousel column settings. Critically, the columns_carousel control has been explicitly marked as frontend_available, ensuring that its configured values are correctly transmitted to the frontend JavaScript.
 
-            The columns and columns_carousel controls have been re-labeled with more descriptive terminology to enhance clarity for the user, differentiating between grid and carousel column settings. Critically, the columns_carousel control has been explicitly marked as frontend_available, ensuring that its configured values are correctly transmitted to the frontend JavaScript. These values are subsequently passed via data-columns-desktop, data-columns-tablet, and data-columns-mobile attributes to the loop_container element. This mechanism enables filtered-loop-widget.js to dynamically configure Flickity's groupCells option, thereby guaranteeing that the carousel accurately displays the specified number of columns responsively, adapting seamlessly to the user's device viewport and ensuring an optimal viewing experience.
+Query Tab Overhaul (Fix Applied, Continuing):
 
-    Query Tab Overhaul (Fix Applied):
+    2.1 Advanced Select2 Controls:
 
-        2.1 Advanced Select2 Controls:
+        Updated posts_include_by_ids, posts_exclude_by_ids, terms_include, terms_exclude: These controls have been upgraded to leverage Elementor Pro's Query::CONTROL_ID type. This transformation elevates basic text input fields into sophisticated Select2 fields, offering advanced functionalities such as live search capabilities, multi-item selection, and a substantially improved user experience by minimizing manual data entry errors and enhancing data integrity. Users can now intuitively search for and select specific posts or terms from a large database, rather than manually entering IDs.
 
-            Updated posts_include_by_ids, posts_exclude_by_ids, terms_include, terms_exclude: These controls have been upgraded to leverage Elementor Pro's Query::CONTROL_ID type. This transformation elevates basic text input fields into sophisticated Select2 fields, offering advanced functionalities such as live search capabilities, multi-item selection, and a substantially improved user experience by minimizing manual data entry errors and enhancing data integrity. Users can now intuitively search for and select specific posts or terms from a large database, rather than manually entering IDs.
+        Conditional Registration for Elementor Pro Query Controls: To proactively mitigate the recurring "Undefined constant" fatal error, the instantiation of these Elementor Pro Query controls is now conditionally executed. This is achieved by wrapping their inclusion with defined( '\ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID' ) and class_exists( '\ElementorPro\Modules\QueryControl\Module' ). This robust defensive programming strategy ensures that these controls are registered exclusively if Elementor Pro's Query Control module is fully loaded and its requisite constants are available. This approach is designed to prevent critical runtime crashes, allowing the Elementor editor to load gracefully, even if the advanced query functionalities are temporarily unavailable due to plugin loading order or other environmental factors. A warning message is displayed to inform the user about the unavailability of these features.
 
-            Conditional Registration for Elementor Pro Query Controls: To proactively mitigate the recurring "Undefined constant" fatal error, the instantiation of these Elementor Pro Query controls is now conditionally executed. This is achieved by wrapping their inclusion with defined( '\ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID' ) and class_exists( '\ElementorPro\Modules\QueryControl\Module' ). This robust defensive programming strategy ensures that these controls are registered exclusively if Elementor Pro's Query Control module is fully loaded and its requisite constants are available. This approach is designed to prevent critical runtime crashes, allowing the Elementor editor to load gracefully, even if the advanced query functionalities are temporarily unavailable due to plugin loading order or other environmental factors. A warning message is displayed to inform the user about the unavailability of these features.
+        Integration of Dedicated Taxonomy Select2 Fields: Separate select2 controls (product_categories_query and product_tags_query) have been incorporated. These controls are specifically designed for direct and intuitive filtering by product categories and tags, respectively, offering a streamlined interface for WooCommerce users. This allows for precise targeting of product-specific content.
 
-            Integration of Dedicated Taxonomy Select2 Fields: Separate select2 controls (product_categories_query and product_tags_query) have been incorporated. These controls are specifically designed for direct and intuitive filtering by product categories and tags, respectively, offering a streamlined interface for WooCommerce users. This allows for precise targeting of product-specific content.
+        Implementation Strategy Note: For the initial implementation phase, the strategy involves leveraging Elementor Pro's existing REST API endpoints for fetching autocomplete suggestions for these Select2 fields. This approach is prioritized for its expedited integration and inherent consistency with Elementor's native functionalities, reducing the need for custom API development. Subsequent optimization phases may entail the exploration of custom AJAX endpoints if demonstrable performance enhancements can be achieved through such a tailored approach, particularly for very large datasets.
 
-            Implementation Strategy Note: For the initial implementation phase, the strategy involves leveraging Elementor Pro's existing REST API endpoints for fetching autocomplete suggestions for these Select2 fields. This approach is prioritized for its expedited integration and inherent consistency with Elementor's native functionalities, reducing the need for custom API development. Subsequent optimization phases may entail the exploration of custom AJAX endpoints if demonstrable performance enhancements can be achieved through such a tailored approach, particularly for very large datasets.
+    2.2 ACF Field Integration for Query:
 
-        2.2 ACF Field Integration for Query:
+        The query section has been significantly enhanced through the introduction of a new Repeater control, acf_meta_query_repeater. This innovative feature grants users unparalleled flexibility in constructing complex ACF meta queries directly within the widget's interface. This empowers advanced users to precisely filter content based on custom field values, addressing highly specific content display requirements that go beyond standard post or taxonomy queries. Each instance within this repeater control will encompass fields for acf_meta_key (representing the ACF field's programmatic name), acf_meta_value (the value to be queried against the custom field), and acf_meta_compare (the comparison operator, such as =, LIKE, BETWEEN, etc.).
 
-            The query section has been significantly enhanced through the introduction of a new Repeater control, acf_meta_query_repeater. This innovative feature grants users unparalleled flexibility in constructing complex ACF meta queries directly within the widget's interface. This empowers advanced users to precisely filter content based on custom field values, addressing highly specific content display requirements that go beyond standard post or taxonomy queries. Each instance within this repeater control will encompass fields for acf_meta_key (representing the ACF field's programmatic name), acf_meta_value (the value to be queried against the custom field), and acf_meta_compare (the comparison operator, such as =, LIKE, BETWEEN, etc.).
+        Implementation Strategy Note: For the resolution of ACF field keys, the system will primarily utilize the field's name (e.g., my_custom_field), as this is the most commonly recognized and human-readable identifier for users. The underlying code will be engineered with robust error handling, incorporating a fallback mechanism to attempt resolution via the unique field_xxxxxxxxxxxxx key if the field name does not yield a direct match, ensuring a high degree of reliability. The implementation will meticulously account for the nuances of various ACF field types (e.g., text, number, select, checkbox, true/false) and their respective data storage formats (e.g., serialized arrays for checkbox fields), ensuring that accurate meta_query arguments are generated for precise data retrieval from the WordPress database.
 
-            Implementation Strategy Note: For the resolution of ACF field keys, the system will primarily utilize the field's name (e.g., my_custom_field), as this is the most commonly recognized and human-readable identifier for users. The underlying code will be engineered with robust error handling, incorporating a fallback mechanism to attempt resolution via the unique field_xxxxxxxxxxxxx key if the field name does not yield a direct match, ensuring a high degree of reliability. The implementation will meticulously account for the nuances of various ACF field types (e.g., text, number, select, checkbox, true/false) and their respective data storage formats (e.g., serialized arrays for checkbox fields), ensuring that accurate meta_query arguments are generated for precise data retrieval from the WordPress database.
+    2.3 Mimicry of Loop Grid Query Tab: This section's structure and naming conventions will be meticulously designed to closely mirror those of Elementor Pro's native Loop Grid Query tab. This deliberate design choice prioritizes user familiarity, as designers accustomed to Elementor Pro's interface will find this widget's query options intuitive and easy to navigate. This significantly reduces the cognitive load associated with learning a new interface, thereby ensuring the widget feels like an intuitive and natural extension of the Elementor ecosystem, enhancing overall usability and adoption.
 
-        2.3 Mimicry of Loop Grid Query Tab: This section's structure and naming conventions will be meticulously designed to closely mirror those of Elementor Pro's native Loop Grid Query tab. This deliberate design choice prioritizes user familiarity, as designers accustomed to Elementor Pro's interface will find this widget's query options intuitive and easy to navigate. This significantly reduces the cognitive load associated with learning a new interface, thereby ensuring the widget feels like an intuitive and natural extension of the Elementor ecosystem, enhancing overall usability and adoption.
+Filters Tab Implementation:
 
-    Filters Tab Implementation:
+    3.1 Frontend Filter Rendering:
 
-        3.1 Frontend Filter Rendering:
+        The render() method within class-filtered-loop-widget.php is explicitly tasked with the dynamic generation of the HTML for each filter element defined within the filters_repeater control. This encompasses the precise rendering of appropriate user interface components, such as dropdown menus, checkboxes, radio buttons, text input fields, and numerical input fields, based on the specified display_as setting for both taxonomies and ACF fields. For instance, a taxonomy filter might render as a series of checkboxes, while an ACF number field might render as a numerical input. Crucially, data-taxonomy and data-acf-field-key attributes are systematically applied to the respective filter group elements, serving as essential hooks for the frontend JavaScript to facilitate interactive state management and dynamic updates, enabling a truly interactive filtering experience.
 
-            The render() method within class-filtered-loop-widget.php is explicitly tasked with the dynamic generation of the HTML for each filter element defined within the filters_repeater control. This encompasses the precise rendering of appropriate user interface components, such as dropdown menus, checkboxes, radio buttons, text input fields, and numerical input fields, based on the specified display_as setting for both taxonomies and ACF fields. For instance, a taxonomy filter might render as a series of checkboxes, while an ACF number field might render as a numerical input. Crucially, data-taxonomy and data-acf-field-key attributes are systematically applied to the respective filter group elements, serving as essential hooks for the frontend JavaScript to facilitate interactive state management and dynamic updates, enabling a truly interactive filtering experience.
+    3.2 Dynamic Filter Count:
 
-        3.2 Dynamic Filter Count:
+        The DGCPF_Ajax.php class will be enhanced to include a sophisticated get_available_filter_options_for_query method. This method is engineered to precisely calculate and return the quantifiable number of products that correspond to each potential filter option (e.g., "Category A (15 products)", "Size M (8 products)"), taking into meticulous account all other currently active filters. This real-time calculation provides immediate and accurate feedback to the user, significantly improving the efficiency of the filtering process by guiding them towards options that will yield results.
 
-            The DGCPF_Ajax.php class will be enhanced to include a sophisticated get_available_filter_options_for_query method. This method is engineered to precisely calculate and return the quantifiable number of products that correspond to each potential filter option (e.g., "Category A (15 products)", "Size M (8 products)"), taking into meticulous account all other currently active filters. This real-time calculation provides immediate and accurate feedback to the user, significantly improving the efficiency of the filtering process by guiding them towards options that will yield results.
+        On the frontend, the filtered-loop-widget.js script will update its updateFilterOptionsState function to dynamically display these computed counts adjacent to each filter option within the user interface, offering invaluable real-time insights into the potential impact of their selections.
 
-            On the frontend, the filtered-loop-widget.js script will update its updateFilterOptionsState function to dynamically display these computed counts adjacent to each filter option within the user interface, offering invaluable real-time insights into the potential impact of their selections.
+    3.3 Disabling Zero-Result Filters:
 
-        3.3 Disabling Zero-Result Filters:
+        Building upon the foundation of dynamic filter counts, filtered-loop-widget.js will extend its updateFilterOptionsState functionality to visually disable (e.g., by applying a disabled CSS class and setting the prop('disabled', true) attribute) any filter options that, if selected, would result in zero matching products. This proactive measure prevents users from inadvertently pursuing "dead ends" in their filtering process, thereby substantially enhancing overall usability and reducing user frustration. It is imperative to note that currently selected filters will retain their enabled state, even if their corresponding product count diminishes to zero, allowing users the flexibility to deselect them as needed.
 
-            Building upon the foundation of dynamic filter counts, filtered-loop-widget.js will extend its updateFilterOptionsState functionality to visually disable (e.g., by applying a disabled CSS class and setting the prop('disabled', true) attribute) any filter options that, if selected, would result in zero matching products. This proactive measure prevents users from inadvertently pursuing "dead ends" in their filtering process, thereby substantially enhancing overall usability and reducing user frustration. It is imperative to note that currently selected filters will retain their enabled state, even if their corresponding product count diminishes to zero, allowing users the flexibility to deselect them as needed.
+    3.4 Filter Dependencies:
 
-        3.4 Filter Dependencies:
+        The get_available_filter_options_for_query method in DGCPF_Ajax.php is inherently designed to accommodate complex filter dependencies. By transmitting the current active query arguments (excluding pagination parameters) to this function, the calculated counts and the availability of options for a given filter will dynamically and accurately reflect the selections made in other interconnected filters (e.g., the selection of "Category A" will automatically constrain the "Tags" filter to display only tags pertinent to products within "Category A"). This creates a highly interactive and intuitively responsive filtering experience, guiding users through complex content structures.
 
-            The get_available_filter_options_for_query method in DGCPF_Ajax.php is inherently designed to accommodate complex filter dependencies. By transmitting the current active query arguments (excluding pagination parameters) to this function, the calculated counts and the availability of options for a given filter will dynamically and accurately reflect the selections made in other interconnected filters (e.g., the selection of "Category A" will automatically constrain the "Tags" filter to display only tags pertinent to products within "Category A"). This creates a highly interactive and intuitively responsive filtering experience, guiding users through complex content structures.
+        Subsequently, filtered-loop-widget.js's updateFilterOptionsState will apply these dynamically updated options to the frontend user interface, ensuring visual synchronization and a seamless user flow.
 
-            Subsequently, filtered-loop-widget.js's updateFilterOptionsState will apply these dynamically updated options to the frontend user interface, ensuring visual synchronization and a seamless user flow.
+    3.5 AJAX Loading Micro-interactions:
 
-        3.5 AJAX Loading Micro-interactions:
+        To furnish immediate and subtle visual feedback during asynchronous JavaScript and XML (AJAX) requests, a series of micro-interactions will be meticulously implemented. Within filtered-loop-widget.css, specific styles will be defined to introduce visual cues, such as a slight opacity alteration or the integration of a diminutive spinner icon, directly onto individual filter buttons or input fields when an AJAX call is actively in progress. This provides a clear, non-intrusive signal to the user that their action has been registered and is being processed, thereby substantially improving the perceived responsiveness of the user interface and mitigating any potential sensation of unresponsiveness during data retrieval.
 
-            To furnish immediate and subtle visual feedback during asynchronous JavaScript and XML (AJAX) requests, a series of micro-interactions will be meticulously implemented. Within filtered-loop-widget.css, specific styles will be defined to introduce visual cues, such as a slight opacity alteration or the integration of a diminutive spinner icon, directly onto individual filter buttons or input fields when an AJAX call is actively in progress. This provides a clear, non-intrusive signal to the user that their action has been registered and is being processed, thereby substantially improving the perceived responsiveness of the user interface and mitigating any potential sensation of unresponsiveness during data retrieval.
+    3.6 ACF Field Display:
 
-        3.6 ACF Field Display:
+        The PHP render() method is meticulously designed to ensure that ACF fields, when configured as filters, are accurately and appropriately rendered on the frontend. It utilizes acf_get_field_object to retrieve comprehensive field details (including, but not limited to, choices for select, radio, and checkbox fields) and subsequently populating the corresponding HTML elements. This rigorous approach guarantees that ACF-based filters, regardless of their designated display type (dropdown, checkbox, radio, text, or number input), function precisely as intended and faithfully reflect the underlying ACF field configuration, providing powerful custom content filtering capabilities.
 
-            The PHP render() method is meticulously designed to ensure that ACF fields, when configured as filters, are accurately and appropriately rendered on the frontend. It utilizes acf_get_field_object to retrieve comprehensive field details (including, but not limited to, choices for select, radio, and checkbox fields) and subsequently populating the corresponding HTML elements. This rigorous approach guarantees that ACF-based filters, regardless of their designated display type (dropdown, checkbox, radio, text, or number input), function precisely as intended and faithfully reflect the underlying ACF field configuration, providing powerful custom content filtering capabilities.
+    3.7 Improve Taxonomy Dropdown Clarity (Completed):
 
-        3.7 Improve Taxonomy Dropdown Clarity (Completed):
+        The _get_all_taxonomies() method in class-filtered-loop-widget.php has been updated to provide more descriptive labels for taxonomies in the Elementor editor dropdown. For each taxonomy, the label will now include the singular name of its associated post type(s) in parentheses (e.g., "Category (Posts)", "Tag (Products)", "Category (Products)"). This enhancement directly addresses the ambiguity previously encountered when multiple taxonomies shared the same basic name but applied to different content types. This improved clarity ensures that users can easily distinguish between taxonomies, thereby significantly improving the precision and confidence during widget configuration.
 
-            The _get_all_taxonomies() method in class-filtered-loop-widget.php has been updated to provide more descriptive labels for taxonomies in the Elementor editor dropdown. For each taxonomy, the label will now include the singular name of its associated post type(s) in parentheses (e.g., "Category (Posts)", "Tag (Products)", "Category (Products)"). This enhancement directly addresses the ambiguity previously encountered when multiple taxonomies shared the same basic name but applied to different content types. This improved clarity ensures that users can easily distinguish between taxonomies, thereby significantly improving the precision and confidence during widget configuration.
+Pagination & Carousel Enhancements:
 
-    Pagination & Carousel Enhancements:
+    4.1 History API Integration:
 
-        4.1 History API Integration:
+        The updateUrl and onPopState functions, already present within filtered-loop-widget.js, are designed to seamlessly integrate with the browser's History API. This sophisticated integration ensures that as users interact with and apply filters, the browser's URL dynamically updates to reflect the active filter parameters (e.g., ?dgcpf_tax_category=slug1,slug2&dgcpf_acf_color=red). This functionality confers several significant advantages: it enables users to bookmark specific filtered results for future reference, facilitates the effortless sharing of tailored content views with other individuals, and permits the utilization of the browser's native back/forward navigation buttons to traverse through various filter states. Collectively, these benefits substantially enhance the overall user experience and can contribute positively to search engine optimization (SEO) efforts by creating unique, indexable URLs for filtered content. The widget is configured to automatically apply these filters upon page load if their parameters are detected within the URL.
 
-            The updateUrl and onPopState functions, already present within filtered-loop-widget.js, are designed to seamlessly integrate with the browser's History API. This sophisticated integration ensures that as users interact with and apply filters, the browser's URL dynamically updates to reflect the active filter parameters (e.g., ?dgcpf_tax_category=slug1,slug2&dgcpf_acf_color=red). This functionality confers several significant advantages: it enables users to bookmark specific filtered results for future reference, facilitates the effortless sharing of tailored content views with other individuals, and permits the utilization of the browser's native back/forward navigation buttons to traverse through various filter states. Collectively, these benefits substantially enhance the overall user experience and can contribute positively to search engine optimization (SEO) efforts by creating unique, indexable URLs for filtered content. The widget is configured to automatically apply these filters upon page load if their parameters are detected within the URL.
+    4.2 Carousel Custom Arrows & Navigation (Completed):
 
-        4.2 Carousel Custom Arrows & Navigation (Completed):
+        PHP (class-filtered-loop-widget.php): Controls for carousel_prev_arrow_icon and carousel_next_arrow_icon have been incorporated into a dedicated Carousel Navigation Style section. These controls leverage Elementor's Controls_Manager::ICONS type, providing access to a diverse library of vector icons for highly customizable navigation aesthetics, allowing designers to match the site's branding. Furthermore, a responsive slides_to_move control (Controls_Manager::NUMBER) has been added, empowering users to precisely define the number of slides the carousel advances with each click of the navigation arrows, thereby offering a more flexible and tailored navigation experience that can adapt to different content densities or user preferences.
 
-            PHP (class-filtered-loop-widget.php): Controls for carousel_prev_arrow_icon and carousel_next_arrow_icon have been incorporated into a dedicated Carousel Navigation Style section. These controls leverage Elementor's Controls_Manager::ICONS type, providing access to a diverse library of vector icons for highly customizable navigation aesthetics, allowing designers to match the site's branding. Furthermore, a responsive slides_to_move control (Controls_Manager::NUMBER) has been added, empowering users to precisely define the number of slides the carousel advances with each click of the navigation arrows, thereby offering a more flexible and tailored navigation experience that can adapt to different content densities or user preferences.
+        JS (filtered-loop-widget.js): The initializeCarousel function has been updated to consume these new settings. This will involve rendering the custom SVG icons for Flickity's navigation buttons and accurately transmitting the slides_to_move value to Flickity's configuration (via groupCells), ensuring the carousel's navigational behavior precisely aligns with the user's configurations and provides a smooth, predictable interaction.
 
-            JS (filtered-loop-widget.js): The initializeCarousel function has been updated to consume these new settings. This will involve rendering the custom SVG icons for Flickity's navigation buttons and accurately transmitting the slides_to_move value to Flickity's configuration (via groupCells), ensuring the carousel's navigational behavior precisely aligns with the user's configurations and provides a smooth, predictable interaction.
+    4.3 Carousel Thumbnails for Navigation (Lower Priority):
 
-        4.3 Carousel Thumbnails for Navigation (Lower Priority):
+        A new control to enable/disable carousel_thumbnails_navigation will be integrated. When activated, this feature will render a smaller, navigable set of thumbnail images positioned beneath the main carousel. The functionality will allow users to directly navigate the primary carousel to a corresponding slide by clicking on a specific thumbnail. This visual navigation paradigm is expected to significantly enhance user interaction, particularly for carousels containing a substantial number of items, by providing a quick visual overview of the content. Given its inherent complexity and the prioritization of core functionalities, this feature is designated as a lower-priority enhancement.
 
-            A new control to enable/disable carousel_thumbnails_navigation will be integrated. When activated, this feature will render a smaller, navigable set of thumbnail images positioned beneath the main carousel. The functionality will allow users to directly navigate the primary carousel to a corresponding slide by clicking on a specific thumbnail. This visual navigation paradigm is expected to significantly enhance user interaction, particularly for carousels containing a substantial number of items, by providing a quick visual overview of the content. Given its inherent complexity and the prioritization of core functionalities, this feature is designated as a lower-priority enhancement.
+        Accompanying controls for specifying the number of visible thumbnails and defining their stylistic attributes (e.g., active state indicators) will also be included to offer comprehensive customization, allowing designers to fine-tune the appearance of this navigation element.
 
-            Accompanying controls for specifying the number of visible thumbnails and defining their stylistic attributes (e.g., active state indicators) will also be included to offer comprehensive customization, allowing designers to fine-tune the appearance of this navigation element.
+    4.4 Customizable "Load More" Text (Completed):
 
-        4.4 Customizable "Load More" Text (Completed):
-
-            New text input controls, load_more_button_text and no_more_products_text, have been introduced. These controls provide users with the capability to customize the textual content displayed on the "Load More" button (e.g., "Show More Products," "View All") and the message presented when all available products have been loaded (e.g., "End of Results," "All Items Displayed"). This enhancement significantly contributes to greater branding consistency and localization flexibility for the widget, allowing for a more tailored user experience. The filtered-loop-widget.js has been updated to display these texts and disable the button when no more products are available.
+        New text input controls, load_more_button_text and no_more_products_text, have been introduced. These controls provide users with the capability to customize the textual content displayed on the "Load More" button (e.g., "Show More Products," "View All") and the message presented when all available products have been loaded (e.g., "End of Results," "All Items Displayed"). This enhancement significantly contributes to greater branding consistency and localization flexibility for the widget, allowing for a more tailored user experience. The filtered-loop-widget.js has been updated to display these texts and disable the button when no more products are available.
 
 Phase 3: AJAX & JavaScript Integration
 
@@ -154,23 +152,23 @@ This phase is meticulously focused on refining the intricate communication proto
 
 (Revisiting and refining DGCPF_Ajax.php and filtered-loop-widget.js based on new controls)
 
-    Refactor DGCPF_Ajax.php:
+Refactor DGCPF_Ajax.php:
 
-        Comprehensive Query Construction: The filter_products_handler function will undergo substantial refactoring to precisely receive and process all newly introduced query parameters transmitted from the frontend. This comprehensive set of parameters includes posts_include_by_ids, posts_exclude_by_ids, terms_include, terms_exclude, product_categories_query, product_tags_query, and the complex data structure originating from the acf_meta_query_repeater. Subsequently, this function will dynamically construct a WP_Query object, meticulously combining these diverse parameters with the user's live filter selections (selected_terms_by_taxonomy, selected_acf_fields) in strict adherence to the specified global filter_logic (AND/OR). This ensures that the backend query accurately reflects the user's granular filtering criteria.
+    Comprehensive Query Construction: The filter_products_handler function will undergo substantial refactoring to precisely receive and process all newly introduced query parameters transmitted from the frontend. This comprehensive set of parameters includes posts_include_by_ids, posts_exclude_by_ids, terms_include, terms_exclude, product_categories_query, product_tags_query, and the complex data structure originating from the acf_meta_query_repeater. Subsequently, this function will dynamically construct a WP_Query object, meticulously combining these diverse parameters with the user's live filter selections (selected_terms_by_taxonomy, selected_acf_fields) in strict adherence to the specified global filter_logic (AND/OR). This ensures that the backend query accurately reflects the user's granular filtering criteria.
 
-        ACF Meta Query Logic: Within the filter_products_handler, precise logic will be implemented to accurately interpret the data conveyed by the acf_meta_query_repeater. This involves correctly mapping various ACF field types (e.g., text, number, select, checkbox, radio, true/false) to their appropriate meta_query arguments, as defined by WordPress's query parameters. This includes specialized handling for serialized array values commonly associated with checkbox fields, and the accurate assignment of compare and type parameters for both numerical and string-based comparisons, ensuring query precision and reliable data retrieval from custom fields.
+    ACF Meta Query Logic: Within the filter_products_handler, precise logic will be implemented to accurately interpret the data conveyed by the acf_meta_query_repeater. This involves correctly mapping various ACF field types (e.g., text, number, select, checkbox, radio, true/false) to their appropriate meta_query arguments, as defined by WordPress's query parameters. This includes specialized handling for serialized array values commonly associated with checkbox fields, and the accurate assignment of compare and type parameters for both numerical and string-based comparisons, ensuring query precision and reliable data retrieval from custom fields.
 
-        Dynamic Filter Counts (get_available_filter_options_for_query): This pivotal helper function will be engineered for enhanced robustness and accuracy. It will accept the current active query arguments (excluding pagination parameters to ensure counts reflect the entire filtered set) and systematically iterate through each configured filter (encompassing both taxonomy and ACF types). For every potential filter option (e.g., a specific tag or an option from an ACF select field), it will execute a separate, highly optimized WP_Query (configured with fields='ids' and no_found_rows=true for efficiency) to ascertain the exact number of products that would match if that particular option were selected in conjunction with all other currently active filters. This meticulous process guarantees the provision of highly accurate real-time counts and serves as the foundational mechanism for the filter dependency feature, guiding user interaction.
+    Dynamic Filter Counts (get_available_filter_options_for_query): This pivotal helper function will be engineered for enhanced robustness and accuracy. It will accept the current active query arguments (excluding pagination parameters to ensure counts reflect the entire filtered set) and systematically iterate through each configured filter (encompassing both taxonomy and ACF types). For every potential filter option (e.g., a specific tag or an option from an ACF select field), it will execute a separate, highly optimized WP_Query (configured with fields='ids' and no_found_rows=true for efficiency) to ascertain the exact number of products that would match if that particular option were selected in conjunction with all other currently active filters. This meticulous process guarantees the provision of highly accurate real-time counts and serves as the foundational mechanism for the filter dependency feature, guiding user interaction.
 
-    Update filtered-loop-widget.js:
+Update filtered-loop-widget.js:
 
-        Synchronization with PHP Controls: The JavaScript codebase will be updated to accurately retrieve all newly introduced Elementor control settings from the self.settings object, which is transmitted via the data-settings attribute on the widget's container element. This encompasses posts_per_page_initial, horizontal_gap, vertical_gap, equal_height_columns, the expanded carousel options (including custom icons, slides to move, and thumbnail navigation settings), and all new query-related controls. These retrieved settings will then be meticulously packaged and transmitted as part of the AJAX request data to the backend, ensuring that all user configurations are respected in the query.
+    Synchronization with PHP Controls: The JavaScript codebase will be updated to accurately retrieve all newly introduced Elementor control settings from the self.settings object, which is transmitted via the data-settings attribute on the widget's container element. This encompasses posts_per_page_initial, horizontal_gap, vertical_gap, equal_height_columns, the expanded carousel options (including custom icons, slides to move, and thumbnail navigation settings), and all new query-related controls. These retrieved settings will then be meticulously packaged and transmitted as part of the AJAX request data to the backend, ensuring that all user configurations are respected in the query.
 
-        Enhanced onFilterChange: This function will be comprehensively updated to precisely capture the selected values from the newly implemented Select2 fields (pertaining to post/term inclusions/exclusions, and product categories/tags) as well as the refined ACF input types (text, number, and repeater-based ACF filters). It will then accurately update the internal state variables, self.selectedTermsByTaxonomy and self.selectedAcfFields, based on these new input paradigms, maintaining a consistent representation of the active filters.
+    Enhanced onFilterChange: This function will be comprehensively updated to precisely capture the selected values from the newly implemented Select2 fields (pertaining to post/term inclusions/exclusions, and product categories/tags) as well as the refined ACF input types (text, number, and repeater-based ACF filters). It will then accurately update the internal state variables, self.selectedTermsByTaxonomy and self.selectedAcfFields, based on these new input paradigms, maintaining a consistent representation of the active filters.
 
-        Flickity Initialization with New Settings: The initializeCarousel function is slated for comprehensive updates to fully consume and implement these new settings. This will involve rendering the custom SVG icons for Flickity's navigation buttons and accurately transmitting the slides_to_move value to Flickity's configuration (likely via groupCells or a custom Flickity extension if more intricate movement logic is required), ensuring the carousel's navigational behavior precisely aligns with the user's configurations.
+    Flickity Initialization with New Settings: The initializeCarousel function is slated for comprehensive updates to fully consume and implement these new settings. This will involve rendering the custom SVG icons for Flickity's navigation buttons and accurately transmitting the slides_to_move value to Flickity's configuration (likely via groupCells or a custom Flickity extension if more intricate movement logic is required), ensuring the carousel's navigational behavior precisely aligns with the user's configurations.
 
-        User Interface Updates based on available_filter_options: The updateFilterOptionsState function is of critical importance for the dynamic filter counts and dependencies. It will process the available_filter_options object received in the AJAX response. For each filter type (taxonomy, ACF), it will iterate through its available options, dynamically updating the displayed count (e.g., "Tag Name (X)"). Concurrently, it will apply or remove the disabled CSS class to options that, when selected, would yield zero results, thereby ensuring a highly interactive, intuitive, and efficient filtering experience for the user by guiding their choices.
+    User Interface Updates based on available_filter_options: The updateFilterOptionsState function is of critical importance for the dynamic filter counts and dependencies. It will process the available_filter_options object received in the AJAX response. For each filter type (taxonomy, ACF), it will iterate through its available options, dynamically updating the displayed count (e.g., "Tag Name (X)"). Concurrently, it will apply or remove the disabled CSS class to options that, when selected, would yield zero results, thereby ensuring a highly interactive, intuitive, and efficient filtering experience for the user by guiding their choices.
 
 Phase 4: Styling & Polish (CSS)
 
@@ -178,153 +176,145 @@ This phase is strategically dedicated to ensuring that the widget exhibits an ae
 
 (All modifications are primarily confined to filtered-loop-widget.css)
 
-    Implementation of Elementor CSS Variables:
+Implementation of Elementor CSS Variables:
 
-        Update to filtered-loop-widget.css: All hardcoded values for common design properties, including colors, typography, border styles, and spacing, shall be systematically replaced with Elementor's global CSS variables (e.g., var(--e-global-color-primary), var(--e-global-typography-text-font-family)). This adherence to best practices guarantees that the widget automatically inherits the site's established global styles configured within Elementor, thereby promoting design consistency across the entire website and significantly reducing manual styling efforts. Custom CSS variables (e.g., --dgcpf-filter-input-padding) will be meticulously defined for widget-specific properties that do not possess direct global equivalents, ensuring comprehensive style control without sacrificing global theme integration.
+    Update to filtered-loop-widget.css: All hardcoded values for common design properties, including colors, typography, border styles, and spacing, shall be systematically replaced with Elementor's global CSS variables (e.g., var(--e-global-color-primary), var(--e-global-typography-text-font-family)). This adherence to best practices guarantees that the widget automatically inherits the site's established global styles configured within Elementor, thereby promoting design consistency across the entire website and significantly reducing manual styling efforts. Custom CSS variables (e.g., --dgcpf-filter-input-padding) will be meticulously defined for widget-specific properties that do not possess direct global equivalents, ensuring comprehensive style control without sacrificing global theme integration.
 
-    Styling of New User Interface Elements:
+Styling of New User Interface Elements:
 
-        Dedicated CSS rules will be formulated and applied to the custom select2 fields introduced within the Query tab. This ensures their visual consistency with both the broader Elementor editor interface and the frontend display, providing a cohesive user experience.
+    Dedicated CSS rules will be formulated and applied to the custom select2 fields introduced within the Query tab. This ensures their visual consistency with both the broader Elementor editor interface and the frontend display, providing a cohesive user experience.
 
-        The newly implemented responsive gap settings will be precisely translated into visual attributes, specifically column-gap and row-gap for grid layouts, and appropriate padding or margin values for individual carousel items. This ensures that the intended spacing is accurately rendered and maintained across all defined breakpoints, contributing to a polished layout.
+    The newly implemented responsive gap settings will be precisely translated into visual attributes, specifically column-gap and row-gap for grid layouts, and appropriate padding or margin values for individual carousel items. This ensures that the intended spacing is accurately rendered and maintained across all defined breakpoints, contributing to a polished layout.
 
-        Styling for the custom carousel navigation arrows (encompassing various states, including hover effects) and, if implemented, the thumbnail navigation will be developed to achieve a polished, branded, and cohesive visual presentation that aligns with the site's overall design language.
+    Styling for the custom carousel navigation arrows (encompassing various states, including hover effects) and, if implemented, the thumbnail navigation will be developed to achieve a polished, branded, and cohesive visual presentation that aligns with the site's overall design language.
 
-    Refinement of Loading Animations:
+Refinement of Loading Animations:
 
-        Performance Optimization for Initial Load (High Priority): This critical aspect involves the strategic implementation of techniques designed to enhance the perceived loading speed of the widget. For instance, the adoption of lazy-loading for filter options (where options are fetched only for currently visible filters or progressively loaded) and an initial simplified query (retrieving only essential data for the first view, with full details loading asynchronously in the background) will be thoroughly explored. The primary aim of these optimizations is to minimize the time until the user perceives meaningful content, even during complex data retrieval processes, thereby improving user satisfaction.
+    Performance Optimization for Initial Load (High Priority): This critical aspect involves the strategic implementation of techniques designed to enhance the perceived loading speed of the widget. For instance, the adoption of lazy-loading for filter options (where options are fetched only for currently visible filters or progressively loaded) and an initial simplified query (retrieving only essential data for the first view, with full details loading asynchronously in the background) will be thoroughly explored. The primary aim of these optimizations is to minimize the time until the user perceives meaningful content, even during complex data retrieval processes, thereby improving user satisfaction.
 
-        The visual aesthetics of the AJAX loading spinner and overlay will be significantly enhanced, incorporating smoother animations or more seamlessly integrated design elements. This provides a more professional and less jarring loading experience.
+    The visual aesthetics of the AJAX loading spinner and overlay will be significantly enhanced, incorporating smoother animations or more seamlessly integrated design elements. This provides a more professional and less jarring loading experience.
 
-        Micro-interactions, such as subtle loading states (e.g., a slight dimming effect or a small, embedded spinner icon) on individual filter buttons or input fields, will be implemented during active AJAX requests. This provides immediate, non-intrusive feedback to the user, signaling that their action has been registered and is being processed, thereby substantially improving the perceived responsiveness of the user interface and mitigating any potential sensation of unresponsiveness during data retrieval.
+    Micro-interactions, such as subtle loading states (e.g., a slight dimming effect or a small, embedded spinner icon) on individual filter buttons or input fields, will be implemented during active AJAX requests. This provides immediate, non-intrusive feedback to the user, signaling that their action has been registered and is being processed, thereby substantially improving the perceived responsiveness of the user interface and mitigating any potential sensation of unresponsiveness during data retrieval.
 
-    Equal Heights Styling:
+Equal Heights Styling:
 
-        CSS rules will be comprehensively added to fully support the equal_height_columns setting. For grid layouts, this will entail the application of grid-auto-rows: 1fr; to ensure consistent row heights, preventing visual misalignment. For carousel items, appropriate height properties will be applied to guarantee visual uniformity, complementing Flickity's adaptive height feature when it is enabled, resulting in a more balanced and professional display.
+    CSS rules will be comprehensively added to fully support the equal_height_columns setting. For grid layouts, this will entail the application of grid-auto-rows: 1fr; to ensure consistent row heights, preventing visual misalignment. For carousel items, appropriate height properties will be applied to guarantee visual uniformity, complementing Flickity's adaptive height feature when it is enabled, resulting in a more balanced and professional display.
 
-    Accessibility for Filter Counts:
+Accessibility for Filter Counts:
 
-        When dynamic filter counts are displayed, meticulous attention will be directed towards ensuring optimal accessibility. This includes the strategic utilization of aria-live regions to dynamically announce changes in filter counts to screen readers, or the updating of aria-label attributes on individual filter options (e.g., "Category A, 15 items available"). This commitment ensures that users relying on assistive technologies receive critical and timely information regarding the current filtering state, promoting inclusivity.
+    When dynamic filter counts are displayed, meticulous attention will be directed towards ensuring optimal accessibility. This includes the strategic utilization of aria-live regions to dynamically announce changes in filter counts to screen readers, or the updating of aria-label attributes on individual filter options (e.g., "Category A, 15 items available"). This commitment ensures that users relying on assistive technologies receive critical and timely information regarding the current filtering state, promoting inclusivity.
 
-    Keyboard Navigation for Filters:
+Keyboard Navigation for Filters:
 
-        Robust keyboard navigation capabilities will be comprehensively implemented for all interactive filter elements. This encompasses ensuring that users can seamlessly navigate between filter components using the Tab key, activate or deactivate selections via the Space or Enter keys, and utilize arrow keys for navigating options within dropdown menus, checkbox groups, and radio button sets. This unwavering commitment to keyboard accessibility guarantees that the widget is fully operable and navigable for all users, including those who do not employ a mouse, enhancing overall usability.
+    Robust keyboard navigation capabilities will be comprehensively implemented for all interactive filter elements. This encompasses ensuring that users can seamlessly navigate between filter components using the Tab key, activate or deactivate selections via the Space or Enter keys, and utilize arrow keys for navigating options within dropdown menus, checkbox groups, and radio button sets. This unwavering commitment to keyboard accessibility guarantees that the widget is fully operable and navigable for all users, including those who do not employ a mouse, enhancing overall usability.
 
 Phase 5: ACF Plugin Presence Checks
 
 This phase is dedicated to ensuring that the plugin gracefully manages scenarios where the Advanced Custom Fields (ACF) plugin is not actively installed or enabled, thereby providing a resilient and seamless user experience. Robust dependency handling is a key aspect of professional plugin development.
 
-    Plugin Activation/Load Verification:
+Plugin Activation/Load Verification:
 
-        Update to domgats-customizable-product-filters.php: A dedicated function shall be incorporated, hooked to either admin_init or plugins_loaded, to ascertain the active status of the ACF plugin. This verification will be performed using standard WordPress functions such as function_exists('acf_get_field_groups') or is_plugin_active. In instances where ACF is not detected as active, and the plugin's functionality is reliant upon ACF-specific features (e.g., ACF field controls within the widget), a clear, concise, and informative administrative notice will be displayed, guiding the user regarding the requisite dependency. This proactive communication helps prevent user frustration and ensures they understand why certain features may be unavailable.
+    Update to domgats-customizable-product-filters.php: A dedicated function shall be incorporated, hooked to either admin_init or plugins_loaded, to ascertain the active status of the ACF plugin. This verification will be performed using standard WordPress functions such as function_exists('acf_get_field_groups') or is_plugin_active. In instances where ACF is not detected as active, and the plugin's functionality is reliant upon ACF-specific features (e.g., ACF field controls within the widget), a clear, concise, and informative administrative notice will be displayed, guiding the user regarding the requisite dependency. This proactive communication helps prevent user frustration and ensures they understand why certain features may be unavailable.
 
-    Elementor Editor Control State Management:
+Elementor Editor Control State Management:
 
-        Update to class-filtered-loop-widget.php's _get_all_acf_field_keys(): This method will be modified to return an appropriate message (e.g., "ACF plugin not active") or an empty array of options, contingent upon the active status of ACF. This prevents the editor from attempting to load non-existent ACF fields.
+    Update to class-filtered-loop-widget.php's _get_all_acf_field_keys(): This method will be modified to return an appropriate message (e.g., "ACF plugin not active") or an empty array of options, contingent upon the active status of ACF. This prevents the editor from attempting to load non-existent ACF fields.
 
-        Implementation of Control Conditions: Elementor's conditions property will be extensively leveraged across all ACF-related controls within the register_controls() method. This dynamic conditional rendering will ensure that these controls are automatically hidden or disabled within the Elementor editor if ACF is not detected (e.g., by evaluating a PHP-generated is_acf_active flag, which is then passed to the frontend JavaScript). This proactive measure prevents user confusion, streamlines the editor interface when ACF functionalities are unavailable, and avoids potential fatal errors by only attempting to render controls that are supported by the active environment.
+    Implementation of Control Conditions: Elementor's conditions property will be extensively leveraged across all ACF-related controls within the register_controls() method. This dynamic conditional rendering will ensure that these controls are automatically hidden or disabled within the Elementor editor if ACF is not detected (e.g., by evaluating a PHP-generated is_acf_active flag, which is then passed to the frontend JavaScript). This proactive measure prevents user confusion, streamlines the editor interface when ACF functionalities are unavailable, and avoids potential fatal errors by only attempting to render controls that are supported by the active environment.
 
 Phase 6: Lower Priority / Future Enhancements
 
 These enhancements represent strategic additions planned for subsequent iterations of the widget's development. Their implementation will focus on further augmenting usability, refining performance, and bolstering overall robustness, following the successful completion of core functionalities.
 
-    Filter Persistence Across User Sessions:
+Filter Persistence Across User Sessions:
 
-        An optional configuration setting will be introduced, enabling users to elect for the storage of their selected filter values within localStorage or sessionStorage mechanisms of the web browser. This functionality ensures that if a user navigates away from a filtered page and subsequently returns, their previously applied filter selections will be automatically reapplied. This contributes significantly to a seamless and highly personalized browsing experience, reducing repetitive user input and improving overall user satisfaction.
+    An optional configuration setting will be introduced, enabling users to elect for the storage of their selected filter values within localStorage or sessionStorage mechanisms of the web browser. This functionality ensures that if a user navigates away from a filtered page and subsequently returns, their previously applied filter selections will be automatically reapplied. This contributes to a seamless and highly personalized browsing experience, reducing repetitive user input and improving overall user satisfaction.
 
-    Optional Filter Reset Confirmation:
+Optional Filter Reset Confirmation:
 
-        For the "Clear All Filters" button, an optional confirmation dialog will be implemented. This dialog will utilize a custom modal user interface, explicitly avoiding the use of intrusive browser alert() functions. When enabled, this feature will prompt the user to confirm their intention before proceeding with the reset of all active filters, thereby preventing accidental data loss or unintended changes to the displayed content, particularly when numerous filters are actively engaged. This adds a layer of user protection and control.
+    For the "Clear All Filters" button, an optional confirmation dialog will be implemented. This dialog will utilize a custom modal user interface, explicitly avoiding the use of intrusive browser alert() functions. When enabled, this feature will prompt the user to confirm their intention before proceeding with the reset of all active filters, thereby preventing accidental data loss or unintended changes to the displayed content, particularly when numerous filters are actively engaged. This adds a layer of user protection and control.
 
-    Graceful Rendering Post-ACF Deactivation:
+Graceful Rendering Post-ACF Deactivation:
 
-        Robust conditional checks will be integrated into the render() method of class-filtered-loop-widget.php. These checks are designed to detect scenarios where ACF fields were previously configured within the widget's settings, but the ACF plugin has subsequently been disabled or removed from the WordPress installation. Rather than resulting in a fatal error or a broken display, the widget will gracefully render a predefined fallback display or a clear, user-friendly message, ensuring the overall integrity and functionality of the website remains unimpaired. This proactive error handling is crucial for maintaining site stability in dynamic plugin environments.
+    Robust conditional checks will be integrated into the render() method of class-filtered-loop-widget.php. These checks are designed to detect scenarios where ACF fields were previously configured within the widget's settings, but the ACF plugin has subsequently been disabled or removed from the WordPress installation. Rather than resulting in a fatal error or a broken display, the widget will gracefully render a predefined fallback display or a clear, user-friendly message, ensuring the overall integrity and functionality of the website remains unimpaired. This proactive error handling is crucial for maintaining site stability in dynamic plugin environments.
 
 Files Provided List
 
 I. Plugin/Widget Files (Being Worked On):
 
-    domgats-customizable-product-filters.php
+domgats-customizable-product-filters.php
 
-    assets/css/filtered-loop-widget.css (designated as the primary CSS stylesheet)
+assets/css/filtered-loop-widget.css (designated as the primary CSS stylesheet)
 
-    assets/js/filtered-loop-widget.js (designated as the primary JavaScript handler)
+assets/js/filtered-loop-widget.js (designated as the primary JavaScript handler)
 
-    includes/DGCPF_Admin.php
+assets/js/filtered-loop-widget-editor.js (new file for editor-specific logic)
 
-    includes/DGCPF_Ajax.php
+includes/DGCPF_Admin.php
 
-    includes/elementor/class-dgcpf-elementor-widgets.php
+includes/DGCPF_Ajax.php
 
-    includes/elementor/widgets/dgcpf-filtered-loop-widget/class-filtered-loop-widget.php
+includes/elementor/class-dgcpf-elementor-widgets.php
 
-II. Legacy Files (Designated for Removal/Consolidation):
+includes/elementor/widgets/dgcpf-filtered-loop-widget/class-filtered-loop-widget.php
 
-    assets/js/main.js
+II. Informational Elementor Files (Provided for Reference and Guidance, if needed):
 
-    assets/css/main.css
+base.php
 
-    templates/filter-ui.php
+loop-carousel.php
 
-    includes/DGCPF_Shortcodes.php
+loop-carousel.5108cb72ebb124297adb.bundle.js
 
-III. Informational Elementor Files (Provided for Reference and Guidance):
+loop-carousel.f8067ec0c24b628c786e.bundle.min.js
 
-    base.php
+loop-filter-editor.46a4c013b80a381a50c9.bundle.js
 
-    loop-carousel.php
+loop-filter-editor.67dfa5d044d7bd86bd6f.bundle.min.js
 
-    loop-carousel.5108cb72ebb124297adb.bundle.js
+loop.da94e53412e56933f721.bundle.js
 
-    loop-carousel.f8067ec0c24b628c786e.bundle.min.js
+loop-grid.php
 
-    loop-filter-editor.46a4c013b80a381a50c9.bundle.js
+module.php (originating from elementor-pro/modules/loop-builder/module.php)
 
-    loop-filter-editor.67dfa5d044d7bd86bd6f.bundle.min.js
+cta-template.php
 
-    loop.da94e53412e56933f721.bundle.js
+skin-loop-base.php
 
-    loop-grid.php
+skin-loop-post.php
 
-    module.php (originating from elementor-pro/modules/loop-builder/module.php)
+skin-loop-post-taxonomy.php
 
-    cta-template.php
+skin-loop-taxonomy-base.php
 
-    skin-loop-base.php
+taxonomy-loop-provider.php
 
-    skin-loop-post.php
+loop.php (originating from ElementorPro\Modules\LoopBuilder\Files\Css\loop.php)
 
-    skin-loop-post-taxonomy.php
+loop-css-trait.php
 
-    skin-loop-taxonomy-base.php
+loop-dynamic-css.php (originating from ElementorPro\Modules\LoopBuilder\Files\Css\loop-dynamic-css.php)
 
-    taxonomy-loop-provider.php
+loop-preview.php (originating from ElementorPro\Modules\LoopBuilder\Files\Css\loop-preview.php)
 
-    loop.php (originating from ElementorPro\Modules\LoopBuilder\Files\Css\loop.php)
+loop.php (originating from ElementorPro\Modules\LoopBuilder\Documents\loop.php)
 
-    loop-css-trait.php
+module.php (originating from ElementorPro/Modules/LoopFilter/module.php)
 
-    loop-dynamic-css.php (originating from ElementorPro\Modules\LoopBuilder\Files\Css\loop-dynamic-css.php)
+taxonomy-filter.php (originating from ElementorPro/Modules/LoopFilter/Widgets/taxonomy-filter.php)
 
-    loop-preview.php (originating from ElementorPro\Modules\LoopBuilder\Files\Css\loop-preview.php)
+hierarchical-taxonomy-trait.php (originating from ElementorPro/Modules/LoopFilter/Traits/hierarchical-taxonomy-trait.php)
 
-    loop.php (originating from ElementorPro\Modules\LoopBuilder\Documents\loop.php)
+taxonomy-filter-trait.php (originating from ElementorPro/Modules/LoopFilter/Traits/taxonomy-filter-trait.php)
 
-    module.php (originating from ElementorPro/Modules/LoopFilter/module.php)
+taxonomy-manager.php (originating from ElementorPro/Modules/LoopFilter/Query/taxonomy-manager.php)
 
-    taxonomy-filter.php (originating from ElementorPro/Modules/LoopFilter/Widgets/taxonomy-filter.php)
+taxonomy-query-builder.php (originating from ElementorPro/Modules/LoopFilter/Query/taxonomy-query-builder.php)
 
-    hierarchical-taxonomy-trait.php (originating from ElementorPro/Modules/LoopFilter/Traits/hierarchical-taxonomy-trait.php)
+file-tree-elementor-files-loop-builder.txt
 
-    taxonomy-filter-trait.php (originating from ElementorPro/Modules/LoopFilter/Traits/taxonomy-filter-trait.php)
-
-    taxonomy-manager.php (originating from ElementorPro/Modules/LoopFilter/Query/taxonomy-manager.php)
-
-    taxonomy-query-builder.php (originating from ElementorPro/Modules/LoopFilter/Query/taxonomy-query-builder.php)
-
-    file-tree-elementor-files-loop-builder.txt
-
-    file-tree-elementor-loop-filter.txt
+file-tree-elementor-loop-filter.txt
 
 Directory Tree of Informational Elementor Files (as provided):
 
@@ -391,5 +381,3 @@ elementor-pro/
 │   └── utils/
 │       └── document-handle.js (from loop.da94e53412e56933f721.bundle.js)
 └── (other Elementor Pro files and directories)
-
-
