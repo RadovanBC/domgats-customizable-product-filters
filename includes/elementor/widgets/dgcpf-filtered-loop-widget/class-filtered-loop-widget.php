@@ -93,10 +93,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label'   => esc_html__( 'Load Layout Preset', 'custom-product-filters' ),
                 'type'    => Controls_Manager::SELECT,
                 'options' => $this->_get_layout_presets_options(),
-                'default' => '',
-                'render_type' => 'none',
-                'frontend_available' => false,
-                'separator' => 'after',
+                'default' => 'custom',
             ]
         );
 
@@ -190,6 +187,15 @@ class Filtered_Loop_Widget extends Widget_Base {
             [
                 'label' => esc_html__( 'Query', 'custom-product-filters' ),
                 'tab'   => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+        
+        $this->add_control(
+            '_is_acf_active',
+            [
+                'label' => esc_html__( 'Is ACF Active?', 'custom-product-filters' ),
+                'type' => Controls_Manager::HIDDEN,
+                'default' => $this->_is_acf_active() ? '1' : '0',
             ]
         );
 
@@ -1015,7 +1021,7 @@ class Filtered_Loop_Widget extends Widget_Base {
 
     private function _get_layout_presets_options() {
         $presets = $this->_get_layout_presets();
-        $options = [ '' => esc_html__( '— Select Preset —', 'custom-product-filters' ) ];
+        $options = [ 'custom' => esc_html__( 'Custom', 'custom-product-filters' ) ];
         foreach ( $presets as $key => $preset ) {
             $options[ $key ] = $preset['label'];
         }
