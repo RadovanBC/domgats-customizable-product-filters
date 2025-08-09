@@ -35,6 +35,7 @@ class Filtered_Loop_Widget extends Widget_Base {
         return [
             'dgcpf-filtered-loop-widget-js',
             'flickity-js',
+            'imagesloaded',
         ];
     }
 
@@ -49,19 +50,7 @@ class Filtered_Loop_Widget extends Widget_Base {
         return class_exists('ACF');
     }
 
-    private function _get_query_control_type() {
-        if ( defined( '\ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID' ) ) {
-            return \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID;
-        }
-        return Controls_Manager::TEXT;
-    }
-
-    private function _get_query_control_module_class() {
-        if ( class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
-            return \ElementorPro\Modules\QueryControl\Module::class;
-        }
-        return '';
-    }
+    
 
     protected function register_controls() {
         $this->register_content_controls();
@@ -84,6 +73,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => $this->_get_loop_templates(),
                 'default' => '',
+                'frontend_available' => true,
             ]
         );
 
@@ -94,6 +84,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => $this->_get_layout_presets_options(),
                 'default' => 'custom',
+                'frontend_available' => true,
             ]
         );
 
@@ -108,6 +99,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 ],
                 'default' => 'grid',
                 'toggle' => false,
+                'frontend_available' => true,
             ]
         );
 
@@ -118,6 +110,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type' => Controls_Manager::NUMBER, 'min' => 1, 'max' => 6, 'default' => 3,
                 'condition' => [ 'layout_type' => 'grid' ],
                 'selectors' => [ '{{WRAPPER}} .dgcpf-loop-container.dgcpf-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);' ],
+                'frontend_available' => true,
             ]
         );
 
@@ -128,6 +121,9 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type' => Controls_Manager::NUMBER, 'min' => 1, 'max' => 6, 'default' => 3,
                 'condition' => [ 'layout_type' => 'carousel' ],
                 'frontend_available' => true,
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-loop-container.dgcpf-carousel .elementor-loop-item' => 'width: calc(100% / {{VALUE}});'
+                ],
             ]
         );
 
@@ -142,6 +138,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                     '{{WRAPPER}} .dgcpf-loop-container.dgcpf-grid' => 'column-gap: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .dgcpf-loop-container.dgcpf-carousel .elementor-loop-item' => 'padding-left: calc({{SIZE}}{{UNIT}} / 2); padding-right: calc({{SIZE}}{{UNIT}} / 2);',
                 ],
+                'frontend_available' => true,
             ]
         );
 
@@ -154,6 +151,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'default' => [ 'unit' => 'px', 'size' => 20 ],
                 'selectors' => [ '{{WRAPPER}} .dgcpf-loop-container.dgcpf-grid' => 'row-gap: {{SIZE}}{{UNIT}};' ],
                 'condition' => [ 'layout_type' => 'grid' ],
+                'frontend_available' => true,
             ]
         );
 
@@ -161,12 +159,14 @@ class Filtered_Loop_Widget extends Widget_Base {
             'equal_height_columns',
             [
                 'label' => esc_html__( 'Equal Height Columns', 'custom-product-filters' ),
-                'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
-                'selectors_dictionary' => [ 'yes' => 'align-items: stretch;' ],
+                'type' => Controls_Manager::SWITCHER,
+                'return_value' => 'stretch',
+                'default' => 'flex-start',
                 'selectors' => [
-                    '{{WRAPPER}} .dgcpf-loop-container.dgcpf-grid' => '{{VALUE}}',
+                    '{{WRAPPER}} .dgcpf-loop-container.dgcpf-grid' => 'align-items: {{VALUE}};',
                 ],
                 'condition' => [ 'template_id!' => '' ],
+                'frontend_available' => true,
             ]
         );
 
@@ -175,8 +175,8 @@ class Filtered_Loop_Widget extends Widget_Base {
             [
                 'label' => esc_html__( 'Initial Items Per Page', 'custom-product-filters' ),
                 'type' => Controls_Manager::NUMBER, 'min' => 1, 'default' => 9,
-                'condition' => [ 'layout_type' => 'grid', 'enable_load_more' => 'yes' ],
                 'separator' => 'before',
+                'frontend_available' => true,
             ]
         );
 
@@ -196,6 +196,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Is ACF Active?', 'custom-product-filters' ),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => $this->_is_acf_active() ? '1' : '0',
+                'frontend_available' => true,
             ]
         );
 
@@ -206,19 +207,20 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => $this->_get_all_post_types(),
                 'default' => 'product',
+                'frontend_available' => true,
             ]
         );
 
-        $query_control_type = $this->_get_query_control_type();
-        $query_control_module_class = $this->_get_query_control_module_class();
-
-        if ( $query_control_type !== Controls_Manager::TEXT && ! empty( $query_control_module_class ) ) {
+        if ( class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
+            $query_control_type = 'query';
+            $query_control_module_class = \ElementorPro\Modules\QueryControl\Module::class;
             $this->add_control(
                 'posts_include_by_ids',
                 [
                     'label' => esc_html__( 'Include Posts by ID', 'custom-product-filters' ),
                     'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
                     'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_POST', 'query'  => [ 'post_type' => 'any' ] ],
+                    'frontend_available' => true,
                 ]
             );
             $this->add_control(
@@ -227,22 +229,39 @@ class Filtered_Loop_Widget extends Widget_Base {
                     'label' => esc_html__( 'Exclude Posts by ID', 'custom-product-filters' ),
                     'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
                     'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_POST', 'query'  => [ 'post_type' => 'any' ] ],
+                    'frontend_available' => true,
                 ]
             );
             $this->add_control(
                 'terms_include',
                 [
                     'label' => esc_html__( 'Include Terms', 'custom-product-filters' ),
-                    'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
-                    'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX', 'query'  => [ 'taxonomy' => 'category' ] ],
+                    'type' => $query_control_type,
+                    'label_block' => true,
+                    'multiple' => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query' => [
+                            'post_type' => '{{post_type}}',
+                        ],
+                    ],
+                    'frontend_available' => true,
                 ]
             );
             $this->add_control(
                 'terms_exclude',
                 [
                     'label' => esc_html__( 'Exclude Terms', 'custom-product-filters' ),
-                    'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
-                    'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX', 'query'  => [ 'taxonomy' => 'category' ] ],
+                    'type' => $query_control_type,
+                    'label_block' => true,
+                    'multiple' => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query' => [
+                            'post_type' => '{{post_type}}',
+                        ],
+                    ],
+                    'frontend_available' => true,
                 ]
             );
             $this->add_control(
@@ -252,6 +271,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                     'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
                     'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX', 'query'  => [ 'taxonomy' => 'product_cat' ] ],
                     'condition' => [ 'post_type' => 'product' ],
+                    'frontend_available' => true,
                 ]
             );
             $this->add_control(
@@ -261,6 +281,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                     'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
                     'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX', 'query'  => [ 'taxonomy' => 'product_tag' ] ],
                     'condition' => [ 'post_type' => 'product' ],
+                    'frontend_available' => true,
                 ]
             );
         } else {
@@ -281,6 +302,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label'   => esc_html__( 'ACF Field', 'custom-product-filters' ),
                 'type'    => Controls_Manager::SELECT,
                 'options' => $this->_get_all_acf_field_keys(),
+                'frontend_available' => true,
             ]
         );
         $acf_repeater->add_control(
@@ -289,6 +311,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Field Value', 'custom-product-filters' ),
                 'type' => Controls_Manager::TEXT,
                 'condition' => [ 'acf_meta_key!' => '' ],
+                'frontend_available' => true,
             ]
         );
         $acf_repeater->add_control(
@@ -307,6 +330,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 ],
                 'default' => '=',
                 'condition' => [ 'acf_meta_key!' => '' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -317,7 +341,8 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'fields'  => $acf_repeater->get_controls(),
                 'title_field' => '{{{ acf_meta_key }}}',
                 'separator' => 'before',
-                'condition' => [ '_is_acf_active' => '1' ]
+                'condition' => [ '_is_acf_active' => '1' ],
+                'frontend_available' => true,
             ]
         );
 
@@ -332,6 +357,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                     'private' => esc_html__( 'Private', 'custom-product-filters' ), 'any'     => esc_html__( 'Any', 'custom-product-filters' ),
                 ],
                 'default' => 'publish',
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -347,6 +373,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                     'comment_count' => esc_html__( 'Comment Count', 'custom-product-filters' ), 'menu_order' => esc_html__( 'Menu Order', 'custom-product-filters' ),
                 ],
                 'default' => 'date',
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -356,6 +383,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => [ 'DESC' => esc_html__( 'Descending', 'custom-product-filters' ), 'ASC'  => esc_html__( 'Ascending', 'custom-product-filters' ) ],
                 'default' => 'DESC',
+                'frontend_available' => true,
             ]
         );
 
@@ -377,6 +405,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => [ 'taxonomy' => esc_html__( 'Taxonomy', 'custom-product-filters' ), 'acf' => esc_html__( 'Custom Field (ACF)', 'custom-product-filters' ) ],
                 'default' => 'taxonomy',
+                'frontend_available' => true,
             ]
         );
         $repeater->add_control(
@@ -386,6 +415,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => $this->_get_all_taxonomies(),
                 'condition' => [ 'filter_type' => 'taxonomy' ],
+                'frontend_available' => true,
             ]
         );
         $repeater->add_control(
@@ -395,6 +425,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'      => Controls_Manager::SELECT,
                 'options'   => $this->_get_all_acf_field_keys(),
                 'condition' => [ 'filter_type' => 'acf' ],
+                'frontend_available' => true,
             ]
         );
         $repeater->add_control(
@@ -408,6 +439,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                     'number'   => esc_html__( 'Number Input', 'custom-product-filters' ),
                 ],
                 'default' => 'dropdown',
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -418,6 +450,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'fields'  => $repeater->get_controls(),
                 'title_field' => '{{{ filter_type }}} - {{{ taxonomy_name || acf_field_key }}}',
                 'default' => [ [ 'filter_type' => 'taxonomy', 'taxonomy_name' => 'product_tag', 'display_as' => 'dropdown' ] ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -427,6 +460,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => [ 'AND' => esc_html__( 'AND', 'custom-product-filters' ), 'OR'  => esc_html__( 'OR', 'custom-product-filters' ) ],
                 'default' => 'AND',
+                'frontend_available' => true,
             ]
         );
 
@@ -446,6 +480,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Enable Load More', 'custom-product-filters' ),
                 'type'  => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes',
                 'condition' => [ 'layout_type' => 'grid' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -454,6 +489,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Posts Per Page (Load More)', 'custom-product-filters' ),
                 'type' => Controls_Manager::NUMBER, 'min' => 1, 'default' => 9,
                 'condition' => [ 'enable_load_more' => 'yes', 'layout_type' => 'grid' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -462,6 +498,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Load More Button Text', 'custom-product-filters' ),
                 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'Load More', 'custom-product-filters' ),
                 'condition' => [ 'enable_load_more' => 'yes', 'layout_type' => 'grid' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -470,6 +507,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'No More Products Text', 'custom-product-filters' ),
                 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'No More Products', 'custom-product-filters' ),
                 'condition' => [ 'enable_load_more' => 'yes', 'layout_type' => 'grid' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -477,6 +515,7 @@ class Filtered_Loop_Widget extends Widget_Base {
             [
                 'label' => esc_html__( 'Enable History API (URL Update)', 'custom-product-filters' ),
                 'type'  => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
+                'frontend_available' => true,
             ]
         );
         
@@ -494,6 +533,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Autoplay', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -502,6 +542,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Autoplay Interval (ms)', 'custom-product-filters' ),
                 'type' => Controls_Manager::NUMBER, 'min' => 1000, 'step' => 500, 'default' => 3000,
                 'condition' => [ 'layout_type' => 'carousel', 'carousel_autoplay' => 'yes' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -510,6 +551,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Navigation Arrows', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -518,6 +560,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Previous Arrow Icon', 'custom-product-filters' ),
                 'type' => Controls_Manager::ICONS, 'skin' => 'inline', 'label_block' => false,
                 'condition' => [ 'layout_type' => 'carousel', 'carousel_nav_buttons' => 'yes' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -526,6 +569,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Next Arrow Icon', 'custom-product-filters' ),
                 'type' => Controls_Manager::ICONS, 'skin' => 'inline', 'label_block' => false,
                 'condition' => [ 'layout_type' => 'carousel', 'carousel_nav_buttons' => 'yes' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_responsive_control(
@@ -534,6 +578,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Slides to Move', 'custom-product-filters' ),
                 'type' => Controls_Manager::NUMBER, 'min' => 1, 'default' => 1,
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -542,6 +587,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Pagination Dots', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -550,6 +596,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Wrap Around', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -558,6 +605,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Draggable', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -566,6 +614,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Adaptive Height', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
         $this->add_control(
@@ -576,6 +625,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'options' => [ 'left' => esc_html__( 'Left', 'custom-product-filters' ), 'center' => esc_html__( 'Center', 'custom-product-filters' ), 'right'  => esc_html__( 'Right', 'custom-product-filters' ) ],
                 'default' => 'left',
                 'condition' => [ 'layout_type' => 'carousel' ],
+                'frontend_available' => true,
             ]
         );
 
@@ -837,6 +887,141 @@ class Filtered_Loop_Widget extends Widget_Base {
         $this->end_controls_section();
 
         $this->start_controls_section(
+            'section_clear_all_style',
+            [
+                'label' => esc_html__( 'Clear All Button', 'custom-product-filters' ),
+                'tab'   => Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name' => 'clear_all_typography',
+                'selector' => '{{WRAPPER}} .dgcpf-clear-all-filters-button',
+            ]
+        );
+
+        $this->start_controls_tabs( 'tabs_clear_all_button_style' );
+
+        $this->start_controls_tab(
+            'tab_clear_all_button_normal',
+            [
+                'label' => esc_html__( 'Normal', 'custom-product-filters' ),
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_text_color',
+            [
+                'label' => esc_html__( 'Text Color', 'custom-product-filters' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_background_color',
+            [
+                'label' => esc_html__( 'Background Color', 'custom-product-filters' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
+            [
+                'name' => 'clear_all_button_border',
+                'selector' => '{{WRAPPER}} .dgcpf-clear-all-filters-button',
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_border_radius',
+            [
+                'label' => esc_html__( 'Border Radius', 'custom-product-filters' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%' ],
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'clear_all_button_box_shadow',
+                'selector' => '{{WRAPPER}} .dgcpf-clear-all-filters-button',
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_padding',
+            [
+                'label' => esc_html__( 'Padding', 'custom-product-filters' ),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', 'em', '%' ],
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        $this->start_controls_tab(
+            'tab_clear_all_button_hover',
+            [
+                'label' => esc_html__( 'Hover', 'custom-product-filters' ),
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_hover_text_color',
+            [
+                'label' => esc_html__( 'Text Color', 'custom-product-filters' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_hover_background_color',
+            [
+                'label' => esc_html__( 'Background Color', 'custom-product-filters' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'clear_all_button_hover_border_color',
+            [
+                'label' => esc_html__( 'Border Color', 'custom-product-filters' ),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .dgcpf-clear-all-filters-button:hover' => 'border-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
             'section_no_products_style',
             [
                 'label' => esc_html__( '"No Products Found" Message', 'custom-product-filters' ),
@@ -944,8 +1129,15 @@ class Filtered_Loop_Widget extends Widget_Base {
     }
 
     private function _get_all_acf_field_keys() {
+        static $options = null;
+
+        if ( $options !== null ) {
+            return $options;
+        }
+
         if ( !$this->_is_acf_active() ) {
-            return ['' => esc_html__('ACF plugin not active', 'custom-product-filters')];
+            $options = ['' => esc_html__('ACF plugin not active', 'custom-product-filters')];
+            return $options;
         }
         $options = [ '' => esc_html__( 'Select an ACF field', 'custom-product-filters' ) ];
         $field_groups = acf_get_field_groups();
@@ -953,7 +1145,7 @@ class Filtered_Loop_Widget extends Widget_Base {
             $fields = acf_get_fields( $group['key'] );
             foreach ( $fields as $field ) {
                 if ( in_array( $field['type'], ['text', 'number', 'select', 'checkbox', 'radio', 'true_false'] ) ) {
-                    $options[ $field['name'] ] = $field['label'] . ' (' . $field['type'] . ')';
+                    $options[ $field['key'] ] = $field['label'] . ' (' . $field['type'] . ')';
                 }
             }
         }
@@ -982,7 +1174,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label' => esc_html__( 'Single Column Grid (Mobile-friendly)', 'custom-product-filters' ),
                 'settings' => [
                     'layout_type' => 'grid', 'columns' => 1, 'columns_tablet' => 1, 'columns_mobile' => 1,
-                    'horizontal_gap' => ['size' => 0, 'unit' => 'px'], 'vertical_gap' => ['size' => 20, 'unit' => 'px'],
+                    'horizontal_gap' => ['size' => 0, 'unit' => 'px'], 'vertical_g_gap' => ['size' => 20, 'unit' => 'px'],
                     'equal_height_columns' => 'no', 'enable_load_more' => 'yes', 'posts_per_page_initial' => 5, 'posts_per_page' => 5,
                 ],
             ],
@@ -1037,40 +1229,40 @@ class Filtered_Loop_Widget extends Widget_Base {
             return;
         }
 
+        // Build initial query args
         $args = [
-            'post_type'      => $settings['post_type'],
-            'post_status'    => !empty($settings['post_status']) ? $settings['post_status'] : 'publish',
+            'post_type'      => $settings['post_type'] ?? 'product',
+            'post_status'    => $settings['post_status'] ?? ['publish'],
             'posts_per_page' => $settings['posts_per_page_initial'] ?? 9,
             'paged'          => 1,
             'orderby'        => $settings['orderby'] ?? 'date',
             'order'          => $settings['order'] ?? 'DESC',
+            'tax_query'      => ['relation' => 'AND'],
+            'meta_query'     => ['relation' => 'AND'],
         ];
 
-        if ( ! empty( $settings['posts_include_by_ids'] ) ) $args['post__in'] = $settings['posts_include_by_ids'];
-        if ( ! empty( $settings['posts_exclude_by_ids'] ) ) $args['post__not_in'] = $settings['posts_exclude_by_ids'];
+        if (!empty($settings['posts_include_by_ids'])) $args['post__in'] = $settings['posts_include_by_ids'];
+        if (!empty($settings['posts_exclude_by_ids'])) $args['post__not_in'] = $settings['posts_exclude_by_ids'];
+        if (!empty($settings['terms_include'])) $args['tax_query'][] = ['taxonomy' => 'category', 'field' => 'term_id', 'terms' => $settings['terms_include']];
+        if (!empty($settings['terms_exclude'])) $args['tax_query'][] = ['taxonomy' => 'category', 'field' => 'term_id', 'terms' => $settings['terms_exclude'], 'operator' => 'NOT IN'];
+        if (!empty($settings['product_categories_query'])) $args['tax_query'][] = ['taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => $settings['product_categories_query']];
+        if (!empty($settings['product_tags_query'])) $args['tax_query'][] = ['taxonomy' => 'product_tag', 'field' => 'term_id', 'terms' => $settings['product_tags_query']];
 
-        $tax_query_main = [];
-        if ( ! empty( $settings['terms_include'] ) ) $tax_query_main[] = [ 'taxonomy' => 'category', 'field' => 'term_id', 'terms' => $settings['terms_include'], 'operator' => 'IN' ];
-        if ( ! empty( $settings['terms_exclude'] ) ) $tax_query_main[] = [ 'taxonomy' => 'category', 'field' => 'term_id', 'terms' => $settings['terms_exclude'], 'operator' => 'NOT IN' ];
-        if ( ! empty( $settings['product_categories_query'] ) && 'product' === $settings['post_type'] ) $tax_query_main[] = [ 'taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => $settings['product_categories_query'], 'operator' => 'IN' ];
-        if ( ! empty( $settings['product_tags_query'] ) && 'product' === $settings['post_type'] ) $tax_query_main[] = [ 'taxonomy' => 'product_tag', 'field' => 'term_id', 'terms' => $settings['product_tags_query'], 'operator' => 'IN' ];
-        if ( ! empty( $tax_query_main ) ) {
-            $args['tax_query'] = [ 'relation' => 'AND' ];
-            $args['tax_query'] = array_merge( $args['tax_query'], $tax_query_main );
-        }
-
-        $meta_query_main = [];
-        if ( ! empty( $settings['acf_meta_query_repeater'] ) && $this->_is_acf_active() ) {
-            $meta_query_main['relation'] = 'AND';
-            foreach ( $settings['acf_meta_query_repeater'] as $meta_item ) {
-                 if ( ! empty( $meta_item['acf_meta_key'] ) && isset( $meta_item['acf_meta_value'] ) && $meta_item['acf_meta_value'] !== '' ) {
-                    $meta_query_main[] = [ 'key' => $meta_item['acf_meta_key'], 'value' => $meta_item['acf_meta_value'], 'compare' => $meta_item['acf_meta_compare'] ];
+        if (!empty($settings['acf_meta_query_repeater']) && function_exists('get_field_object')) {
+            foreach ($settings['acf_meta_query_repeater'] as $item) {
+                if (!empty($item['acf_meta_key']) && isset($item['acf_meta_value'])) {
+                    $args['meta_query'][] = [
+                        'key'     => $item['acf_meta_key'],
+                        'value'   => $item['acf_meta_value'],
+                        'compare' => $item['acf_meta_compare'] ?? '=',
+                    ];
                 }
             }
         }
-        if ( count($meta_query_main) > 1 ) $args['meta_query'] = $meta_query_main;
 
-        $query = new WP_Query( $args );
+        $query = new \WP_Query($args);
+        
+        $settings['max_num_pages'] = $query->max_num_pages;
 
         $this->add_render_attribute( 'widget_container', 'class', 'dgcpf-filtered-loop-widget-container' );
         $this->add_render_attribute( 'widget_container', 'data-settings', wp_json_encode( $settings ) );
@@ -1079,6 +1271,8 @@ class Filtered_Loop_Widget extends Widget_Base {
 
         $layout_type_class = 'dgcpf-' . $settings['layout_type'];
         $this->add_render_attribute( 'loop_container', 'class', [ 'dgcpf-loop-container', $layout_type_class ] );
+        $this->add_render_attribute( 'loop_container', 'aria-live', 'polite' );
+
         if ( 'carousel' === $settings['layout_type'] ) {
             $this->add_render_attribute( 'loop_container', 'class', 'flickity-enabled' );
             $this->add_render_attribute( 'loop_container', 'data-columns-desktop', $settings['columns_carousel'] );
@@ -1174,21 +1368,21 @@ class Filtered_Loop_Widget extends Widget_Base {
         echo '</div>';
 
         echo '<div ' . $this->get_render_attribute_string( 'loop_container' ) . '>';
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) {
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
                 $query->the_post();
-                echo '<div class="elementor-loop-item">';
-                echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
-                echo '</div>';
+                if (class_exists('\Elementor\Plugin')) {
+                    echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display($template_id);
+                }
             }
         } else {
-            echo '<p class="no-products-found">' . esc_html__('No products found matching your criteria.', 'custom-product-filters') . '</p>';
+            echo '<p class="no-products-found">' . esc_html__('No products found.', 'custom-product-filters') . '</p>';
         }
         echo '</div>';
         
         echo '<div class="dgcpf-load-more-container">';
-        if ( $settings['enable_load_more'] === 'yes' && $query->max_num_pages > 1 ) {
-            echo '<button class="dgcpf-load-more-button elementor-button" data-max-pages="' . esc_attr( $query->max_num_pages ) . '">' . esc_html( $settings['load_more_button_text'] ) . '</button>';
+        if ( 'yes' === $settings['enable_load_more'] ) {
+            echo '<button class="dgcpf-load-more-button elementor-button">' . esc_html( $settings['load_more_button_text'] ) . '</button>';
         }
         echo '</div>';
         

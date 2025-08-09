@@ -12,6 +12,22 @@ class DGCPF_Elementor_Widgets {
     public function __construct() {
         add_action( 'elementor/elements/categories_registered', [ $this, 'register_widget_categories' ] );
         add_action( 'elementor/widgets/register', [ $this, 'register_widgets' ] );
+        
+        // Hooks to enqueue scripts and styles for Elementor editor preview.
+        add_action( 'elementor/preview/enqueue_scripts', [ $this, 'enqueue_preview_scripts' ] );
+        add_action( 'elementor/preview/enqueue_styles', [ $this, 'enqueue_preview_styles' ] );
+    }
+
+    public function enqueue_preview_scripts() {
+        // Enqueue scripts needed for the widget's functionality in the editor.
+        wp_enqueue_script('flickity-js');
+        wp_enqueue_script('dgcpf-filtered-loop-widget-js');
+    }
+
+    public function enqueue_preview_styles() {
+        // Enqueue styles needed for the widget's appearance in the editor.
+        wp_enqueue_style('flickity-css');
+        wp_enqueue_style('dgcpf-filtered-loop-widget-css');
     }
 
     public function register_widget_categories( $elements_manager ) {

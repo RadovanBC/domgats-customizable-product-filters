@@ -1,5 +1,6 @@
 <?php
 namespace DomGats\ProductFilter;
+
 /**
  * Handles the admin-side settings page for the plugin.
  *
@@ -14,6 +15,7 @@ class DGCPF_Admin {
 
 	/**
 	 * The unique ID for the settings page.
+	 * @var string
 	 */
 	private $option_group = 'dgcpf_settings_group';
 
@@ -30,8 +32,8 @@ class DGCPF_Admin {
 	 */
 	public function add_admin_menu() {
 		add_options_page(
-			'DomGats Product Filters Settings', // Page Title
-			'Product Filters',                    // Menu Title
+			esc_html__( 'DomGats Product Filters Settings', 'custom-product-filters' ), // Page Title
+			esc_html__( 'Product Filters', 'custom-product-filters' ),                    // Menu Title
 			'manage_options',                     // Capability required
 			'dgcpf_settings',                     // Menu Slug
 			[ $this, 'render_settings_page' ]      // Callback function to render the page
@@ -49,7 +51,7 @@ class DGCPF_Admin {
 				<?php
 				settings_fields( $this->option_group );
 				do_settings_sections( 'dgcpf_settings' );
-				submit_button( 'Save Settings' );
+				submit_button( esc_html__( 'Save Settings', 'custom-product-filters' ) );
 				?>
 			</form>
 		</div>
@@ -69,7 +71,7 @@ class DGCPF_Admin {
 		// Section for General Settings
 		add_settings_section(
 			'dgcpf_general_section',
-			'Display Text Settings',
+			esc_html__( 'Display Text Settings', 'custom-product-filters' ),
 			null, // No description needed for this section
 			'dgcpf_settings'
 		);
@@ -77,28 +79,28 @@ class DGCPF_Admin {
 		// Field for "Filter by:" text
 		add_settings_field(
 			'dgcpf_filter_by_text',
-			'Filter Dropdown Label',
+			esc_html__( 'Filter Dropdown Label', 'custom-product-filters' ),
 			[ $this, 'render_text_field' ],
 			'dgcpf_settings',
 			'dgcpf_general_section',
 			[
 				'id'      => 'filter_by_text',
-				'label'   => 'The label shown above the list of tags in the dropdown.',
-				'default' => 'Filter by:',
+				'label'   => esc_html__( 'The label shown above the list of tags in the dropdown.', 'custom-product-filters' ),
+				'default' => esc_html__( 'Filter by:', 'custom-product-filters' ),
 			]
 		);
 
 		// Field for "No products found" text
 		add_settings_field(
 			'dgcpf_no_products_text',
-			'"No Products Found" Message',
+			esc_html__( '"No Products Found" Message', 'custom-product-filters' ),
 			[ $this, 'render_text_field' ],
 			'dgcpf_settings',
 			'dgcpf_general_section',
 			[
 				'id'      => 'no_products_text',
-				'label'   => 'The message displayed when no products match the selected filters.',
-				'default' => 'There are no products with that combination of tags.',
+				'label'   => esc_html__( 'The message displayed when no products match the selected filters.', 'custom-product-filters' ),
+				'default' => esc_html__( 'There are no products with that combination of tags.', 'custom-product-filters' ),
 			]
 		);
 	}

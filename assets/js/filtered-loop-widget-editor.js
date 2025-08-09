@@ -1,6 +1,7 @@
 (function($) {
     $(window).on('elementor:init', function() {
         elementor.hooks.addAction('panel/open_editor/widget/dgcpf_filtered_loop', function(panel, model) {
+            let isApplyingPreset = false;
 
             function applyPreset(presetKey) {
                 if (!presetKey || presetKey === 'custom' || !DgcpfEditorData || !DgcpfEditorData.presets[presetKey]) {
@@ -8,48 +9,38 @@
                 }
                 const presetSettings = DgcpfEditorData.presets[presetKey].settings;
                 
-                elementor.helpers.isInAtomicAction = true;
+                isApplyingPreset = true;
+                
+                elementor.history.history.startAtomic();
+                
                 Object.keys(presetSettings).forEach(function(key) {
                     model.setSetting(key, presetSettings[key]);
                 });
-                elementor.helpers.isInAtomicAction = false;
+
+                elementor.history.history.endAtomic();
                 
-                // We need to re-render the widget preview after applying settings
-                elementor.channels.editor.run('document/render/widget', { model: model });
-            }
-
-            function checkCustomPreset() {
-                if (elementor.helpers.isInAtomicAction) {
-                    return;
-                }
-                const currentSettings = model.get('settings').attributes;
-                const presetKey = currentSettings.layout_preset;
-
-                if (!presetKey || presetKey === 'custom' || !DgcpfEditorData || !DgcpfEditorData.presets[presetKey]) {
-                    return;
-                }
-
-                const presetSettings = DgcpfEditorData.presets[presetKey].settings;
-                let isModified = false;
-
-                for (const key in presetSettings) {
-                    if (JSON.stringify(currentSettings[key]) !== JSON.stringify(presetSettings[key])) {
-                        isModified = true;
-                        break;
-                    }
-                }
-
-                if (isModified) {
-                    model.setSetting('layout_preset', 'custom');
-                }
+                setTimeout(function() {
+                    isApplyingPreset = false;
+                }, 10);
             }
 
             function onSettingsChange(changedModel) {
+                if (isApplyingPreset) {
+                    return;
+                }
+
                 const changedAttributes = changedModel.changed;
+
                 if (changedAttributes.hasOwnProperty('layout_preset')) {
                     applyPreset(changedAttributes.layout_preset);
                 } else {
-                    checkCustomPreset();
+                    if (model.getSetting('layout_preset') !== 'custom') {
+                        model.setSetting('layout_preset', 'custom', { silent: true });
+                        const controlView = panel.getControlView('layout_preset');
+                        if (controlView) {
+                            controlView.render();
+                        }
+                    }
                 }
             }
 

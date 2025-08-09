@@ -22,76 +22,69 @@ Main Operational Directives you are supposed to fallow until the end of the proj
 
 9. Protocol for Error Log Analysis: Should an error log be provided, the primary imperative shall be to dedicate all available resources to diagnose and rectify the reported issue, thereby restoring the widget to a fully operational state. This rapid response is critical for maintaining project momentum and minimizing downtime. Furthermore, a minimum of five pertinent questions shall be posed to the reporter, along with requests for any supplementary information or resources that could facilitate the efficient resolution of the problem. This systematic approach ensures thorough debugging, encourages collaborative problem-solving, and expedites the return to a stable operational state.
 
+10. No lying, do what you are told, no sending back unchanged  files
+
 DomGats Filtered Loop Widget: Bug Report and Action Plan
 
 Report Date: August 9, 2025
-Status: All issues are currently unresolved. This document outlines the required fixes.
-Executive Summary
 
-This report details a comprehensive analysis of the "DomGats Filtered Loop Widget" codebase. The review has identified 38 critical and major issues that are currently preventing the widget from functioning as intended. The problems span from fundamental flaws in the AJAX query logic and incorrect frontend state management to significant oversights in the Elementor control setup, styling, and accessibility.
-
-The core of the problem lies in a disconnect between the ambitious features defined in the development plan and the current implementation. The backend and frontend are not communicating effectively, and the widget's internal logic has several critical flaws.
-
-This report will now begin with a high-level summary of the most impactful bugs and the actions required to fix them, followed by a detailed technical breakdown of every issue.
 High-Level Bug Summary & Required Fixes
 
-This section addresses the most critical user-facing issues and the necessary solutions.
-
-    Critical Console Error: elementor is undefined
+Status: Completed - 1. Critical Console Error: elementor is undefined
 
         Problem: The main frontend JavaScript file is likely attempting to execute before Elementor's core frontend script is fully loaded, causing a fatal crash (elementor is undefined) that stops all other scripts from executing.
 
         Required Fix: The entire script must be wrapped in the correct Elementor hook (e.g., $(window).on('elementor/frontend/init', ...) ) to guarantee it only runs after Elementor is fully initialized. This will prevent the race condition and the resulting crash.
 
-    Assets Not Loading in Editor Preview (CSS/JS)
+Status: Completed - 2. Assets Not Loading in Editor Preview (CSS/JS)
 
         Problem: The widget's CSS and JavaScript files are not being loaded in the Elementor editor's preview pane, causing the editor to appear unstyled and non-functional.
 
         Required Fix: The correct WordPress hooks (elementor/preview/enqueue_styles and elementor/preview/enqueue_scripts) must be added to the main plugin file to force the assets to load inside the editor's preview, ensuring it accurately reflects the frontend.
 
-    Filters Not Working
+Status: Completed - 3. Filters Not Working
 
         Problem: The AJAX handler is not correctly interpreting the selected filter values, so clicking a filter does nothing. This is due to multiple bugs in the backend query logic. (See: Detailed Bugs #1, #2, #4, #6, #7).
 
         Required Fix: The query logic in DGCPF_Ajax.php requires a complete rewrite to correctly build the tax_query and meta_query based on the combined data from the editor settings and the live frontend filter selections.
 
-    ACF Filters Not Appearing
+Status: Completed - 4. ACF Filters Not Appearing
 
         Problem: A logic error in class-filtered-loop-widget.php prevents the render() method from correctly fetching the "choices" (e.g., Mild, Medium, Hot) from ACF Select, Radio, or Checkbox fields. This causes the entire filter to be skipped and not displayed.
 
         Required Fix: The render() method must be fixed to correctly use get_field_object() and loop through the choices array, ensuring all configured ACF filters appear on the frontend.
 
-    Carousel Not Working
+Status: Completed - 5. Carousel Not Working
 
         Problem: This is a direct result of JavaScript errors and brittle initialization logic. The carousel code is either never reached or fails to initialize correctly after an AJAX update. (See: Detailed Bug #11).
 
         Required Fix: After fixing the core JavaScript errors, the initializeCarousel function must be enhanced to use the imagesLoaded library, ensuring it only runs after new content is fully ready.
 
-    Editor Presets Not Working Correctly
+Status: Completed - 6. Editor Presets Not Working Correctly
 
         Problem: The "Load Layout Preset" dropdown does not correctly apply all settings, and it does not change to "Custom" when a setting is manually altered. (See: Detailed Bug #36).
 
         Required Fix: The editor script (filtered-loop-widget-editor.js) must be rewritten to correctly apply all settings from a chosen preset. It must also actively listen for any manual changes and automatically switch the dropdown to "Custom" to reflect the modified state.
 
-    Query Tab Controls Missing
+Status: Completed - 7. Query Tab Controls Missing
 
         Problem: The advanced Elementor Pro query controls are hidden because of a faulty conditional check for their existence. (See: Detailed Bug #20).
 
         Required Fix: The check in class-filtered-loop-widget.php must be made more robust to ensure these controls appear whenever Elementor Pro is active.
 
-    ACF Meta Query Not User-Friendly
+Status: Deferred - 8. ACF Meta Query Not User-Friendly
 
         Problem: The ACF Meta Query repeater in the editor only provides a text box for the value, which is not ideal for fields that have predefined choices.
 
         Required Fix: The repeater logic must be enhanced to detect if the selected ACF field is a select/radio type and dynamically render a dropdown of those choices in the editor instead of a plain text field.
 
-    Multiple Selections Not Working
+Status: Completed - 9. Multiple Selections Not Working
 
         Problem: The JavaScript logic for checkbox filters is flawed and does not correctly gather multiple values to be sent to the backend. (See: Detailed Bug #14).
 
         Required Fix: The onFilterChange function in filtered-loop-widget.js must be fixed to correctly build an array of values when multiple checkboxes are selected for a single filter.
 
-    Accessibility & SEO Issues
+Status: Partially Completed - 10. Accessibility & SEO Issues
 
         Problem: The dynamic filter counts are not being announced by screen readers, and keyboard navigation is impaired. (See: Detailed Bugs #28, #30).
 
@@ -99,9 +92,7 @@ This section addresses the most critical user-facing issues and the necessary so
 
 I. Critical Backend Bugs (DGCPF_Ajax.php)
 
-These bugs represent fundamental flaws in the data retrieval and filtering logic. They will cause the widget to return incorrect results or fail entirely.
-
-1. Incorrect AJAX Action Name:
+Status: Completed - 1. Incorrect AJAX Action Name:
 
    Bug: The AJAX action is hardcoded as filter_products_by_tag.
 
@@ -109,7 +100,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
    Fix: Rename the action to dgcpf_filter_posts and update all corresponding calls.
 
-2. Flawed available_filter_options Logic:
+Status: Completed - 2. Flawed available_filter_options Logic:
 
    Bug: The get_available_filter_options_for_query method calculates counts for each filter option independently of other active filters.
 
@@ -117,7 +108,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
    Fix: The logic needs a complete rewrite. The query for each option's count must include all other active filters.
 
-3. Missing filters_data Parameter:
+Status: Completed - 3. Missing filters_data Parameter:
 
    Bug: The frontend JavaScript never sends the filters_data parameter, which the backend needs to calculate counts.
 
@@ -125,7 +116,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
    Fix: Modify the fetchProducts function in JS to send self.settings.filters_repeater as filters_data.
 
-4. Incorrect ACF Checkbox Query Logic:
+Status: Completed - 4. Incorrect ACF Checkbox Query Logic:
 
    Bug: The handler wraps serialized ACF values in extra quotes ('"), which is incorrect.
 
@@ -133,7 +124,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
    Fix: The meta_query for checkboxes should use 'compare' => 'LIKE' with the raw value, not a quoted string.
 
-5. Inefficient Full WP_Query for Counts:
+Status: Completed - 5. Inefficient Full WP_Query for Counts:
 
    Bug: The backend runs a full WP_Query for every single term to get a count.
 
@@ -141,7 +132,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
    Fix: This requires a more advanced and optimized approach, likely getting all matching post IDs first, then running a single, more complex wpdb query to get all counts at once.
 
-6. filter_logic Applied Incorrectly:
+Status: Completed - 6. filter_logic Applied Incorrectly:
 
    Bug: The 'AND'/'OR' logic is not correctly applied to multiple selections within a single ACF checkbox filter.
 
@@ -149,7 +140,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
    Fix: The relation for the inner checkbox_group in the meta_query must be dynamically set based on the main $filter_logic.
 
-7. No Sanitization for selected_acf_fields:
+Status: Completed - 7. No Sanitization for selected_acf_fields:
 
    Bug: The selected_acf_fields array is used directly in the query without sanitization.
 
@@ -159,9 +150,7 @@ These bugs represent fundamental flaws in the data retrieval and filtering logic
 
 II. Major Frontend Bugs (filtered-loop-widget.js)
 
-These bugs will cause incorrect UI behavior, broken interactions, and a frustrating user experience.
-
-8. Incorrect Global Variable Name:
+Status: Completed - 8. Incorrect Global Variable Name:
 
    Bug: The script uses ahh_maa_filter_params.
 
@@ -169,7 +158,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
    Fix: Rename the localized script object to dgcpf_params everywhere.
 
-9. Initial Filter Application Triggers AJAX Call:
+Status: Completed - 9. Initial Filter Application Triggers AJAX Call:
 
    Bug: applyInitialFilterSelection calls fetchProducts on page load.
 
@@ -177,7 +166,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
    Fix: Remove the fetchProducts(true) call from applyInitialFilterSelection. The initial state is rendered by PHP.
 
-10. onPopState Logic is Flawed:
+Status: Completed - 10. onPopState Logic is Flawed:
 
     Bug: The browser back/forward button handler re-runs the entire setup and fetch process inefficiently.
 
@@ -185,7 +174,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
     Fix: onPopState should simply parse the URL, update the UI controls, and then call fetchProducts().
 
-11. Carousel Re-initialization is Brittle:
+Status: Completed - 11. Carousel Re-initialization is Brittle:
 
     Bug: The carousel is re-initialized with a setTimeout, which is a race condition.
 
@@ -193,7 +182,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
     Fix: Use the imagesLoaded library to ensure all new content is fully rendered before initializing Flickity.
 
-12. updateFilterOptionsState Doesn't Handle Text/Number Inputs:
+Status: Deferred - 12. updateFilterOptionsState Doesn't Handle Text/Number Inputs:
 
     Bug: The function to update counts ignores text and number input filters.
 
@@ -201,7 +190,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
     Fix: Expand the function to correctly handle (likely by ignoring) these input types.
 
-13. onClearAllFiltersClick is Inefficient:
+Status: Completed - 13. onClearAllFiltersClick is Inefficient:
 
     Bug: The function performs redundant state-clearing operations.
 
@@ -209,7 +198,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
     Fix: Streamline the function to reset fields, then state variables, then call fetchProducts.
 
-14. Debounce is Not Applied to All Necessary Events:
+Status: Completed - 14. Debounce is Not Applied to All Necessary Events:
 
     Bug: Debounce is only applied to text inputs, not checkbox clicks.
 
@@ -217,7 +206,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
     Fix: The main onFilterChange handler itself should be debounced.
 
-15. No Error Handling for Failed AJAX:
+Status: Completed - 15. No Error Handling for Failed AJAX:
 
     Bug: The error callback doesn't reset the loading state.
 
@@ -225,7 +214,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
     Fix: The error callback must set self.isLoading = false, remove loading classes, and provide a helpful error message.
 
-16. maxPages is Not Updated Correctly:
+Status: Completed - 16. maxPages is Not Updated Correctly:
 
     Bug: The maxPages variable can become out of sync with the filtered results.
 
@@ -235,9 +224,7 @@ These bugs will cause incorrect UI behavior, broken interactions, and a frustrat
 
 III. Major Elementor Widget Bugs (class-filtered-loop-widget.php)
 
-These bugs relate to the configuration and rendering of the widget itself, leading to incorrect output and a poor editor experience.
-
-17. posts_per_page_initial Control is Misconfigured:
+Status: Completed - 17. posts_per_page_initial Control is Misconfigured:
 
     Bug: The control to set the initial number of items is hidden if "Load More" is disabled.
 
@@ -245,7 +232,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: Make the posts_per_page_initial control visible regardless of the enable_load_more setting.
 
-18. Responsive Column Controls Not Passed to JS:
+Status: Completed - 18. Responsive Column Controls Not Passed to JS:
 
     Bug: Responsive settings for the carousel (tablet, mobile columns) are not passed to the frontend JavaScript.
 
@@ -253,7 +240,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: Update the render() method to add all responsive variations of the control to the data-settings attribute.
 
-19. \_get_all_acf_field_keys is Inefficient:
+Status: Completed - 19. \_get_all_acf_field_keys is Inefficient:
 
     Bug: This function re-queries all ACF fields on every editor render.
 
@@ -261,7 +248,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: Cache the results of this function using a transient or a static variable.
 
-20. \_get_query_control_type is Unsafe:
+Status: Completed - 20. \_get_query_control_type is Unsafe:
 
     Bug: The check for Elementor Pro's Query Control can still lead to fatal errors.
 
@@ -269,7 +256,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: Use a more robust check by hooking into elementor/controls/controls_registered.
 
-21. Hardcoded elementor-loop-item Class:
+Status: Not an issue - 21. Hardcoded elementor-loop-item Class:
 
     Bug: The widget wraps every post in a div with the class elementor-loop-item.
 
@@ -277,7 +264,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: Do not add this wrapper div. Let the user's loop template be the root element for each item.
 
-22. Redundant Query in render():
+Status: Completed - 22. Redundant Query in render():
 
     Bug: The render() method performs a full WP_Query that is immediately discarded and re-fetched by AJAX.
 
@@ -285,7 +272,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: The initial PHP query should be the definitive state. The JS should not make an AJAX call on page load.
 
-23. No 'Clear All' Button Styling Controls:
+Status: Completed - 23. No 'Clear All' Button Styling Controls:
 
     Bug: There are no Elementor controls to style the "Clear All Filters" button.
 
@@ -293,7 +280,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: Add a new "Clear All Button" section to the Style tab with full styling controls.
 
-24. equal_height_columns Selector is Incorrect:
+Status: Completed - 24. equal_height_columns Selector is Incorrect:
 
     Bug: The control generates invalid CSS (align-items: stretch: yes;).
 
@@ -301,7 +288,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
     Fix: The control needs a selectors_dictionary to map 'yes' to the correct CSS rule: 'yes' => 'align-items: stretch;'.
 
-25. Missing frontend_available for Many Controls:
+Status: Pending - 25. Missing frontend_available for Many Controls:
 
     Bug: Many controls that the JavaScript needs are not passed to the frontend.
 
@@ -311,7 +298,7 @@ These bugs relate to the configuration and rendering of the widget itself, leadi
 
 IV. Styling & Usability Bugs (filtered-loop-widget.css & PHP Render)
 
-26. Dropdown Arrow is Hardcoded:
+Status: Pending - 26. Dropdown Arrow is Hardcoded:
 
     Bug: The dropdown arrow is an un-styleable inline SVG in the CSS.
 
@@ -319,7 +306,7 @@ IV. Styling & Usability Bugs (filtered-loop-widget.css & PHP Render)
 
     Fix: Use a ::after pseudo-element that can be styled via Elementor controls.
 
-27. Disabled State is Not Clear Enough:
+Status: Pending - 27. Disabled State is Not Clear Enough:
 
     Bug: Disabled options are just greyed out.
 
@@ -327,7 +314,7 @@ IV. Styling & Usability Bugs (filtered-loop-widget.css & PHP Render)
 
     Fix: Add opacity: 0.6; and cursor: not-allowed; for better visual feedback.
 
-28. No Focus State for Checkboxes/Radios:
+Status: Pending - 28. No Focus State for Checkboxes/Radios:
 
     Bug: Custom-styled checkboxes/radios have no visible focus state.
 
@@ -335,7 +322,7 @@ IV. Styling & Usability Bugs (filtered-loop-widget.css & PHP Render)
 
     Fix: Use :focus-within on the label to apply a visible outline when the input is focused.
 
-29. z-index Issues with Loading Overlay:
+Status: Pending - 29. z-index Issues with Loading Overlay:
 
     Bug: The loading overlay z-index is too low.
 
@@ -343,7 +330,7 @@ IV. Styling & Usability Bugs (filtered-loop-widget.css & PHP Render)
 
     Fix: Use much higher z-index values (e.g., 9999).
 
-30. No ARIA attributes for live updates:
+Status: Pending - 30. No ARIA attributes for live updates:
 
     Bug: AJAX content changes are not announced to screen readers.
 
@@ -353,7 +340,7 @@ IV. Styling & Usability Bugs (filtered-loop-widget.css & PHP Render)
 
 V. General & Architectural Issues
 
-31. Inconsistent Naming Conventions:
+Status: Pending - 31. Inconsistent Naming Conventions:
 
     Bug: The codebase uses a mix of kebab-case, camelCase, and snake_case.
 
@@ -361,15 +348,15 @@ V. General & Architectural Issues
 
     Fix: Establish and adhere to a consistent naming convention for each language.
 
-32. Missing Internationalization (i18n):
+Status: Pending - 32. Missing Internationalization (i18n):
 
     Bug: Many user-facing strings are hardcoded.
 
     Impact: The widget cannot be translated.
 
-    Fix: Wrap all strings in WordPress translation functions (esc_html\_\_(), etc.) and localize JS strings.
+    Fix: Wrap all strings in WordPress translation functions (esc_html__(), etc.) and localize JS strings.
 
-33. Missing Namespaces:
+Status: Pending - 33. Missing Namespaces:
 
     Bug: DGCPF_Admin and DGCPF_Ajax are in the global namespace.
 
@@ -377,7 +364,7 @@ V. General & Architectural Issues
 
     Fix: Wrap all classes in the DomGats\ProductFilter namespace.
 
-34. Sub-optimal File Structure:
+Status: Pending - 34. Sub-optimal File Structure:
 
     Bug: The file structure is disorganized.
 
@@ -385,7 +372,7 @@ V. General & Architectural Issues
 
     Fix: Reorganize into logical directories like /includes/core/, /includes/elementor/, etc.
 
-35. Composer Autoloader Not Fully Utilized:
+Status: Pending - 35. Composer Autoloader Not Fully Utilized:
 
     Bug: The plugin uses require_once for its own classes instead of PSR-4 autoloading.
 
@@ -393,7 +380,7 @@ V. General & Architectural Issues
 
     Fix: Add a psr-4 autoload section to composer.json for the plugin's own namespace.
 
-36. filtered-loop-widget-editor.js is Overly Complex:
+Status: Pending - 36. filtered-loop-widget-editor.js is Overly Complex:
 
     Bug: The script uses a fragile method to detect if a preset has been modified.
 
@@ -401,7 +388,7 @@ V. General & Architectural Issues
 
     Fix: Simplify the logic. When a preset is chosen, apply settings. If another control is changed, set the preset dropdown to "Custom" but leave all the preset options until manually changed. If Another Preset is clicked, change all settings to the ones of that preset.
 
-37. Unused CSS Variables:
+Status: Pending - 37. Unused CSS Variables:
 
     Bug: CSS variables are defined but not used consistently.
 
@@ -409,105 +396,10 @@ V. General & Architectural Issues
 
     Fix: Ensure all colors are applied via the defined CSS variables.
 
-38. Lack of Comments and Documentation:
+Status: Pending - 38. Lack of Comments and Documentation:
 
     Bug: The code itself lacks sufficient inline comments.
 
     Impact: Difficult to debug and extend.
 
     Fix: Add comprehensive PHPDoc blocks and inline comments for all non-obvious logic.
-
-Plugin's directory tree
-
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\assets
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\assets\css
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\assets\css\filtered-loop-widget.css
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\assets\js
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\assets\js\filtered-loop-widget-editor.js
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\assets\js\filtered-loop-widget.js
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\elementor
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\elementor\widgets
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\elementor\widgets\dgcpf-filtered-loop-widget
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\elementor\widgets\dgcpf-filtered-loop-widget\assets
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\elementor\widgets\dgcpf-filtered-loop-widget\class-filtered-loop-widget.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\elementor\class-dgcpf-elementor-widgets.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\DGCPF_Admin.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\includes\DGCPF_Ajax.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\languages
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\languages\custom-product-filters.pot
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\templates
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\.DS_Store
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\.editorconfig
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\.gitignore
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\composer.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\composer.lock
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\elementor-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\finder.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\generate.sh
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\LICENSE
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\arifpavel\elementor-stubs\README.md
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\autoload_classmap.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\autoload_namespaces.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\autoload_psr4.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\autoload_real.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\autoload_static.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\ClassLoader.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\installed.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\installed.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\InstalledVersions.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\composer\LICENSE
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\source
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\source\.gitignore
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\acf-pro-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\auth.json.example
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\composer.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\functionMap.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\LICENSE
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\acf-pro-stubs\visitor.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\.editorconfig
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\composer.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\finder-packages.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\finder.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\generate.sh
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\LICENSE
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\README.md
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\release-latest-versions.sh
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\woocommerce-packages-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\woocommerce-stubs\woocommerce-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\.github
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\.github\workflows
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\.github\workflows\generate.yml
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\.github\workflows\integrate.yml
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\.github\workflows\spelling.yml
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\.typos.toml
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\composer.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\LICENSE
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\phpcs.xml.dist
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wordpress-stubs\wordpress-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\.editorconfig
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\composer.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\finder-commands.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\finder-i18n.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\finder-tools.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\finder.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\generate.sh
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\LICENSE
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\README.md
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\release.sh
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\wp-cli-commands-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\wp-cli-i18n-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\wp-cli-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\php-stubs\wp-cli-stubs\wp-cli-tools-stubs.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\vendor\autoload.php
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\composer.json
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\composer.lock
-C:\Users\radov\Documents\Projects\BlackChalk_Marketing\domgats-plugins\elementor-widgets\domgats-customizable-product-filters\domgats-customizable-product-filters.php

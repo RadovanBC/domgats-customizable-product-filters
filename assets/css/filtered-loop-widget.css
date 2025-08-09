@@ -56,10 +56,20 @@
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-	background-repeat: no-repeat;
-	background-position: right 8px center;
-	background-size: 16px;
+	padding-right: 30px;
+}
+
+.dgcpf-filter-dropdown-wrapper {
+	position: relative;
+}
+
+.dgcpf-filter-dropdown-wrapper::after {
+	content: "\25BC";
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	pointer-events: none;
 }
 
 .dgcpf-filter-dropdown:focus,
@@ -92,6 +102,12 @@
 	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
+.dgcpf-filter-checkboxes label:focus-within,
+.dgcpf-filter-radio-buttons label:focus-within {
+	outline: 2px solid var(--dgcpf-accent-color);
+	outline-offset: 2px;
+}
+
 .dgcpf-filter-checkboxes input[type="checkbox"],
 .dgcpf-filter-radio-buttons input[type="radio"] {
 	margin: 0;
@@ -102,13 +118,15 @@
 
 .dgcpf-filter-dropdown option:disabled {
 	color: #aaa;
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .dgcpf-filter-checkboxes label.disabled,
 .dgcpf-filter-radio-buttons label.disabled {
 	color: #aaa;
 	cursor: not-allowed;
-	opacity: 0.7;
+	opacity: 0.6;
 	background-color: var(--dgcpf-background-light);
 }
 
@@ -167,7 +185,7 @@
 	width: 100%;
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.7);
-	z-index: 10;
+	z-index: 9998;
 	transition: opacity 0.3s ease;
 }
 .dgcpf-loop-container.loading::after {
@@ -183,7 +201,7 @@
 	border-top-color: var(--dgcpf-secondary-color);
 	border-radius: 50%;
 	animation: dgcpf-spin 0.8s linear infinite;
-	z-index: 11;
+	z-index: 9999;
 }
 
 .dgcpf-filter-group.processing {
@@ -218,8 +236,11 @@
 	transition: background-color 0.3s ease;
 }
 
-.dgcpf-load-more-button:hover {
+.dgcpf-load-more-button:hover,
+.dgcpf-load-more-button:focus {
 	background-color: var(--dgcpf-accent-color);
+	outline: 2px solid var(--dgcpf-accent-color);
+	outline-offset: 2px;
 }
 
 .dgcpf-load-more-button:disabled {
@@ -239,8 +260,11 @@
 	transition: background-color 0.2s ease;
 }
 
-.dgcpf-clear-all-filters-button:hover {
+.dgcpf-clear-all-filters-button:hover,
+.dgcpf-clear-all-filters-button:focus {
 	background-color: #e0e0e0;
+	outline: 2px solid var(--dgcpf-accent-color);
+	outline-offset: 2px;
 }
 
 .no-products-found {
