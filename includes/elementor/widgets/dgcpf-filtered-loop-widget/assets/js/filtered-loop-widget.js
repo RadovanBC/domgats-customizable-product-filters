@@ -177,13 +177,26 @@
                     wrapAround: self.settings.carousel_wrap_around === 'yes',
                     adaptiveHeight: self.settings.carousel_adaptive_height === 'yes',
                     draggable: self.settings.carousel_draggable === 'yes',
-                    groupCells: self.settings.carousel_slides_to_move > 1 ? self.settings.carousel_slides_to_move : false,
+                    groupCells: self.settings.carousel_slides_to_move > 1 ? parseInt(self.settings.carousel_slides_to_move) : false,
                     imagesLoaded: true,
                     rightToLeft: $('body').hasClass('rtl'),
                     cellAlign: self.settings.carousel_cell_align || 'left',
-                    autoPlay: self.settings.carousel_autoplay === 'yes' ? (self.settings.carousel_autoplay_interval || 3000) : false,
+                    autoPlay: self.settings.carousel_autoplay === 'yes' ? (parseInt(self.settings.carousel_autoplay_interval) || 3000) : false,
                 };
                 self.flickityInstance = new Flickity(self.$loopContainer[0], flickityOptions);
+                
+                // Handle custom arrow icons
+                if (self.settings.carousel_nav_buttons === 'yes') {
+                    const $prevButton = self.$loopContainer.find('.flickity-button.previous');
+                    const $nextButton = self.$loopContainer.find('.flickity-button.next');
+                    
+                    if (self.settings.carousel_prev_arrow_icon && self.settings.carousel_prev_arrow_icon.value) {
+                        $prevButton.html(`<i class="${self.settings.carousel_prev_arrow_icon.value}"></i>`);
+                    }
+                    if (self.settings.carousel_next_arrow_icon && self.settings.carousel_next_arrow_icon.value) {
+                        $nextButton.html(`<i class="${self.settings.carousel_next_arrow_icon.value}"></i>`);
+                    }
+                }
             };
 
             self.destroyCarousel = function () {
@@ -263,7 +276,7 @@
                             if (self.settings.layout_type === 'carousel') {
                                 self.destroyCarousel();
                                 self.$loopContainer.html(newHtml);
-                                self.initializeCarousel();
+                                setTimeout(() => self.initializeCarousel(), 100);
                             } else {
                                 appendResults ? self.$loopContainer.append(newHtml) : self.$loopContainer.html(newHtml);
                             }

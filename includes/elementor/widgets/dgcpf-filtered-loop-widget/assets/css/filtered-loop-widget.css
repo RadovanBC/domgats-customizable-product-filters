@@ -1,6 +1,15 @@
 /*
- * DomGats Filtered Loop Widget Styling v1.3.16
+ * DomGats Filtered Loop Widget Styling v1.3.18
  */
+
+:root {
+	--dgcpf-primary-color: var(--e-global-color-primary, #6d28d9);
+	--dgcpf-secondary-color: var(--e-global-color-secondary, #dc1f26);
+	--dgcpf-text-color: var(--e-global-color-text, #333);
+	--dgcpf-accent-color: var(--e-global-color-accent, #0073aa);
+	--dgcpf-background-light: #f9f9f9;
+	--dgcpf-border-color: #ddd;
+}
 
 .dgcpf-filtered-loop-widget-container {
 	margin-bottom: 30px;
@@ -25,18 +34,18 @@
 
 .dgcpf-filter-label {
 	font-weight: bold;
-	color: var(--dgcpf-filter-label-color, #333);
+	color: var(--dgcpf-text-color);
 	font-size: 16px;
 }
 
 .dgcpf-filter-dropdown,
 .dgcpf-filter-text-input,
 .dgcpf-filter-number-input {
-	padding: var(--dgcpf-filter-input-padding, 8px 12px);
-	border: 1px solid #ddd;
+	padding: 8px 12px;
+	border: 1px solid var(--dgcpf-border-color);
 	border-radius: 5px;
 	background-color: #fff;
-	color: #555;
+	color: var(--dgcpf-text-color);
 	font-size: 15px;
 	cursor: pointer;
 	min-width: 150px;
@@ -57,8 +66,8 @@
 .dgcpf-filter-text-input:focus,
 .dgcpf-filter-number-input:focus {
 	outline: none;
-	border-color: #0073aa;
-	box-shadow: 0 0 0 1px #0073aa;
+	border-color: var(--dgcpf-accent-color);
+	box-shadow: 0 0 0 1px var(--dgcpf-accent-color);
 }
 
 .dgcpf-filter-checkboxes,
@@ -75,9 +84,9 @@
 	gap: 5px;
 	cursor: pointer;
 	font-size: 15px;
-	color: #555;
+	color: var(--dgcpf-text-color);
 	background-color: #fff;
-	border: 1px solid #ddd;
+	border: 1px solid var(--dgcpf-border-color);
 	border-radius: 5px;
 	padding: 8px 12px;
 	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
@@ -100,13 +109,13 @@
 	color: #aaa;
 	cursor: not-allowed;
 	opacity: 0.7;
-	background-color: #f9f9f9;
+	background-color: var(--dgcpf-background-light);
 }
 
 .dgcpf-filter-checkbox:checked + span,
 .dgcpf-filter-radio:checked + span {
 	font-weight: bold;
-	color: #0073aa;
+	color: var(--dgcpf-accent-color);
 }
 
 .dgcpf-loop-container {
@@ -127,6 +136,29 @@
 	box-sizing: border-box;
 }
 
+.dgcpf-loop-container.dgcpf-carousel .flickity-button {
+	background: var(--dgcpf-secondary-color);
+	transition: background 0.2s ease, opacity 0.2s ease;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	opacity: 0.8;
+}
+.dgcpf-loop-container.dgcpf-carousel .flickity-button:hover {
+	background: var(--dgcpf-accent-color);
+	opacity: 1;
+}
+.dgcpf-loop-container.dgcpf-carousel .flickity-button-icon {
+	fill: #ffffff;
+}
+.dgcpf-loop-container.dgcpf-carousel .flickity-button i,
+.dgcpf-loop-container.dgcpf-carousel .flickity-button svg {
+	color: #ffffff;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
 .dgcpf-loop-container.loading::before {
 	content: "";
 	position: absolute;
@@ -136,6 +168,7 @@
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.7);
 	z-index: 10;
+	transition: opacity 0.3s ease;
 }
 .dgcpf-loop-container.loading::after {
 	content: "";
@@ -146,10 +179,10 @@
 	height: 40px;
 	margin-top: -20px;
 	margin-left: -20px;
-	border: 4px solid #f3f3f3;
-	border-top: 4px solid #dc1f26;
+	border: 4px solid rgba(0, 0, 0, 0.1);
+	border-top-color: var(--dgcpf-secondary-color);
 	border-radius: 50%;
-	animation: dgcpf-spin 1s linear infinite;
+	animation: dgcpf-spin 0.8s linear infinite;
 	z-index: 11;
 }
 
@@ -175,7 +208,7 @@
 .dgcpf-load-more-button {
 	display: inline-block;
 	padding: 12px 25px;
-	background-color: #6d28d9;
+	background-color: var(--dgcpf-primary-color);
 	color: #fff;
 	border: 0;
 	border-radius: 5px;
@@ -186,7 +219,7 @@
 }
 
 .dgcpf-load-more-button:hover {
-	background-color: #5b21b6;
+	background-color: var(--dgcpf-accent-color);
 }
 
 .dgcpf-load-more-button:disabled {
@@ -198,8 +231,8 @@
 .dgcpf-clear-all-filters-button {
 	padding: 8px 15px;
 	background-color: #f0f0f0;
-	color: #555;
-	border: 1px solid #ccc;
+	color: var(--dgcpf-text-color);
+	border: 1px solid var(--dgcpf-border-color);
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 14px;
@@ -212,7 +245,7 @@
 
 .no-products-found {
 	text-align: center;
-	color: #d63638;
+	color: var(--dgcpf-secondary-color);
 	font-size: 18px;
 	padding: 20px;
 	border: 1px solid #ffecec;

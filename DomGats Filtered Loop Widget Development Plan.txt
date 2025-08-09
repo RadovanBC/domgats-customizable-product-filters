@@ -174,35 +174,27 @@ This phase is strategically dedicated to ensuring that the widget exhibits an ae
 
 (All modifications are primarily confined to filtered-loop-widget.css)
 
-Implementation of Elementor CSS Variables:
+4.1 Implementation of Elementor CSS Variables (Completed):
 
-    Update to filtered-loop-widget.css: All hardcoded values for common design properties, including colors, typography, border styles, and spacing, shall be systematically replaced with Elementor's global CSS variables (e.g., var(--e-global-color-primary), var(--e-global-typography-text-font-family)). This adherence to best practices guarantees that the widget automatically inherits the site's established global styles configured within Elementor, thereby promoting design consistency across the entire website and significantly reducing manual styling efforts. Custom CSS variables (e.g., --dgcpf-filter-input-padding) will be meticulously defined for widget-specific properties that do not possess direct global equivalents, ensuring comprehensive style control without sacrificing global theme integration.
+    Update to filtered-loop-widget.css: All hardcoded values for common design properties have been systematically replaced with Elementor's global CSS variables (e.g., var(--e-global-color-primary)). This guarantees that the widget automatically inherits the site's established global styles. Custom CSS variables have been defined for widget-specific properties.
 
-Styling of New User Interface Elements:
+4.2 Styling of New User Interface Elements (Completed):
 
-    Dedicated CSS rules will be formulated and applied to the custom select2 fields introduced within the Query tab. This ensures their visual consistency with both the broader Elementor editor interface and the frontend display, providing a cohesive user experience.
+    Styling for the custom carousel navigation arrows (encompassing various states, including hover effects) has been developed to achieve a polished and branded visual presentation.
 
-    The newly implemented responsive gap settings will be precisely translated into visual attributes, specifically column-gap and row-gap for grid layouts, and appropriate padding or margin values for individual carousel items. This ensures that the intended spacing is accurately rendered and maintained across all defined breakpoints, contributing to a polished layout.
+4.3 Refinement of Loading Animations (Completed):
 
-    Styling for the custom carousel navigation arrows (encompassing various states, including hover effects) and, if implemented, the thumbnail navigation will be developed to achieve a polished, branded, and cohesive visual presentation that aligns with the site's overall design language.
+    The visual aesthetics of the AJAX loading spinner and the `.processing` state on individual filters have been enhanced with smoother animations and styles that align with the Elementor UI.
 
-Refinement of Loading Animations:
-
-    Performance Optimization for Initial Load (High Priority): This critical aspect involves the strategic implementation of techniques designed to enhance the perceived loading speed of the widget. For instance, the adoption of lazy-loading for filter options (where options are fetched only for currently visible filters or progressively loaded) and an initial simplified query (retrieving only essential data for the first view, with full details loading asynchronously in the background) will be thoroughly explored. The primary aim of these optimizations is to minimize the time until the user perceives meaningful content, even during complex data retrieval processes, thereby improving user satisfaction.
-
-    The visual aesthetics of the AJAX loading spinner and overlay will be significantly enhanced, incorporating smoother animations or more seamlessly integrated design elements. This provides a more professional and less jarring loading experience.
-
-    Micro-interactions, such as subtle loading states (e.g., a slight dimming effect or a small, embedded spinner icon) on individual filter buttons or input fields, will be implemented during active AJAX requests. This provides immediate, non-intrusive feedback to the user, signaling that their action has been registered and is being processed, thereby substantially improving the perceived responsiveness of the user interface and mitigating any potential sensation of unresponsiveness during data retrieval.
-
-Equal Heights Styling:
+4.4 Equal Heights Styling:
 
     CSS rules will be comprehensively added to fully support the equal_height_columns setting. For grid layouts, this will entail the application of grid-auto-rows: 1fr; to ensure consistent row heights, preventing visual misalignment. For carousel items, appropriate height properties will be applied to guarantee visual uniformity, complementing Flickity's adaptive height feature when it is enabled, resulting in a more balanced and professional display.
 
-Accessibility for Filter Counts:
+4.5 Accessibility for Filter Counts:
 
     When dynamic filter counts are displayed, meticulous attention will be directed towards ensuring optimal accessibility. This includes the strategic utilization of aria-live regions to dynamically announce changes in filter counts to screen readers, or the updating of aria-label attributes on individual filter options (e.g., "Category A, 15 items available"). This commitment ensures that users relying on assistive technologies receive critical and timely information regarding the current filtering state, promoting inclusivity.
 
-Keyboard Navigation for Filters:
+4.6 Keyboard Navigation for Filters:
 
     Robust keyboard navigation capabilities will be comprehensively implemented for all interactive filter elements. This encompasses ensuring that users can seamlessly navigate between filter components using the Tab key, activate or deactivate selections via the Space or Enter keys, and utilize arrow keys for navigating options within dropdown menus, checkbox groups, and radio button sets. This unwavering commitment to keyboard accessibility guarantees that the widget is fully operable and navigable for all users, including those who do not employ a mouse, enhancing overall usability.
 
