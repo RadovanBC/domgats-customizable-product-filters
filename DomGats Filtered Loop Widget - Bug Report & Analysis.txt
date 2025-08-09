@@ -1,6 +1,8 @@
+DomGats Filtered Loop Widget: Detailed Development Plan
+
 This comprehensive plan delineates the structured sequence of tasks essential for the successful development of the "DomGats Filtered Loop" Elementor widget. The overarching objective is to meticulously integrate all previously discussed features, refinements, and architectural adjustments, thereby yielding a product of superior quality, optimized performance, and enhanced user-friendliness. This widget is designed to seamlessly extend the existing capabilities of the Elementor platform, providing an advanced content display and filtering solution. By leveraging Elementor's robust framework, this widget aims to offer a native-like experience within the editor, while delivering a highly performant and customizable output on the frontend, addressing complex content presentation needs that surpass standard Elementor functionalities.
 
-Main Operational Directives:
+Main Operational Directives you are supposed to fallow until the end of the project:
 
 1. Code Versioning Protocol: Each substantive modification or aggregation of changes shall necessitate the assignment of a new version identifier to the affected files. This systematic approach ensures the establishment of a transparent historical record, allowing for precise tracking of all alterations throughout the development lifecycle. Furthermore, this protocol facilitates the capability to revert to prior stable states, a critical safeguard if unforeseen issues or feature adjustments are deemed necessary. This disciplined approach is indispensable for maintaining project integrity, particularly within collaborative development environments.
 
