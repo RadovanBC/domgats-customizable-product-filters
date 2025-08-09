@@ -1882,4 +1882,3 @@ class Filtered_Loop_Widget extends Widget_Base { // Using the imported Widget_Ba
         wp_reset_postdata();
     }
 }
-

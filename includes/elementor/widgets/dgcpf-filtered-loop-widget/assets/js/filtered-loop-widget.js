@@ -1,5 +1,5 @@
 /*
- * START: DomGats Filtered Loop Elementor Widget Frontend Handler v1.3.1
+ * START: DomGats Filtered Loop Elementor Widget Frontend Handler v1.3.12
  */
 (function ($, elementor) {
 
@@ -292,6 +292,22 @@
             };
 
             /**
+             * Updates the visibility of the "Load More" button.
+             */
+            self.updateLoadMoreButtonVisibility = function () {
+                if (self.settings.layout_type === 'grid' && self.settings.enable_load_more === 'yes' && self.currentPage < self.maxPages) {
+                    self.$loadMoreContainer.show();
+                    self.$loadMoreButton.text(self.settings.load_more_button_text || 'Load More');
+                    self.$loadMoreButton.prop('disabled', false); // Ensure button is enabled
+                } else if (self.settings.layout_type === 'grid' && self.settings.enable_load_more === 'yes' && self.currentPage >= self.maxPages) {
+                    self.$loadMoreContainer.show(); // Keep container visible
+                    self.$loadMoreButton.text(self.settings.no_more_products_text || 'No More Products').prop('disabled', true); // Disable button
+                } else {
+                    self.$loadMoreContainer.hide();
+                }
+            };
+
+            /**
              * Updates the visibility of the "Clear All Filters" button.
              */
             self.updateClearAllButtonVisibility = function () {
@@ -368,7 +384,7 @@
                 for (const acfFieldKey in self.selectedAcfFields) {
                     const selectedValue = self.selectedAcfFields[acfFieldKey];
                     if (selectedValue !== null && selectedValue !== undefined && selectedValue !== '' && (Array.isArray(selectedValue) ? selectedValue.length > 0 : true)) {
-                        const $filterGroup = self.$filtersWrapper.find('.dgcpf-filter-group [data-acf-field-key="' + acfFieldKey + '"]');
+                        const $filterGroup = self.$filtersWrapper.find('.dgcpf-filter-group [data-acf-field-key="' + acfFieldKey + '"]'); // Corrected selector syntax
                         const filterName = $filterGroup.data('filter-name');
                         if (filterName) {
                              // For checkboxes, join array values with comma
@@ -396,8 +412,24 @@
                     // Destroy existing instance before re-initializing.
                     self.destroyCarousel();
                     
-                    const columns = self.settings.columns_carousel || 3; // Default to 3 if not set.
                     const isRTL = $('body').hasClass('rtl'); // Check for RTL support.
+
+                    // Get responsive columns from data attributes
+                    // Note: These data attributes are set in PHP's render method based on responsive controls
+                    const columnsDesktop = parseInt(self.$loopContainer.data('columns-desktop') || 3);
+                    const columnsTablet = parseInt(self.$loopContainer.data('columns-tablet') || columnsDesktop);
+                    const columnsMobile = parseInt(self.$loopContainer.data('columns-mobile') || columnsTablet);
+
+                    // Determine current columns based on responsive settings
+                    let currentColumns = columnsDesktop;
+                    if (window.innerWidth <= 767) { // Mobile breakpoint
+                        currentColumns = columnsMobile;
+                    } else if (window.innerWidth <= 1024) { // Tablet breakpoint
+                        currentColumns = columnsTablet;
+                    }
+
+                    // Get slides to move from settings
+                    const slidesToMove = self.settings.carousel_slides_to_move || 1;
 
                     // Construct Flickity options from widget settings
                     const flickityOptions = {
@@ -407,7 +439,7 @@
                         wrapAround: self.settings.carousel_wrap_around === 'yes',
                         adaptiveHeight: self.settings.carousel_adaptive_height === 'yes',
                         draggable: self.settings.carousel_draggable === 'yes',
-                        groupCells: columns, // Use responsive columns setting
+                        groupCells: slidesToMove === 1 ? false : slidesToMove, // Use slidesToMove, but false if 1 for simpler scrolling
                         imagesLoaded: true, // Always wait for images to load.
                         rightToLeft: isRTL, // RTL support.
                         cellAlign: self.settings.carousel_cell_align || 'left',
@@ -421,6 +453,39 @@
                     }
 
                     self.flickityInstance = new Flickity(self.$loopContainer[0], flickityOptions);
+
+                    // Handle custom arrow icons if set
+                    if (self.settings.carousel_nav_buttons === 'yes') {
+                        const $prevButton = self.$loopContainer.find('.flickity-button.flickity-prev-next-button.previous');
+                        const $nextButton = self.$loopContainer.find('.flickity-button.flickity-prev-next-button.next');
+
+                        // Clear default SVG
+                        $prevButton.empty();
+                        $nextButton.empty();
+
+                        // Append custom icons (assuming Elementor's ICONS control provides SVG HTML or similar)
+                        if (self.settings.carousel_prev_arrow_icon && self.settings.carousel_prev_arrow_icon.value) {
+                            if (self.settings.carousel_prev_arrow_icon.value.library === 'svg') {
+                                $prevButton.append(self.settings.carousel_prev_arrow_icon.value.raw);
+                            } else {
+                                $prevButton.append('<i class="' + self.settings.carousel_prev_arrow_icon.value + '"></i>');
+                            }
+                        } else {
+                            // Fallback to default chevron if no custom icon set
+                            $prevButton.append('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>');
+                        }
+
+                        if (self.settings.carousel_next_arrow_icon && self.settings.carousel_next_arrow_icon.value) {
+                            if (self.settings.carousel_next_arrow_icon.value.library === 'svg') {
+                                $nextButton.append(self.settings.carousel_next_arrow_icon.value.raw);
+                            } else {
+                                $nextButton.append('<i class="' + self.settings.carousel_next_arrow_icon.value + '"></i>');
+                            }
+                        } else {
+                            // Fallback to default chevron if no custom icon set
+                            $nextButton.append('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>');
+                        }
+                    }
                 }
             };
 
@@ -440,6 +505,11 @@
             self.updateLoadMoreButtonVisibility = function () {
                 if (self.settings.layout_type === 'grid' && self.settings.enable_load_more === 'yes' && self.currentPage < self.maxPages) {
                     self.$loadMoreContainer.show();
+                    self.$loadMoreButton.text(self.settings.load_more_button_text || 'Load More');
+                    self.$loadMoreButton.prop('disabled', false); // Ensure button is enabled
+                } else if (self.settings.layout_type === 'grid' && self.settings.enable_load_more === 'yes' && self.currentPage >= self.maxPages) {
+                    self.$loadMoreContainer.show(); // Keep container visible
+                    self.$loadMoreButton.text(self.settings.no_more_products_text || 'No More Products').prop('disabled', true); // Disable button
                 } else {
                     self.$loadMoreContainer.hide();
                 }
@@ -468,8 +538,10 @@
                             }
                             if (availableTerms.hasOwnProperty(termSlug) && availableTerms[termSlug].count > 0) {
                                 $option.prop('disabled', false).text(availableTerms[termSlug].name + ' (' + availableTerms[termSlug].count + ')');
+                                $option.attr('aria-label', availableTerms[termSlug].name + ' (' + availableTerms[termSlug].count + ')'); // Accessibility
                             } else {
                                 $option.prop('disabled', true).text($option.text().split(' (')[0] + ' (0)');
+                                $option.attr('aria-label', $option.text().split(' (')[0] + ' (0)'); // Accessibility
                             }
                         });
                     } else if (displayAs === 'checkbox' || displayAs === 'radio') {
@@ -488,6 +560,7 @@
                                 $label.removeClass('disabled');
                                 $input.prop('disabled', false);
                                 $label.find('span').text(availableTerms[termSlug].name + ' (' + availableTerms[termSlug].count + ')');
+                                $input.attr('aria-label', availableTerms[termSlug].name + ' (' + availableTerms[termSlug].count + ')'); // Accessibility
                             } else {
                                 // Keep selected checkboxes enabled but show 0 count
                                 if ($input.is(':checked')) {
@@ -498,6 +571,7 @@
                                     $input.prop('disabled', true);
                                 }
                                 $label.find('span').text($label.find('span').text().split(' (')[0] + ' (0)');
+                                $input.attr('aria-label', $label.find('span').text().split(' (')[0] + ' (0)'); // Accessibility
                             }
                         });
                     }
@@ -521,8 +595,10 @@
                             }
                             if (availableAcfOptions.values && availableAcfOptions.values.hasOwnProperty(value) && availableAcfOptions.values[value].count > 0) {
                                 $option.prop('disabled', false).text(availableAcfOptions.values[value].name + ' (' + availableAcfOptions.values[value].count + ')');
+                                $option.attr('aria-label', availableAcfOptions.values[value].name + ' (' + availableAcfOptions.values[value].count + ')'); // Accessibility
                             } else {
                                 $option.prop('disabled', true).text($option.text().split(' (')[0] + ' (0)');
+                                $option.attr('aria-label', $option.text().split(' (')[0] + ' (0)'); // Accessibility
                             }
                         });
                     } else if ((displayAs === 'checkbox' || displayAs === 'radio') && (acfFieldType === 'checkbox' || acfFieldType === 'select' || acfFieldType === 'radio' || acfFieldType === 'true_false')) {
@@ -541,6 +617,7 @@
                                 $label.removeClass('disabled');
                                 $input.prop('disabled', false);
                                 $label.find('span').text(availableAcfOptions.values[value].name + ' (' + availableAcfOptions.values[value].count + ')');
+                                $input.attr('aria-label', availableAcfOptions.values[value].name + ' (' + availableAcfOptions.values[value].count + ')'); // Accessibility
                             } else {
                                 // Keep selected checkboxes enabled but show 0 count
                                 if ($input.is(':checked')) {
@@ -551,6 +628,7 @@
                                     $input.prop('disabled', true);
                                 }
                                 $label.find('span').text($label.find('span').text().split(' (')[0] + ' (0)');
+                                $input.attr('aria-label', $label.find('span').text().split(' (')[0] + ' (0)'); // Accessibility
                             }
                         });
                     }
@@ -558,6 +636,15 @@
                 });
 
                 self.updateClearAllButtonVisibility(); // Update clear button visibility after filter state is updated
+
+                // Announce changes for accessibility if filters are visible
+                if (self.$filtersWrapper.is(':visible')) {
+                    self.$loopContainer.attr('aria-live', 'polite').attr('aria-atomic', 'true');
+                    // A timeout ensures the screen reader announces the change after DOM update
+                    setTimeout(() => {
+                        self.$loopContainer.removeAttr('aria-live').removeAttr('aria-atomic');
+                    }, 500);
+                }
             };
 
             /**
@@ -608,6 +695,9 @@
                         posts_exclude_by_ids: self.settings.posts_exclude_by_ids,
                         terms_include: self.settings.terms_include,
                         terms_exclude: self.settings.terms_exclude,
+                        product_categories_query: self.settings.product_categories_query, // New: Product Categories
+                        product_tags_query: self.settings.product_tags_query,         // New: Product Tags
+                        acf_meta_query_repeater: self.settings.acf_meta_query_repeater, // New: ACF Meta Queries
                         post_status: self.settings.post_status,
                         orderby: self.settings.orderby,
                         order: self.settings.order,
@@ -683,5 +773,5 @@
     });
 })(jQuery, window.elementor);
 /*
- * END: DomGats Filtered Loop Elementor Widget Frontend Handler v1.3.1
+ * END: DomGats Filtered Loop Elementor Widget Frontend Handler v1.3.12
  */

@@ -1,5 +1,5 @@
 /*
- * DomGats Filtered Loop Widget Styling v1.3.1
+ * DomGats Filtered Loop Widget Styling v1.3.12
  */
 
 /* =================================================================
@@ -203,6 +203,17 @@
 	right: -20px; /* Adjust position */
 }
 
+/* Custom icon styling for Flickity buttons */
+.dgcpf-loop-container.dgcpf-carousel .flickity-button i {
+	font-size: 20px; /* Adjust icon size */
+	line-height: 1; /* Ensure icon is centered */
+}
+.dgcpf-loop-container.dgcpf-carousel .flickity-button svg {
+	width: 20px; /* Adjust SVG icon size */
+	height: 20px;
+	fill: currentColor; /* Inherit color from button text */
+}
+
 /* =================================================================
    4. AJAX Loading State
 ================================================================= */
@@ -266,6 +277,13 @@
 	background-color: var(--dgcpf-load-more-hover-background-color, #5b21b6);
 	color: var(--dgcpf-load-more-hover-text-color, #fff);
 	border-color: var(--dgcpf-load-more-hover-border-color, transparent);
+}
+
+.dgcpf-load-more-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	background-color: var(--dgcpf-load-more-disabled-background-color, #ccc); /* New: Disabled background color */
+	color: var(--dgcpf-load-more-disabled-text-color, #666); /* New: Disabled text color */
 }
 
 /* Clear All Filters Button */
