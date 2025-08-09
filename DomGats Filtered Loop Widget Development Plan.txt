@@ -40,7 +40,7 @@ This foundational phase was strategically executed to optimize the plugin's arch
 
         Modification of domgats-customizable-product-filters.php: The Composer autoloader verification process has been refined. While the current strict return; statement upon the absence of vendor/autoload.php effectively prevents fatal errors stemming from undefined classes, future enhancements could explore a more nuanced approach. This might involve a graceful degradation mechanism that permits non-Composer-dependent functionalities of the plugin to operate, while simultaneously providing clear and persistent administrative notifications regarding the Composer dependency. This underscores the pivotal role of Composer in managing PHP dependencies within contemporary plugin development paradigms.
 
-Phase 2: Elementor Widget - Controls (PHP) (Currently Debugging)
+Phase 2: Elementor Widget - Controls (PHP) (Fix Applied, Continuing with Enhancements)
 
 This pivotal phase is exclusively dedicated to the meticulous construction of the robust control panel for the "DomGats Filtered Loop" widget within the Elementor editor interface. This endeavor is designed to empower users with extensive customization capabilities, ensuring granular control over the widget's appearance and behavior.
 
@@ -72,7 +72,7 @@ This pivotal phase is exclusively dedicated to the meticulous construction of th
 
             The columns and columns_carousel controls have been re-labeled with more descriptive terminology to enhance clarity for the user. Critically, the columns_carousel control has been explicitly marked as frontend_available, ensuring that its configured values are correctly transmitted to the frontend JavaScript. These values are subsequently passed via data-columns-desktop, data-columns-tablet, and data-columns-mobile attributes to the loop_container element. This mechanism enables filtered-loop-widget.js to dynamically configure Flickity's groupCells option, thereby guaranteeing that the carousel accurately displays the specified number of columns responsively, adapting seamlessly to the user's device viewport.
 
-    Query Tab Overhaul (Debugging Undefined constant error):
+    Query Tab Overhaul (Fix Applied):
 
         2.1 Advanced Select2 Controls:
 
@@ -125,6 +125,10 @@ This pivotal phase is exclusively dedicated to the meticulous construction of th
         3.6 ACF Field Display:
 
             The PHP render() method is meticulously designed to ensure that ACF fields, when configured as filters, are accurately and appropriately rendered on the frontend. It uses acf_get_field_object to retrieve comprehensive field details (including, but not limited to, choices for select, radio, and checkbox fields) and subsequently populating the corresponding HTML elements. This rigorous approach guarantees that ACF-based filters, regardless of their designated display type (dropdown, checkbox, radio, text, or number input), function precisely as intended and faithfully reflect the underlying ACF field configuration.
+
+        3.7 Improve Taxonomy Dropdown Clarity:
+
+            The _get_all_taxonomies() method in class-filtered-loop-widget.php has been updated to provide more descriptive labels for taxonomies in the Elementor editor dropdown. For each taxonomy, the label will now include the singular name of its associated post type(s) in parentheses (e.g., "Category (Posts)", "Tag (Products)"). This enhancement ensures that users can easily distinguish between taxonomies with the same base name but different object types, improving clarity and reducing potential confusion during widget configuration.
 
     Pagination & Carousel Enhancements:
 

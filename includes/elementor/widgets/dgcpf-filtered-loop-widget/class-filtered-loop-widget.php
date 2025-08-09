@@ -11,9 +11,6 @@ use \Elementor\Widget_Base;
 
 // Explicitly re-added use statement for clarity
 
-// Removed the global function and constant definitions that were causing redeclaration errors.
-// This file should ONLY contain the class definition for Filtered_Loop_Widget.
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
@@ -1408,7 +1405,7 @@ class Filtered_Loop_Widget extends Widget_Base { // Using the imported Widget_Ba
     }
 
     /**
-     * Get a list of all public taxonomies.
+     * Get a list of all public taxonomies with more descriptive labels.
      *
      * @return array
      */
@@ -1420,7 +1417,22 @@ class Filtered_Loop_Widget extends Widget_Base { // Using the imported Widget_Ba
 
         if ( $taxonomies ) {
             foreach ( $taxonomies as $taxonomy ) {
-                $options[ $taxonomy->name ] = $taxonomy->labels->singular_name;
+                $label = $taxonomy->labels->singular_name;
+                $object_types = $taxonomy->object_type; // Array of post types associated with this taxonomy
+
+                if ( ! empty( $object_types ) ) {
+                    $post_type_labels = [];
+                    foreach ( $object_types as $post_type_slug ) {
+                        $post_type_obj = get_post_type_object( $post_type_slug );
+                        if ( $post_type_obj ) {
+                            $post_type_labels[] = $post_type_obj->labels->singular_name;
+                        }
+                    }
+                    if ( ! empty( $post_type_labels ) ) {
+                        $label .= ' (' . implode(', ', $post_type_labels) . ')';
+                    }
+                }
+                $options[ $taxonomy->name ] = $label;
             }
         }
         return $options;
