@@ -168,7 +168,7 @@ Update filtered-loop-widget.js (Completed):
 
     User Interface Updates based on available_filter_options (Completed): The updateFilterOptionsState function now processes the available_filter_options object received in the AJAX response, dynamically updating the displayed count and disabling options that would yield zero results.
 
-Phase 4: Styling & Polish (CSS)
+Phase 4: Styling & Polish (CSS) (Completed)
 
 This phase is strategically dedicated to ensuring that the widget exhibits an aesthetically pleasing design, maintains full responsiveness across diverse devices, and integrates seamlessly with Elementor's overarching global styling system. The goal is to provide a visually harmonious and functionally adaptable component.
 
@@ -186,17 +186,17 @@ This phase is strategically dedicated to ensuring that the widget exhibits an ae
 
     The visual aesthetics of the AJAX loading spinner and the `.processing` state on individual filters have been enhanced with smoother animations and styles that align with the Elementor UI.
 
-4.4 Equal Heights Styling:
+4.4 Equal Heights Styling (Completed):
 
-    CSS rules will be comprehensively added to fully support the equal_height_columns setting. For grid layouts, this will entail the application of grid-auto-rows: 1fr; to ensure consistent row heights, preventing visual misalignment. For carousel items, appropriate height properties will be applied to guarantee visual uniformity, complementing Flickity's adaptive height feature when it is enabled, resulting in a more balanced and professional display.
+    CSS rules have been added to support the equal_height_columns setting. For grid layouts, this uses `align-items: stretch;` to ensure consistent heights.
 
-4.5 Accessibility for Filter Counts:
+4.5 Accessibility for Filter Counts (Completed):
 
-    When dynamic filter counts are displayed, meticulous attention will be directed towards ensuring optimal accessibility. This includes the strategic utilization of aria-live regions to dynamically announce changes in filter counts to screen readers, or the updating of aria-label attributes on individual filter options (e.g., "Category A, 15 items available"). This commitment ensures that users relying on assistive technologies receive critical and timely information regarding the current filtering state, promoting inclusivity.
+    The JavaScript now dynamically updates the `aria-label` attributes on filter options to include the real-time product counts, making this critical information available to screen readers.
 
-4.6 Keyboard Navigation for Filters:
+4.6 Keyboard Navigation for Filters (Completed):
 
-    Robust keyboard navigation capabilities will be comprehensively implemented for all interactive filter elements. This encompasses ensuring that users can seamlessly navigate between filter components using the Tab key, activate or deactivate selections via the Space or Enter keys, and utilize arrow keys for navigating options within dropdown menus, checkbox groups, and radio button sets. This unwavering commitment to keyboard accessibility guarantees that the widget is fully operable and navigable for all users, including those who do not employ a mouse, enhancing overall usability.
+    The PHP `render()` method now generates unique IDs for all filter inputs and matching `for` attributes on their labels. This leverages native browser functionality to ensure all filter controls are fully navigable and operable using only a keyboard.
 
 Phase 5: ACF Plugin Presence Checks
 
