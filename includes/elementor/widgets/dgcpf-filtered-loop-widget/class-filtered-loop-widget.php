@@ -45,6 +45,10 @@ class Filtered_Loop_Widget extends Widget_Base {
         ];
     }
 
+    private function _is_acf_active() {
+        return class_exists('ACF');
+    }
+
     private function _get_query_control_type() {
         if ( defined( '\ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID' ) ) {
             return \ElementorPro\Modules\QueryControl\Controls\Query::CONTROL_ID;
@@ -307,6 +311,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'fields'  => $acf_repeater->get_controls(),
                 'title_field' => '{{{ acf_meta_key }}}',
                 'separator' => 'before',
+                'condition' => [ '_is_acf_active' => '1' ]
             ]
         );
 
@@ -933,19 +938,18 @@ class Filtered_Loop_Widget extends Widget_Base {
     }
 
     private function _get_all_acf_field_keys() {
+        if ( !$this->_is_acf_active() ) {
+            return ['' => esc_html__('ACF plugin not active', 'custom-product-filters')];
+        }
         $options = [ '' => esc_html__( 'Select an ACF field', 'custom-product-filters' ) ];
-        if ( function_exists( 'acf_get_field_groups' ) ) {
-            $field_groups = acf_get_field_groups();
-            foreach ( $field_groups as $group ) {
-                $fields = acf_get_fields( $group['key'] );
-                foreach ( $fields as $field ) {
-                    if ( in_array( $field['type'], ['text', 'number', 'select', 'checkbox', 'radio', 'true_false'] ) ) {
-                        $options[ $field['name'] ] = $field['label'] . ' (' . $field['type'] . ')';
-                    }
+        $field_groups = acf_get_field_groups();
+        foreach ( $field_groups as $group ) {
+            $fields = acf_get_fields( $group['key'] );
+            foreach ( $fields as $field ) {
+                if ( in_array( $field['type'], ['text', 'number', 'select', 'checkbox', 'radio', 'true_false'] ) ) {
+                    $options[ $field['name'] ] = $field['label'] . ' (' . $field['type'] . ')';
                 }
             }
-        } else {
-            $options['acf_not_active'] = esc_html__( 'ACF plugin not active', 'custom-product-filters' );
         }
         return $options;
     }
@@ -1050,7 +1054,7 @@ class Filtered_Loop_Widget extends Widget_Base {
         }
 
         $meta_query_main = [];
-        if ( ! empty( $settings['acf_meta_query_repeater'] ) && function_exists( 'get_field_object' ) ) {
+        if ( ! empty( $settings['acf_meta_query_repeater'] ) && $this->_is_acf_active() ) {
             $meta_query_main['relation'] = 'AND';
             foreach ( $settings['acf_meta_query_repeater'] as $meta_item ) {
                  if ( ! empty( $meta_item['acf_meta_key'] ) && isset( $meta_item['acf_meta_value'] ) && $meta_item['acf_meta_value'] !== '' ) {
@@ -1117,7 +1121,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                         }
                         echo '</div>';
                     }
-                } elseif ( 'acf' === $filter_type && ! empty( $filter_item['acf_field_key'] ) && function_exists( 'get_field_object' ) ) {
+                } elseif ( 'acf' === $filter_type && ! empty( $filter_item['acf_field_key'] ) && $this->_is_acf_active() ) {
                     $acf_field_key = $filter_item['acf_field_key'];
                     $field_object = get_field_object( $acf_field_key );
                     if ( $field_object ) {

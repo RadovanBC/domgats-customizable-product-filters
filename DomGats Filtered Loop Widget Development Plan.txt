@@ -198,19 +198,19 @@ This phase is strategically dedicated to ensuring that the widget exhibits an ae
 
     The PHP `render()` method now generates unique IDs for all filter inputs and matching `for` attributes on their labels. This leverages native browser functionality to ensure all filter controls are fully navigable and operable using only a keyboard.
 
-Phase 5: ACF Plugin Presence Checks
+Phase 5: ACF Plugin Presence Checks (Completed)
 
 This phase is dedicated to ensuring that the plugin gracefully manages scenarios where the Advanced Custom Fields (ACF) plugin is not actively installed or enabled, thereby providing a resilient and seamless user experience. Robust dependency handling is a key aspect of professional plugin development.
 
-Plugin Activation/Load Verification:
+5.1 Plugin Activation/Load Verification (Completed):
 
-    Update to domgats-customizable-product-filters.php: A dedicated function shall be incorporated, hooked to either admin_init or plugins_loaded, to ascertain the active status of the ACF plugin. This verification will be performed using standard WordPress functions such as function_exists('acf_get_field_groups') or is_plugin_active. In instances where ACF is not detected as active, and the plugin's functionality is reliant upon ACF-specific features (e.g., ACF field controls within the widget), a clear, concise, and informative administrative notice will be displayed, guiding the user regarding the requisite dependency. This proactive communication helps prevent user frustration and ensures they understand why certain features may be unavailable.
+    Update to domgats-customizable-product-filters.php: A dedicated function has been incorporated to check if ACF is active on `admin_init`. If it is not, a dismissible admin notice is displayed to inform the user.
 
-Elementor Editor Control State Management:
+5.2 Elementor Editor Control State Management (Completed):
 
-    Update to class-filtered-loop-widget.php's _get_all_acf_field_keys(): This method will be modified to return an appropriate message (e.g., "ACF plugin not active") or an empty array of options, contingent upon the active status of ACF. This prevents the editor from attempting to load non-existent ACF fields.
+    Update to class-filtered-loop-widget.php's _get_all_acf_field_keys(): This method now first checks if ACF is active. If not, it returns a single "ACF not active" message.
 
-    Implementation of Control Conditions: Elementor's conditions property will be extensively leveraged across all ACF-related controls within the register_controls() method. This dynamic conditional rendering will ensure that these controls are automatically hidden or disabled within the Elementor editor if ACF is not detected (e.g., by evaluating a PHP-generated is_acf_active flag, which is then passed to the frontend JavaScript). This proactive measure prevents user confusion, streamlines the editor interface when ACF functionalities are unavailable, and avoids potential fatal errors by only attempting to render controls that are supported by the active environment.
+    Implementation of Control Conditions: Elementor's `condition` property has been applied to all ACF-related controls within the `register_controls()` method. This ensures that ACF-specific options are hidden from the editor if the plugin is not active, preventing user confusion and potential errors.
 
 Phase 6: Lower Priority / Future Enhancements
 
