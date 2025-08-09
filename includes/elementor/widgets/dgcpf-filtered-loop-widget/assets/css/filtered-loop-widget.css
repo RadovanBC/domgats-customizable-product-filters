@@ -1,30 +1,26 @@
 /*
- * DomGats Filtered Loop Widget Styling v1.3.12
+ * DomGats Filtered Loop Widget Styling v1.3.16
  */
 
-/* =================================================================
-   1. Widget Container & General Layout
-================================================================= */
 .dgcpf-filtered-loop-widget-container {
-	/* Basic container styling, if needed */
-	margin-bottom: 30px; /* Add some space below the widget */
+	margin-bottom: 30px;
 }
 
-/* Flex container for filters */
 .dgcpf-filters-wrapper {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--dgcpf-filter-bar-spacing, 15px); /* Spacing between filter groups */
+	gap: var(--dgcpf-filter-bar-spacing, 15px);
 	align-items: center;
 	margin-bottom: 30px;
-	justify-content: flex-start; /* Align filters to the start */
+	justify-content: flex-start;
 }
 
-/* Individual filter group (e.g., for a taxonomy dropdown/checkboxes) */
 .dgcpf-filter-group {
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	position: relative;
+	transition: opacity 0.3s ease;
 }
 
 .dgcpf-filter-label {
@@ -33,49 +29,31 @@
 	font-size: 16px;
 }
 
-/* =================================================================
-   2. Filter UI Elements (Dropdown, Checkbox, Radio, Text, Number)
-================================================================= */
-
-/* Dropdown styles */
-.dgcpf-filter-dropdown {
-	padding: var(--dgcpf-filter-input-padding, 8px 12px);
-	border: var(--dgcpf-filter-input-border-width, 1px) var(--dgcpf-filter-input-border-type, solid) var(--dgcpf-filter-input-border-color, #ddd);
-	border-radius: var(--dgcpf-filter-input-border-radius, 5px);
-	background-color: var(--dgcpf-filter-input-background-color, #fff);
-	color: var(--dgcpf-filter-input-text-color, #555);
-	font-size: 15px;
-	cursor: pointer;
-	min-width: 150px;
-	appearance: none; /* Remove default system dropdown arrow */
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-	background-repeat: no-repeat;
-	background-position: right 8px center;
-	background-size: 16px;
-	transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Micro-interaction */
-}
-
-.dgcpf-filter-dropdown:focus {
-	outline: none;
-	border-color: #0073aa; /* WordPress blue */
-	box-shadow: 0 0 0 1px #0073aa;
-}
-
-/* Text and Number Input styles */
+.dgcpf-filter-dropdown,
 .dgcpf-filter-text-input,
 .dgcpf-filter-number-input {
 	padding: var(--dgcpf-filter-input-padding, 8px 12px);
-	border: var(--dgcpf-filter-input-border-width, 1px) var(--dgcpf-filter-input-border-type, solid) var(--dgcpf-filter-input-border-color, #ddd);
-	border-radius: var(--dgcpf-filter-input-border-radius, 5px);
-	background-color: var(--dgcpf-filter-input-background-color, #fff);
-	color: var(--dgcpf-filter-input-text-color, #555);
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #fff;
+	color: #555;
 	font-size: 15px;
+	cursor: pointer;
 	min-width: 150px;
 	transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.dgcpf-filter-dropdown {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	background-size: 16px;
+}
+
+.dgcpf-filter-dropdown:focus,
 .dgcpf-filter-text-input:focus,
 .dgcpf-filter-number-input:focus {
 	outline: none;
@@ -83,7 +61,6 @@
 	box-shadow: 0 0 0 1px #0073aa;
 }
 
-/* Checkbox/Radio container */
 .dgcpf-filter-checkboxes,
 .dgcpf-filter-radio-buttons {
 	display: flex;
@@ -98,125 +75,58 @@
 	gap: 5px;
 	cursor: pointer;
 	font-size: 15px;
-	color: var(--dgcpf-filter-input-text-color, #555);
-	background-color: var(--dgcpf-filter-input-background-color, #fff);
-	border: var(--dgcpf-filter-input-border-width, 1px) var(--dgcpf-filter-input-border-type, solid) var(--dgcpf-filter-input-border-color, #ddd);
-	border-radius: var(--dgcpf-filter-input-border-radius, 5px);
-	padding: var(--dgcpf-filter-input-padding, 8px 12px);
-	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; /* Micro-interaction */
+	color: #555;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 8px 12px;
+	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .dgcpf-filter-checkboxes input[type="checkbox"],
 .dgcpf-filter-radio-buttons input[type="radio"] {
-	/* Basic styling for checkboxes/radios */
 	margin: 0;
 	width: 18px;
 	height: 18px;
 	cursor: pointer;
 }
 
-/* Disabled state for filter options */
 .dgcpf-filter-dropdown option:disabled {
-	color: var(--dgcpf-filter-input-disabled-color, #aaa);
-	cursor: not-allowed;
-	opacity: 0.7;
+	color: #aaa;
 }
 
 .dgcpf-filter-checkboxes label.disabled,
 .dgcpf-filter-radio-buttons label.disabled {
-	color: var(--dgcpf-filter-input-disabled-color, #aaa);
+	color: #aaa;
 	cursor: not-allowed;
 	opacity: 0.7;
-	background-color: var(--dgcpf-filter-input-disabled-background-color, #f9f9f9); /* Subtle background for disabled */
+	background-color: #f9f9f9;
 }
 
-.dgcpf-filter-checkboxes label.disabled input,
-.dgcpf-filter-radio-buttons label.disabled input {
-	cursor: not-allowed;
-}
-
-/* Active state for selected checkboxes/radios */
-.dgcpf-filter-checkbox:checked + span, /* Assuming a span after checkbox */
+.dgcpf-filter-checkbox:checked + span,
 .dgcpf-filter-radio:checked + span {
-	/* Assuming a span after radio */
 	font-weight: bold;
-	color: var(--dgcpf-filter-input-active-text-color, #0073aa); /* Highlight active selection */
+	color: #0073aa;
 }
 
-/* Screen reader text for accessibility */
-.screen-reader-text {
-	clip: rect(1px, 1px, 1px, 1px);
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	word-wrap: normal !important;
-}
-
-/* =================================================================
-   3. Product Loop Container (Grid & Carousel)
-================================================================= */
 .dgcpf-loop-container {
-	position: relative; /* Needed for loading overlay */
-	min-height: var(--dgcpf-grid-carousel-min-height, 200px); /* Prevent layout shift during loading */
+	position: relative;
+	min-height: 200px;
 }
 
-/* Grid Layout */
 .dgcpf-loop-container.dgcpf-grid {
 	display: grid;
-	/* Columns and gap handled by Elementor responsive controls selectors */
 }
 
-/* Carousel Layout */
 .dgcpf-loop-container.dgcpf-carousel {
-	overflow: hidden; /* Important for Flickity */
+	overflow: hidden;
 	position: relative;
-	padding: 20px 0; /* Space for prev/next buttons if outside viewport */
 }
 
-/* Individual loop item within carousel */
 .dgcpf-loop-container.dgcpf-carousel .elementor-loop-item {
-	/* Width and padding handled by Elementor responsive controls selectors */
-	box-sizing: border-box; /* Ensure padding is included in width */
+	box-sizing: border-box;
 }
 
-/* Flickity specific overrides/enhancements */
-.dgcpf-loop-container.dgcpf-carousel .flickity-button {
-	background: #dc1f26; /* Match existing button style */
-	transition: background 0.2s ease;
-	border-radius: 50%; /* Make buttons round */
-	width: 40px;
-	height: 40px;
-	opacity: 0.8;
-}
-.dgcpf-loop-container.dgcpf-carousel .flickity-button:hover {
-	background: #b52a2a;
-	opacity: 1;
-}
-.dgcpf-loop-container.dgcpf-carousel .flickity-button-icon {
-	fill: #ffffff;
-}
-.dgcpf-loop-container.dgcpf-carousel .flickity-prev-next-button.previous {
-	left: -20px; /* Adjust position */
-}
-.dgcpf-loop-container.dgcpf-carousel .flickity-prev-next-button.next {
-	right: -20px; /* Adjust position */
-}
-
-/* Custom icon styling for Flickity buttons */
-.dgcpf-loop-container.dgcpf-carousel .flickity-button i {
-	font-size: 20px; /* Adjust icon size */
-	line-height: 1; /* Ensure icon is centered */
-}
-.dgcpf-loop-container.dgcpf-carousel .flickity-button svg {
-	width: 20px; /* Adjust SVG icon size */
-	height: 20px;
-	fill: currentColor; /* Inherit color from button text */
-}
-
-/* =================================================================
-   4. AJAX Loading State
-================================================================= */
 .dgcpf-loop-container.loading::before {
 	content: "";
 	position: absolute;
@@ -224,7 +134,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: var(--dgcpf-loading-overlay-color, rgba(255, 255, 255, 0.7)); /* Semi-transparent overlay */
+	background-color: rgba(255, 255, 255, 0.7);
 	z-index: 10;
 }
 .dgcpf-loop-container.loading::after {
@@ -237,11 +147,17 @@
 	margin-top: -20px;
 	margin-left: -20px;
 	border: 4px solid #f3f3f3;
-	border-top: 4px solid var(--dgcpf-loading-spinner-color, #dc1f26); /* Spinner color */
+	border-top: 4px solid #dc1f26;
 	border-radius: 50%;
 	animation: dgcpf-spin 1s linear infinite;
 	z-index: 11;
 }
+
+.dgcpf-filter-group.processing {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
 @keyframes dgcpf-spin {
 	0% {
 		transform: rotate(0deg);
@@ -251,45 +167,35 @@
 	}
 }
 
-/* =================================================================
-   5. Load More Button
-================================================================= */
 .dgcpf-load-more-container {
 	text-align: center;
 	margin-top: 30px;
 }
 
 .dgcpf-load-more-button {
-	/* Basic button styling, similar to Elementor's default button */
 	display: inline-block;
-	padding: var(--dgcpf-load-more-padding, 12px 25px);
-	background-color: var(--dgcpf-load-more-background-color, #6d28d9);
-	color: var(--dgcpf-load-more-text-color, #fff);
-	border: var(--dgcpf-load-more-border-width, 0px) var(--dgcpf-load-more-border-type, solid) var(--dgcpf-load-more-border-color, transparent);
-	border-radius: var(--dgcpf-load-more-border-radius, 5px);
+	padding: 12px 25px;
+	background-color: #6d28d9;
+	color: #fff;
+	border: 0;
+	border-radius: 5px;
 	font-size: 16px;
 	font-weight: 600;
 	cursor: pointer;
-	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+	transition: background-color 0.3s ease;
 }
 
 .dgcpf-load-more-button:hover {
-	background-color: var(--dgcpf-load-more-hover-background-color, #5b21b6);
-	color: var(--dgcpf-load-more-hover-text-color, #fff);
-	border-color: var(--dgcpf-load-more-hover-border-color, transparent);
+	background-color: #5b21b6;
 }
 
 .dgcpf-load-more-button:disabled {
 	opacity: 0.6;
 	cursor: not-allowed;
-	background-color: var(--dgcpf-load-more-disabled-background-color, #ccc); /* New: Disabled background color */
-	color: var(--dgcpf-load-more-disabled-text-color, #666); /* New: Disabled text color */
+	background-color: #ccc;
 }
 
-/* Clear All Filters Button */
 .dgcpf-clear-all-filters-button {
-	/* Inherit some button styles or define new ones */
-	display: inline-block; /* Hidden by default via JS */
 	padding: 8px 15px;
 	background-color: #f0f0f0;
 	color: #555;
@@ -297,61 +203,31 @@
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 14px;
-	font-weight: 500;
-	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-	margin-left: 15px; /* Spacing from filter groups */
+	transition: background-color 0.2s ease;
 }
 
 .dgcpf-clear-all-filters-button:hover {
 	background-color: #e0e0e0;
-	color: #333;
-	border-color: #bbb;
 }
 
-/* Error message styling */
-.dgcpf-error-message,
 .no-products-found {
 	text-align: center;
-	color: var(--dgcpf-no-products-text-color, #d63638);
+	color: #d63638;
 	font-size: 18px;
-	padding: var(--dgcpf-no-products-padding, 20px);
-	border: var(--dgcpf-no-products-border-width, 1px) var(--dgcpf-no-products-border-type, solid) var(--dgcpf-no-products-border-color, #ffecec);
-	background-color: var(--dgcpf-no-products-background-color, #fffafa);
-	border-radius: var(--dgcpf-no-products-border-radius, 5px);
+	padding: 20px;
+	border: 1px solid #ffecec;
+	background-color: #fffafa;
+	border-radius: 5px;
 }
 
-/* =================================================================
-   6. Responsive Adjustments
-================================================================= */
 @media (max-width: 767px) {
 	.dgcpf-filters-wrapper {
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: stretch;
 	}
 	.dgcpf-filter-group {
-		width: 100%;
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 5px;
-	}
-	.dgcpf-filter-dropdown {
-		width: 100%;
-	}
-	.dgcpf-filter-checkboxes,
-	.dgcpf-filter-radio-buttons {
-		flex-direction: column;
-		width: 100%;
-	}
-	/* Adjust carousel buttons for smaller screens if needed */
-	.dgcpf-loop-container.dgcpf-carousel .flickity-prev-next-button.previous {
-		left: 0px;
-	}
-	.dgcpf-loop-container.dgcpf-carousel .flickity-prev-next-button.next {
-		right: 0px;
-	}
-	.dgcpf-clear-all-filters-button {
-		margin-left: 0; /* Remove left margin on mobile */
-		margin-top: 15px; /* Add top margin for spacing */
-		width: 100%; /* Full width button */
 	}
 }
