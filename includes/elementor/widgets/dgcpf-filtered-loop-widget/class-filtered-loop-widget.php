@@ -339,7 +339,7 @@ class Filtered_Loop_Widget extends Widget_Base {
             'acf_meta_value',
             [
                 'label' => esc_html__( 'Field Value', 'custom-product-filters' ),
-                'type' => Controls_Manager::TEXT,
+                'type' => Controls_Manager::SELECT,
                 'condition' => [ 'acf_meta_key!' => '' ],
                 'frontend_available' => true,
             ]
