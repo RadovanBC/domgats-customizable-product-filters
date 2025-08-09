@@ -3,7 +3,7 @@
  * Plugin Name:       DomGats Customizable Product Filters
  * Plugin URI:        https://example.com/
  * Description:       A custom product filter for WooCommerce and more to come.
- * Version:           1.3.21
+ * Version:           1.3.22
  * Author:            Radovan Gataric DomGat
  * Author URI:        https://radovangataric.com/
  * License:           GPL v2 or later
@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'DGCPF_VERSION', '1.3.21' );
+define( 'DGCPF_VERSION', '1.3.22' );
 define( 'DGCPF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DGCPF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
