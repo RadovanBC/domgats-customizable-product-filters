@@ -327,6 +327,13 @@ class Filtered_Loop_Widget extends Widget_Base {
 
         $acf_repeater = new Repeater();
         $acf_repeater->add_control(
+            'acf_field_label',
+            [
+                'type' => Controls_Manager::HIDDEN,
+                'default' => ''
+            ]
+        );
+        $acf_repeater->add_control(
             'acf_meta_key',
             [
                 'label'   => esc_html__( 'ACF Field', 'custom-product-filters' ),
@@ -340,8 +347,19 @@ class Filtered_Loop_Widget extends Widget_Base {
             [
                 'label' => esc_html__( 'Field Value', 'custom-product-filters' ),
                 'type' => Controls_Manager::SELECT,
+                'options' => [], // Will be dynamically populated
                 'condition' => [ 'acf_meta_key!' => '' ],
                 'frontend_available' => true,
+                'render_type' => 'ui', // Important for dynamic updates in editor
+                'ajax' => [
+                    'event' => 'select2:select',
+                    'selector' => 'select[data-setting="acf_meta_key"]',
+                    'action' => 'dgcpf_get_acf_field_choices',
+                    'data' => [
+                        'field_key' => 'acf_meta_key',
+                        'post_type' => 'post_type',
+                    ],
+                ],
             ]
         );
         $acf_repeater->add_control(
@@ -369,7 +387,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'label'   => esc_html__( 'ACF Meta Queries', 'custom-product-filters' ),
                 'type'    => Controls_Manager::REPEATER,
                 'fields'  => $acf_repeater->get_controls(),
-                'title_field' => '{{{ acf_meta_key }}}',
+                'title_field' => '{{{ acf_field_label || acf_meta_key }}}',
                 'separator' => 'before',
                 'condition' => [ '_is_acf_active' => '1' ],
                 'frontend_available' => true,
@@ -1174,7 +1192,7 @@ class Filtered_Loop_Widget extends Widget_Base {
             $fields = acf_get_fields( $group['key'] );
             foreach ( $fields as $field ) {
                 if ( in_array( $field['type'], ['text', 'number', 'select', 'checkbox', 'radio', 'true_false'] ) ) {
-                    $options[ $field['key'] ] = $field['label'] . ' (' . $field['type'] . ')';
+                    $options[ $field['key'] ] = $field['label'];
                 }
             }
         }

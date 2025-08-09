@@ -45,6 +45,22 @@
             }
 
             model.on('change:settings', onSettingsChange);
+
+            // --- Start ACF Meta Query Repeater Logic ---
+            panel.on('change', 'select[data-setting="acf_meta_key"]', function() {
+                const $select = $(this);
+                const selectedLabel = $select.find('option:selected').text();
+                const repeaterItemIndex = $select.closest('.elementor-repeater-row').data('model-cid');
+                
+                // Find the repeater item model
+                const repeaterItems = model.get('acf_meta_query_repeater');
+                const currentItem = repeaterItems.findWhere({ cid: repeaterItemIndex });
+
+                if (currentItem) {
+                    currentItem.set('acf_field_label', selectedLabel);
+                }
+            });
+            // --- End ACF Meta Query Repeater Logic ---
         });
     });
 })(jQuery);
