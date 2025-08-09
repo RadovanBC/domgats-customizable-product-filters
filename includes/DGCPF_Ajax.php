@@ -13,6 +13,74 @@ class DGCPF_Ajax {
     public function __construct() {
         add_action('wp_ajax_dgcpf_filter_posts', [$this, 'filter_posts_handler']);
         add_action('wp_ajax_nopriv_dgcpf_filter_posts', [$this, 'filter_posts_handler']);
+        add_action('wp_ajax_dgcpf_get_acf_field_choices', [$this, 'get_acf_field_choices_handler']);
+    }
+
+    public function get_acf_field_choices_handler() {
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_send_json_error( [ 'message' => esc_html__( 'You do not have permission to perform this action.', 'custom-product-filters' ) ] );
+            return;
+        }
+
+        $field_key = isset( $_POST['field_key'] ) ? sanitize_text_field( wp_unslash( $_POST['field_key'] ) ) : '';
+        $post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) : '';
+
+        if ( empty( $field_key ) ) {
+            wp_send_json_error( [ 'message' => esc_html__( 'ACF field key is missing.', 'custom-product-filters' ) ] );
+            return;
+        }
+
+        if ( ! function_exists( 'get_field_object' ) ) {
+            wp_send_json_error( [ 'message' => esc_html__( 'ACF is not active.', 'custom-product-filters' ) ] );
+            return;
+        }
+
+        $field_object = get_field_object( $field_key );
+        $options = [];
+
+        if ( $field_object ) {
+            // For fields with predefined choices (select, radio, checkbox, true_false)
+            if ( in_array( $field_object['type'], [ 'select', 'radio', 'checkbox', 'true_false' ] ) ) {
+                $choices = $field_object['choices'] ?? [];
+                if ( 'true_false' === $field_object['type'] ) {
+                    $choices = [ '1' => esc_html__( 'Yes', 'custom-product-filters' ), '0' => esc_html__( 'No', 'custom-product-filters' ) ];
+                }
+                foreach ( $choices as $value => $label ) {
+                    $options[] = [ 'id' => $value, 'text' => $label ];
+                }
+            } else {
+                // For fields without predefined choices (e.g., text, number)
+                global $wpdb;
+                $unique_values = $wpdb->get_col( $wpdb->prepare(
+                    "SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+                     INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+                     WHERE pm.meta_key = %s AND p.post_type = %s AND p.post_status = 'publish'",
+                    $field_key,
+                    $post_type
+                ) );
+
+                foreach ( $unique_values as $value ) {
+                    // Handle serialized data if necessary (e.g., for checkbox fields saved as serialized arrays)
+                    $unserialized_value = maybe_unserialize( $value );
+                    if ( is_array( $unserialized_value ) ) {
+                        foreach ( $unserialized_value as $sub_value ) {
+                            $options[] = [ 'id' => $sub_value, 'text' => $sub_value ];
+                        }
+                    } else {
+                        $options[] = [ 'id' => $value, 'text' => $value ];
+                    }
+                }
+                // Sort options alphabetically
+                usort($options, function($a, $b) {
+                    return strcmp($a['text'], $b['text']);
+                });
+            }
+        } else {
+            wp_send_json_error( [ 'message' => esc_html__( 'ACF field not found.', 'custom-product-filters' ) ] );
+            return;
+        }
+
+        wp_send_json_success( [ 'results' => $options ] );
     }
 
     private function _sanitize_input($data) {
@@ -177,52 +245,9 @@ class DGCPF_Ajax {
             $filter_key = '';
             if ($filter_type === 'taxonomy') {
                 $filter_key = $filter_config['taxonomy_name'];
-            } elseif ($filter_type === 'acf') {
-                $filter_key = $filter_config['acf_field_key'];
             }
-            if (empty($filter_key)) {
-                continue;
-            }
-
-            $temp_query_args = $this->_build_query_args($settings, $filter_key, $filter_type);
-            $temp_query_args['fields'] = 'ids';
-            $temp_query_args['posts_per_page'] = -1;
-            $temp_query_args['no_found_rows'] = true;
-
-            $temp_query = new \WP_Query($temp_query_args);
-            $post_ids = $temp_query->posts;
-
-            if ($filter_type === 'taxonomy') {
-                $taxonomy_name = $filter_config['taxonomy_name'];
-                $all_terms = get_terms(['taxonomy' => $taxonomy_name, 'hide_empty' => false]);
-                if (is_wp_error($all_terms)) continue;
-
-                $available_options[$taxonomy_name] = [];
-                foreach ($all_terms as $term) {
-                    $available_options[$taxonomy_name][$term->slug] = ['name' => $term->name, 'count' => 0];
-                }
-
-                if (!empty($post_ids)) {
-                    global $wpdb;
-                    $query = $wpdb->prepare(
-                        "SELECT t.slug FROM {$wpdb->terms} AS t
-                         INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
-                         INNER JOIN {$wpdb->term_relationships} AS tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
-                         WHERE tt.taxonomy = %s AND tr.object_id IN (" . implode(',', array_map('intval', $post_ids)) . ")",
-                        $taxonomy_name
-                    );
-                    $terms_for_posts = $wpdb->get_col($query);
-
-                    if (!empty($terms_for_posts)) {
-                        $term_counts = array_count_values($terms_for_posts);
-                        foreach ($term_counts as $slug => $count) {
-                            if (isset($available_options[$taxonomy_name][$slug])) {
-                                $available_options[$taxonomy_name][$slug]['count'] = $count;
-                            }
-                        }
-                    }
-                }
-            } elseif ($filter_type === 'acf' && function_exists('get_field_object')) {
+            // Removed duplicate elseif block here
+            elseif ($filter_type === 'acf' && function_exists('get_field_object')) {
                 $acf_field_key = $filter_config['acf_field_key'];
                 if (empty($acf_field_key)) continue;
 
@@ -265,6 +290,36 @@ class DGCPF_Ajax {
                                 $available_options[$acf_field_key]['values'][$value]['count'] = $count;
                             }
                         }
+                    }
+                } else { // Handle ACF fields without predefined choices
+                    if (!empty($post_ids)) {
+                        global $wpdb;
+                        $meta_values = $wpdb->get_col($wpdb->prepare(
+                            "SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+                             WHERE pm.meta_key = %s AND pm.post_id IN (" . implode(',', array_map('intval', $post_ids)) . ")",
+                            $acf_field_key
+                        ));
+
+                        $all_values = [];
+                        foreach ($meta_values as $meta_value) {
+                            $unserialized_values = maybe_unserialize($meta_value);
+                            if (is_array($unserialized_values)) {
+                                $all_values = array_merge($all_values, $unserialized_values);
+                            } else {
+                                $all_values[] = $meta_value;
+                            }
+                        }
+
+                        $value_counts = array_count_values($all_values);
+
+                        foreach ($value_counts as $value => $count) {
+                            // For fields without predefined choices, the 'name' is the value itself
+                            $available_options[$acf_field_key]['values'][$value] = ['name' => $value, 'count' => $count];
+                        }
+                        // Sort options alphabetically by name (value)
+                        usort($available_options[$acf_field_key]['values'], function($a, $b) {
+                            return strcmp($a['name'], $b['name']);
+                        });
                     }
                 }
             }
