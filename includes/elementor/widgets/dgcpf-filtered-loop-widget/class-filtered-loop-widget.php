@@ -7,15 +7,18 @@ use \Elementor\Group_Control_Border;
 use \Elementor\Group_Control_Box_Shadow;
 use \Elementor\Group_Control_Typography;
 use \Elementor\Repeater;
+use \Elementor\Widget_Base;
 
-// No direct 'use' for Query or QueryControlModule here,
-// as we will check for class/constant existence before using them.
+// Explicitly re-added use statement for clarity
+
+// Removed the global function and constant definitions that were causing redeclaration errors.
+// This file should ONLY contain the class definition for Filtered_Loop_Widget.
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-class Filtered_Loop_Widget extends Widget_Base {
+class Filtered_Loop_Widget extends Widget_Base { // Using the imported Widget_Base class directly
 
     /**
      * Get widget name.
@@ -92,7 +95,7 @@ class Filtered_Loop_Widget extends Widget_Base {
         if ( class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
             return \ElementorPro\Modules\QueryControl\Module::class;
         }
-        return '';
+        return ''; // Return empty string if class doesn't exist
     }
 
     /**
@@ -304,10 +307,11 @@ class Filtered_Loop_Widget extends Widget_Base {
             ]
         );
 
-        // Check if Elementor Pro's Query Control is available before adding these controls
+        // Safely get Query Control type and Module class name
         $query_control_type = $this->_get_query_control_type();
         $query_control_module_class = $this->_get_query_control_module_class();
 
+        // Only add Query controls if Elementor Pro's Query Control is available
         if ( $query_control_type !== Controls_Manager::TEXT && ! empty( $query_control_module_class ) ) {
             $this->add_control(
                 'posts_include_by_ids',
@@ -842,8 +846,8 @@ class Filtered_Loop_Widget extends Widget_Base {
             [
                 'label' => esc_html__( 'Pagination Dots', 'custom-product-filters' ),
                 'type' => Controls_Manager::SWITCHER,
-                'label_on' => esc_html__( 'Show', 'custom-product-filters' ),
-                'label_off' => esc_html__( 'Hide', 'custom-product-filters' ),
+                'label_on' => esc_html__( 'Yes', 'custom-product-filters' ),
+                'label_off' => esc_html__( 'No', 'custom-product-filters' ),
                 'return_value' => 'yes',
                 'default' => 'no',
                 'condition' => [

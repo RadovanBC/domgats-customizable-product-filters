@@ -3,7 +3,7 @@
  * Plugin Name:       DomGats Customizable Product Filters
  * Plugin URI:        https://example.com/
  * Description:       A custom product filter for WooCommerce and more to come.
- * Version:           1.3.1
+ * Version:           1.3.9
  * Author:            Radovan Gataric DomGat
  * Author URI:        https://radovangataric.com/
  * License:           GPL v2 or later
@@ -22,7 +22,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Constants
  */
-define( 'DGCPF_VERSION', '1.3.1' ); // Version updated to 1.3.1
+define( 'DGCPF_VERSION', '1.3.9' ); // Version updated to 1.3.9
 define( 'DGCPF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DGCPF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -62,8 +62,6 @@ add_action( 'wp_enqueue_scripts', 'dgcpf_enqueue_assets', 30 );
  * Initializes the plugin's classes.
  */
 function dgcpf_initialize_plugin() {
-	// DGCPF_Shortcodes is being removed, so it's no longer initialized here.
-	// new \DomGats\ProductFilter\DGCPF_Shortcodes(); // Removed: Legacy shortcode handler
 	new \DomGats\ProductFilter\DGCPF_Ajax();
 
 	if ( is_admin() ) {
@@ -74,9 +72,10 @@ add_action( 'plugins_loaded', 'dgcpf_initialize_plugin' );
 
 // Elementor Widget Integration
 /**
- * Check if Elementor is active and load the custom widgets.
+ * Check if Elementor is active and load and register the custom widgets.
+ * Changed hook from 'plugins_loaded' to 'init' for more reliable class loading.
  */
-add_action( 'plugins_loaded', 'dgcpf_init_elementor_widgets' );
+add_action( 'init', 'dgcpf_init_elementor_widgets' ); // Changed hook to 'init'
 function dgcpf_init_elementor_widgets() {
     if ( defined( 'ELEMENTOR_PATH' ) && file_exists( DGCPF_PLUGIN_DIR . 'includes/elementor/class-dgcpf-elementor-widgets.php' ) ) {
         require_once DGCPF_PLUGIN_DIR . 'includes/elementor/class-dgcpf-elementor-widgets.php';
