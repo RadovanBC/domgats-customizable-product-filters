@@ -1054,28 +1054,8 @@ class Filtered_Loop_Widget extends Widget_Base {
         if ( ! empty( $settings['acf_meta_query_repeater'] ) && function_exists( 'get_field_object' ) ) {
             $meta_query_main['relation'] = 'AND';
             foreach ( $settings['acf_meta_query_repeater'] as $meta_item ) {
-                if ( ! empty( $meta_item['acf_meta_key'] ) && ! empty( $meta_item['acf_meta_value'] ) ) {
-                    $field_object = get_field_object( $meta_item['acf_meta_key'] );
-                    if ( $field_object ) {
-                        $meta_value = $meta_item['acf_meta_value'];
-                        $compare_operator = $meta_item['acf_meta_compare'];
-                        $meta_type = 'CHAR';
-
-                        if ( in_array( $field_object['type'], ['number'] ) ) {
-                            $meta_type = 'NUMERIC';
-                            if ( in_array( $compare_operator, ['BETWEEN', 'NOT BETWEEN'] ) ) {
-                                $meta_value = array_map( 'floatval', explode( ',', $meta_value ) );
-                            } else {
-                                $meta_value = floatval( $meta_value );
-                            }
-                        } elseif ( in_array( $field_object['type'], ['checkbox', 'select'] ) && in_array( $compare_operator, ['LIKE', 'NOT LIKE'] ) ) {
-                            $meta_value = '%' . serialize( strval( $meta_value ) ) . '%';
-                        } elseif ( in_array( $compare_operator, ['IN', 'NOT IN'] ) ) {
-                            $meta_value = array_map( 'trim', explode( ',', $meta_value ) );
-                        }
-
-                        $meta_query_main[] = [ 'key' => $meta_item['acf_meta_key'], 'value' => $meta_value, 'compare' => $compare_operator, 'type' => $meta_type ];
-                    }
+                 if ( ! empty( $meta_item['acf_meta_key'] ) && isset( $meta_item['acf_meta_value'] ) && $meta_item['acf_meta_value'] !== '' ) {
+                    $meta_query_main[] = [ 'key' => $meta_item['acf_meta_key'], 'value' => $meta_item['acf_meta_value'], 'compare' => $meta_item['acf_meta_compare'] ];
                 }
             }
         }
@@ -1103,7 +1083,6 @@ class Filtered_Loop_Widget extends Widget_Base {
             foreach ( $settings['filters_repeater'] as $filter_item ) {
                 $filter_type = $filter_item['filter_type'];
                 $display_as = $filter_item['display_as'];
-                $filter_name_for_url = '';
 
                 echo '<div class="dgcpf-filter-group dgcpf-filter-type-' . esc_attr( $filter_type ) . '">';
 
@@ -1112,13 +1091,11 @@ class Filtered_Loop_Widget extends Widget_Base {
                     $terms = get_terms( [ 'taxonomy' => $taxonomy_name, 'hide_empty' => false ] );
 
                     if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-                        $filter_name_for_url = 'dgcpf_tax_' . sanitize_key( $taxonomy_name );
                         echo '<span class="dgcpf-filter-label">' . esc_html( get_taxonomy( $taxonomy_name )->labels->singular_name ) . ':</span>';
-                        echo '<div data-taxonomy="' . esc_attr( $taxonomy_name ) . '" data-display-as="' . esc_attr( $display_as ) . '" data-filter-name="' . esc_attr( $filter_name_for_url ) . '">';
+                        echo '<div data-taxonomy="' . esc_attr( $taxonomy_name ) . '" data-display-as="' . esc_attr( $display_as ) . '">';
 
                         if ( 'dropdown' === $display_as ) {
-                            echo '<select class="dgcpf-filter-dropdown" aria-label="' . esc_attr( get_taxonomy( $taxonomy_name )->labels->singular_name ) . '">';
-                            echo '<option value="">' . esc_html__( 'All', 'custom-product-filters' ) . '</option>';
+                            echo '<select class="dgcpf-filter-dropdown"><option value="">' . esc_html__( 'All', 'custom-product-filters' ) . '</option>';
                             foreach ( $terms as $term ) echo '<option value="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</option>';
                             echo '</select>';
                         } elseif ( 'checkbox' === $display_as ) {
@@ -1137,39 +1114,27 @@ class Filtered_Loop_Widget extends Widget_Base {
                     $acf_field_key = $filter_item['acf_field_key'];
                     $field_object = get_field_object( $acf_field_key );
                     if ( $field_object ) {
-                        $filter_name_for_url = 'dgcpf_acf_' . sanitize_key( $acf_field_key );
                         echo '<span class="dgcpf-filter-label">' . esc_html( $field_object['label'] ) . ':</span>';
-                        echo '<div data-acf-field-key="' . esc_attr( $acf_field_key ) . '" data-display-as="' . esc_attr( $display_as ) . '" data-filter-name="' . esc_attr( $filter_name_for_url ) . '" data-acf-field-type="' . esc_attr( $field_object['type'] ) . '">';
+                        echo '<div data-acf-field-key="' . esc_attr( $acf_field_key ) . '" data-display-as="' . esc_attr( $display_as ) . '" data-acf-field-type="' . esc_attr( $field_object['type'] ) . '">';
 
-                        if ( 'dropdown' === $display_as && in_array( $field_object['type'], ['select', 'radio', 'checkbox', 'true_false'] ) ) {
-                            echo '<select class="dgcpf-filter-dropdown" aria-label="' . esc_attr( $field_object['label'] ) . '">';
-                            echo '<option value="">' . esc_html__( 'All', 'custom-product-filters' ) . '</option>';
-                            if ( ! empty( $field_object['choices'] ) ) {
-                                foreach ( $field_object['choices'] as $value => $label ) echo '<option value="' . esc_attr( $value ) . '">' . esc_html( $label ) . '</option>';
-                            } elseif ( 'true_false' === $field_object['type'] ) {
-                                echo '<option value="1">' . esc_html__( 'Yes', 'custom-product-filters' ) . '</option>';
-                                echo '<option value="0">' . esc_html__( 'No', 'custom-product-filters' ) . '</option>';
+                        if ( in_array( $display_as, ['dropdown', 'checkbox', 'radio'] ) && in_array( $field_object['type'], ['select', 'radio', 'checkbox', 'true_false'] ) ) {
+                            $choices = $field_object['choices'] ?? [];
+                            if ('true_false' === $field_object['type']) $choices = ['1' => esc_html__('Yes', 'custom-product-filters'), '0' => esc_html__('No', 'custom-product-filters')];
+
+                            if ( 'dropdown' === $display_as ) {
+                                echo '<select class="dgcpf-filter-dropdown"><option value="">' . esc_html__( 'All', 'custom-product-filters' ) . '</option>';
+                                foreach ( $choices as $value => $label ) echo '<option value="' . esc_attr( $value ) . '">' . esc_html( $label ) . '</option>';
+                                echo '</select>';
+                            } elseif ( 'checkbox' === $display_as ) {
+                                echo '<div class="dgcpf-filter-checkboxes">';
+                                foreach ( $choices as $value => $label ) echo '<label><input type="checkbox" class="dgcpf-filter-checkbox" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . '</span></label>';
+                                echo '</div>';
+                            } elseif ( 'radio' === $display_as ) {
+                                echo '<div class="dgcpf-filter-radio-buttons">';
+                                echo '<label><input type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $acf_field_key ) . '" value="" checked> <span>' . esc_html__( 'All', 'custom-product-filters' ) . '</span></label>';
+                                foreach ( $choices as $value => $label ) echo '<label><input type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $acf_field_key ) . '" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . '</span></label>';
+                                echo '</div>';
                             }
-                            echo '</select>';
-                        } elseif ( 'checkbox' === $display_as && in_array( $field_object['type'], ['checkbox', 'select', 'true_false'] ) ) {
-                            echo '<div class="dgcpf-filter-checkboxes">';
-                            if ( ! empty( $field_object['choices'] ) ) {
-                                foreach ( $field_object['choices'] as $value => $label ) echo '<label><input type="checkbox" class="dgcpf-filter-checkbox" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . '</span></label>';
-                            } elseif ( 'true_false' === $field_object['type'] ) {
-                                echo '<label><input type="checkbox" class="dgcpf-filter-checkbox" value="1"> <span>' . esc_html__( 'Yes', 'custom-product-filters' ) . '</span></label>';
-                                echo '<label><input type="checkbox" class="dgcpf-filter-checkbox" value="0"> <span>' . esc_html__( 'No', 'custom-product-filters' ) . '</span></label>';
-                            }
-                            echo '</div>';
-                        } elseif ( 'radio' === $display_as && in_array( $field_object['type'], ['radio', 'select', 'true_false'] ) ) {
-                            echo '<div class="dgcpf-filter-radio-buttons">';
-                            echo '<label><input type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $acf_field_key ) . '" value="" checked> <span>' . esc_html__( 'All', 'custom-product-filters' ) . '</span></label>';
-                            if ( ! empty( $field_object['choices'] ) ) {
-                                foreach ( $field_object['choices'] as $value => $label ) echo '<label><input type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $acf_field_key ) . '" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . '</span></label>';
-                            } elseif ( 'true_false' === $field_object['type'] ) {
-                                echo '<label><input type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $acf_field_key ) . '" value="1"> <span>' . esc_html__( 'Yes', 'custom-product-filters' ) . '</span></label>';
-                                echo '<label><input type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $acf_field_key ) . '" value="0"> <span>' . esc_html__( 'No', 'custom-product-filters' ) . '</span></label>';
-                            }
-                            echo '</div>';
                         } elseif ( 'text' === $display_as && 'text' === $field_object['type'] ) {
                             echo '<input type="text" class="dgcpf-filter-text-input" placeholder="' . esc_attr( $field_object['label'] ) . '">';
                         } elseif ( 'number' === $display_as && 'number' === $field_object['type'] ) {
@@ -1193,9 +1158,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 echo '</div>';
             }
         } else {
-            $options = get_option('dgcpf_options', []);
-            $no_products_text = isset($options['no_products_text']) ? $options['no_products_text'] : 'There are no products with that combination of tags.';
-            echo '<p class="no-products-found">' . esc_html($no_products_text) . '</p>';
+            echo '<p class="no-products-found">' . esc_html__('No products found matching your criteria.', 'custom-product-filters') . '</p>';
         }
         echo '</div>';
         
