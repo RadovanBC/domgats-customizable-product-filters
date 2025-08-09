@@ -212,14 +212,19 @@ class Filtered_Loop_Widget extends Widget_Base {
         );
 
         if ( class_exists( '\ElementorPro\Modules\QueryControl\Module' ) ) {
-            $query_control_type = 'query';
-            $query_control_module_class = \ElementorPro\Modules\QueryControl\Module::class;
             $this->add_control(
                 'posts_include_by_ids',
                 [
                     'label' => esc_html__( 'Include Posts by ID', 'custom-product-filters' ),
-                    'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
-                    'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_POST', 'query'  => [ 'post_type' => 'any' ] ],
+                    'type' => \ElementorPro\Modules\QueryControl\Module::QUERY_CONTROL_ID,
+                    'label_block' => true,
+                    'multiple' => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_POST,
+                        'query'  => [
+                            'post_type' => 'any'
+                        ],
+                    ],
                     'frontend_available' => true,
                 ]
             );
@@ -227,8 +232,15 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'posts_exclude_by_ids',
                 [
                     'label' => esc_html__( 'Exclude Posts by ID', 'custom-product-filters' ),
-                    'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
-                    'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_POST', 'query'  => [ 'post_type' => 'any' ] ],
+                    'type' => \ElementorPro\Modules\QueryControl\Module::QUERY_CONTROL_ID,
+                    'label_block' => true,
+                    'multiple' => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_POST,
+                        'query'  => [
+                            'post_type' => 'any'
+                        ],
+                    ],
                     'frontend_available' => true,
                 ]
             );
@@ -236,7 +248,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'terms_include',
                 [
                     'label' => esc_html__( 'Include Terms', 'custom-product-filters' ),
-                    'type' => $query_control_type,
+                    'type' => \ElementorPro\Modules\QueryControl\Module::QUERY_CONTROL_ID,
                     'label_block' => true,
                     'multiple' => true,
                     'autocomplete' => [
@@ -252,7 +264,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'terms_exclude',
                 [
                     'label' => esc_html__( 'Exclude Terms', 'custom-product-filters' ),
-                    'type' => $query_control_type,
+                    'type' => \ElementorPro\Modules\QueryControl\Module::QUERY_CONTROL_ID,
                     'label_block' => true,
                     'multiple' => true,
                     'autocomplete' => [
@@ -268,9 +280,18 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'product_categories_query',
                 [
                     'label' => esc_html__( 'Product Categories', 'custom-product-filters' ),
-                    'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
-                    'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX', 'query'  => [ 'taxonomy' => 'product_cat' ] ],
-                    'condition' => [ 'post_type' => 'product' ],
+                    'type' => \ElementorPro\Modules\QueryControl\Module::QUERY_CONTROL_ID,
+                    'label_block' => true,
+                    'multiple' => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query'  => [
+                            'taxonomy' => 'product_cat'
+                        ],
+                    ],
+                    'condition' => [
+                        'post_type' => 'product'
+                    ],
                     'frontend_available' => true,
                 ]
             );
@@ -278,9 +299,18 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'product_tags_query',
                 [
                     'label' => esc_html__( 'Product Tags', 'custom-product-filters' ),
-                    'type' => $query_control_type, 'label_block' => true, 'multiple' => true,
-                    'autocomplete' => [ 'object' => $query_control_module_class . '::' . 'QUERY_OBJECT_TAX', 'query'  => [ 'taxonomy' => 'product_tag' ] ],
-                    'condition' => [ 'post_type' => 'product' ],
+                    'type' => \ElementorPro\Modules\QueryControl\Module::QUERY_CONTROL_ID,
+                    'label_block' => true,
+                    'multiple' => true,
+                    'autocomplete' => [
+                        'object' => \ElementorPro\Modules\QueryControl\Module::QUERY_OBJECT_TAX,
+                        'query'  => [
+                            'taxonomy' => 'product_tag'
+                        ],
+                    ],
+                    'condition' => [
+                        'post_type' => 'product'
+                    ],
                     'frontend_available' => true,
                 ]
             );
@@ -435,8 +465,7 @@ class Filtered_Loop_Widget extends Widget_Base {
                 'type'    => Controls_Manager::SELECT,
                 'options' => [
                     'dropdown' => esc_html__( 'Dropdown', 'custom-product-filters' ), 'checkbox' => esc_html__( 'Checkboxes', 'custom-product-filters' ),
-                    'radio'    => esc_html__( 'Radio Buttons', 'custom-product-filters' ), 'text'     => esc_html__( 'Text Input', 'custom-product-filters' ),
-                    'number'   => esc_html__( 'Number Input', 'custom-product-filters' ),
+                    'radio'    => esc_html__( 'Radio Buttons', 'custom-product-filters' ),
                 ],
                 'default' => 'dropdown',
                 'frontend_available' => true,

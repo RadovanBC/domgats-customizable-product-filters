@@ -23,12 +23,12 @@
             self.initializeCarousel();
             self.updateLoadMoreButtonVisibility();
             self.applyInitialFilterSelection();
+            self.fetchProducts(true);
         };
 
         self.bindEvents = function () {
             const debouncedFilterChange = self.debounce(self.onFilterChange, 500);
             self.$filtersWrapper.on('change', '.dgcpf-filter-dropdown, .dgcpf-filter-checkbox, .dgcpf-filter-radio', debouncedFilterChange);
-            self.$filtersWrapper.on('input', '.dgcpf-filter-text-input, .dgcpf-filter-number-input', debouncedFilterChange);
             self.$loadMoreButton.on('click', self.onLoadMoreClick);
             self.$clearAllButton.on('click', self.onClearAllFiltersClick);
             if (self.settings.enable_history_api === 'yes') {
@@ -81,7 +81,7 @@
                 const value = self.selectedAcfFields[fieldKey];
                 const $group = self.$filtersWrapper.find(`[data-acf-field-key="${fieldKey}"]`);
                 if ($group.length) {
-                    if (['dropdown', 'text', 'number'].includes($group.data('display-as'))) $group.find('input, select').val(value);
+                    if (['dropdown'].includes($group.data('display-as'))) $group.find('select').val(value);
                     else if ($group.data('display-as') === 'checkbox') value.split(',').forEach(val => $group.find(`input[value="${val}"]`).prop('checked', true));
                     else if ($group.data('display-as') === 'radio') $group.find(`input[value="${value || ''}"]`).prop('checked', true);
                 }
@@ -121,7 +121,7 @@
         self.onClearAllFiltersClick = function (e) {
             e.preventDefault();
             // Reset UI
-            self.$filtersWrapper.find('select, input[type="text"], input[type="number"]').val('');
+            self.$filtersWrapper.find('select').val('');
             self.$filtersWrapper.find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
             self.$filtersWrapper.find('input[type="radio"][value=""]').prop('checked', true);
             

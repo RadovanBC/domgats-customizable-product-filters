@@ -199,26 +199,28 @@ class DGCPF_Ajax {
 
                 $available_options[$taxonomy_name] = [];
                 foreach ($all_terms as $term) {
-                    if (empty($post_ids)) {
-                        $count = 0;
-                    } else {
-                        $count_args = [
-                            'post_type' => $settings['post_type'],
-                            'post__in' => $post_ids,
-                            'tax_query' => [
-                                [
-                                    'taxonomy' => $taxonomy_name,
-                                    'field'    => 'slug',
-                                    'terms'    => $term->slug,
-                                ],
-                            ],
-                            'fields' => 'ids',
-                            'posts_per_page' => -1,
-                        ];
-                        $count_query = new \WP_Query($count_args);
-                        $count = $count_query->post_count;
+                    $available_options[$taxonomy_name][$term->slug] = ['name' => $term->name, 'count' => 0];
+                }
+
+                if (!empty($post_ids)) {
+                    global $wpdb;
+                    $query = $wpdb->prepare(
+                        "SELECT t.slug FROM {$wpdb->terms} AS t
+                         INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                         INNER JOIN {$wpdb->term_relationships} AS tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
+                         WHERE tt.taxonomy = %s AND tr.object_id IN (" . implode(',', array_map('intval', $post_ids)) . ")",
+                        $taxonomy_name
+                    );
+                    $terms_for_posts = $wpdb->get_col($query);
+
+                    if (!empty($terms_for_posts)) {
+                        $term_counts = array_count_values($terms_for_posts);
+                        foreach ($term_counts as $slug => $count) {
+                            if (isset($available_options[$taxonomy_name][$slug])) {
+                                $available_options[$taxonomy_name][$slug]['count'] = $count;
+                            }
+                        }
                     }
-                    $available_options[$taxonomy_name][$term->slug] = ['name' => $term->name, 'count' => $count];
                 }
             } elseif ($filter_type === 'acf' && function_exists('get_field_object')) {
                 $acf_field_key = $filter_config['acf_field_key'];
@@ -236,27 +238,33 @@ class DGCPF_Ajax {
                     }
 
                     foreach ($choices as $value => $label) {
-                        if (empty($post_ids)) {
-                            $count = 0;
-                        } else {
-                            $count_args = [
-                                'post_type' => $settings['post_type'],
-                                'post__in' => $post_ids,
-                                'meta_query' => [
-                                    [
-                                        'key' => $acf_field_key,
-                                        'value' => $value,
-                                        'compare' => 'LIKE',
-                                    ],
-                                ],
-                                'fields' => 'ids',
-                                'posts_per_page' => -1,
-                            ];
-                            
-                            $count_query = new \WP_Query($count_args);
-                            $count = $count_query->post_count;
+                        $available_options[$acf_field_key]['values'][$value] = ['name' => $label, 'count' => 0];
+                    }
+
+                    if (!empty($post_ids)) {
+                        global $wpdb;
+                        $meta_values = $wpdb->get_col($wpdb->prepare(
+                            "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND post_id IN (" . implode(',', array_map('intval', $post_ids)) . ")",
+                            $acf_field_key
+                        ));
+
+                        $all_values = [];
+                        foreach ($meta_values as $meta_value) {
+                            $unserialized_values = maybe_unserialize($meta_value);
+                            if (is_array($unserialized_values)) {
+                                $all_values = array_merge($all_values, $unserialized_values);
+                            } else {
+                                $all_values[] = $meta_value;
+                            }
                         }
-                        $available_options[$acf_field_key]['values'][$value] = ['name' => $label, 'count' => $count];
+
+                        $value_counts = array_count_values($all_values);
+
+                        foreach ($value_counts as $value => $count) {
+                            if (isset($available_options[$acf_field_key]['values'][$value])) {
+                                $available_options[$acf_field_key]['values'][$value]['count'] = $count;
+                            }
+                        }
                     }
                 }
             }
