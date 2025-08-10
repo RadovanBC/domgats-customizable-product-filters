@@ -3,7 +3,7 @@
  * Plugin Name:       DomGats Customizable Product Filters
  * Plugin URI:        https://example.com/
  * Description:       A custom product filter for WooCommerce and more to come.
- * Version:           1.3.23
+ * Version:           1.3.24
  * Author:            Radovan Gataric DomGat
  * Author URI:        https://radovangataric.com/
  * License:           GPL v2 or later
@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Define plugin constants
-define( 'DGCPF_VERSION', '1.3.23' );
+define( 'DGCPF_VERSION', '1.3.24' );
 define( 'DGCPF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DGCPF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -46,15 +46,15 @@ register_activation_hook( __FILE__, 'dgcpf_activate_plugin' );
  */
 function dgcpf_register_assets() {
     wp_register_script(
-        'dgcpf-filtered-loop-widget-js',
-        DGCPF_PLUGIN_URL . 'assets/js/filtered-loop-widget.js',
+        'dgcpf-frontend-js',
+        DGCPF_PLUGIN_URL . 'assets/js/frontend.js',
         [ 'jquery', 'elementor-frontend', 'imagesloaded' ],
         DGCPF_VERSION,
         true
     );
 
     wp_localize_script(
-        'dgcpf-filtered-loop-widget-js',
+        'dgcpf-frontend-js',
         'dgcpf_params',
         [
             'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -63,8 +63,8 @@ function dgcpf_register_assets() {
     );
 
     wp_register_style(
-        'dgcpf-filtered-loop-widget-css',
-        DGCPF_PLUGIN_URL . 'assets/css/filtered-loop-widget.css',
+        'dgcpf-frontend-css',
+        DGCPF_PLUGIN_URL . 'assets/css/frontend.css',
         [],
         DGCPF_VERSION
     );
@@ -100,19 +100,19 @@ add_action( 'elementor/frontend/after_register_scripts', 'dgcpf_register_assets'
  */
 function dgcpf_enqueue_editor_assets() {
     wp_register_script(
-        'dgcpf-filtered-loop-widget-editor-js',
-        DGCPF_PLUGIN_URL . 'assets/js/filtered-loop-widget-editor.js',
+        'dgcpf-editor-js',
+        DGCPF_PLUGIN_URL . 'assets/js/editor.js',
         [ 'elementor-editor' ],
         DGCPF_VERSION,
         true
     );
 
-    if ( class_exists('\DomGats\ProductFilter\Elementor\Widgets\Filtered_Loop_Widget') ) {
-        $widget = new \DomGats\ProductFilter\Elementor\Widgets\Filtered_Loop_Widget();
+    if ( class_exists('\DomGats\ProductFilter\Widgets\Widget') ) {
+        $widget = new \DomGats\ProductFilter\Widgets\Widget();
         $presets = $widget->_get_layout_presets();
 
         wp_localize_script(
-            'dgcpf-filtered-loop-widget-editor-js',
+            'dgcpf-editor-js',
             'DgcpfEditorData',
             [
                 'presets' => $presets
@@ -120,11 +120,33 @@ function dgcpf_enqueue_editor_assets() {
         );
     }
 
-    wp_enqueue_script( 'dgcpf-filtered-loop-widget-editor-js' );
-    wp_enqueue_script('dgcpf-filtered-loop-widget-js');
+    wp_enqueue_script( 'dgcpf-editor-js' );
+    wp_enqueue_script( 'dgcpf-frontend-js' );
 }
 add_action( 'elementor/editor/after_enqueue_scripts', 'dgcpf_enqueue_editor_assets' );
 
+/**
+ * Register Elementor widget category.
+ */
+function dgcpf_register_widget_categories( $elements_manager ) {
+    $elements_manager->add_category(
+        'domgats-widgets',
+        [
+            'title' => esc_html__( 'DomGats Widgets', 'custom-product-filters' ),
+            'icon'  => 'fa fa-filter',
+        ]
+    );
+}
+add_action( 'elementor/elements/categories_registered', 'dgcpf_register_widget_categories' );
+
+/**
+ * Register Elementor widgets.
+ */
+function dgcpf_register_elementor_widgets( $widgets_manager ) {
+    require_once DGCPF_PLUGIN_DIR . 'includes/widgets/class-widget.php';
+    $widgets_manager->register( new \DomGats\ProductFilter\Widgets\Widget() );
+}
+add_action( 'elementor/widgets/register', 'dgcpf_register_elementor_widgets' );
 
 
 /**
@@ -143,20 +165,12 @@ add_action( 'admin_init', 'dgcpf_check_required_plugins' );
  * Initialize the plugin.
  */
 function dgcpf_initialize_plugin() {
-	new \DomGats\ProductFilter\DGCPF_Ajax();
+	require_once DGCPF_PLUGIN_DIR . 'includes/class-ajax.php';
+	new \DomGats\ProductFilter\Ajax();
 
 	if ( is_admin() ) {
-		new \DomGats\ProductFilter\DGCPF_Admin();
+		require_once DGCPF_PLUGIN_DIR . 'includes/class-admin.php';
+		new \DomGats\ProductFilter\Admin();
 	}
 }
 add_action( 'plugins_loaded', 'dgcpf_initialize_plugin' );
-
-/**
- * Initialize Elementor widgets.
- */
-add_action( 'init', 'dgcpf_init_elementor_widgets' );
-function dgcpf_init_elementor_widgets() {
-    if ( defined( 'ELEMENTOR_PATH' ) && file_exists( DGCPF_PLUGIN_DIR . 'includes/elementor/class-dgcpf-elementor-widgets.php' ) ) {
-        require_once DGCPF_PLUGIN_DIR . 'includes/elementor/class-dgcpf-elementor-widgets.php';
-    }
-}

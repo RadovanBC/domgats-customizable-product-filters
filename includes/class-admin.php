@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class DGCPF_Admin {
+class Admin {
 
 	/**
 	 * The unique ID for the settings page.

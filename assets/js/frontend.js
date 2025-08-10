@@ -10,6 +10,7 @@
         self.settings = self.$widgetContainer.data('settings') || {};
         self.templateId = self.$widgetContainer.data('template-id');
         self.widgetId = self.$widgetContainer.data('widget-id');
+        self.nonce = self.$widgetContainer.data('nonce');
         self.selectedTermsByTaxonomy = {};
         self.selectedAcfFields = {};
         self.currentPage = 1;
@@ -48,11 +49,13 @@
         self.setupInitialFilterState = function () {
             self.selectedTermsByTaxonomy = {};
             self.selectedAcfFields = {};
-            self.settings.filters_repeater.forEach(filter => {
-                if (filter.filter_type === 'taxonomy' && filter.taxonomy_name) {
-                    self.selectedTermsByTaxonomy[filter.taxonomy_name] = [];
-                }
-            });
+            if (Array.isArray(self.settings.filters_repeater)) {
+                self.settings.filters_repeater.forEach(filter => {
+                    if (filter.filter_type === 'taxonomy' && filter.taxonomy_name) {
+                        self.selectedTermsByTaxonomy[filter.taxonomy_name] = [];
+                    }
+                });
+            }
             if (self.settings.enable_history_api === 'yes') {
                 const urlParams = new URLSearchParams(window.location.search);
                 urlParams.forEach((value, key) => {
@@ -90,20 +93,23 @@
 
         self.onFilterChange = function (e) {
             const $input = $(this);
-            const $groupContainer = $input.closest('.dgcpf-filter-group');
             const $group = $input.closest('[data-taxonomy], [data-acf-field-key]');
             const displayAs = $group.data('display-as');
 
-            $groupContainer.addClass('processing');
-
             if ($group.data('taxonomy')) {
                 const taxonomy = $group.data('taxonomy');
-                if (displayAs === 'checkbox') self.selectedTermsByTaxonomy[taxonomy] = $group.find('input:checked').map((_, el) => $(el).val()).get();
-                else self.selectedTermsByTaxonomy[taxonomy] = $input.val() ? [$input.val()] : [];
+                if (displayAs === 'checkbox') {
+                    self.selectedTermsByTaxonomy[taxonomy] = $group.find('input:checked').map((_, el) => $(el).val()).get();
+                } else {
+                    self.selectedTermsByTaxonomy[taxonomy] = $input.val() ? [$input.val()] : [];
+                }
             } else if ($group.data('acf-field-key')) {
                 const fieldKey = $group.data('acf-field-key');
-                if (displayAs === 'checkbox') self.selectedAcfFields[fieldKey] = $group.find('input:checked').map((_, el) => $(el).val()).get();
-                else self.selectedAcfFields[fieldKey] = $input.val();
+                if (displayAs === 'checkbox') {
+                    self.selectedAcfFields[fieldKey] = $group.find('input:checked').map((_, el) => $(el).val()).get();
+                } else {
+                    self.selectedAcfFields[fieldKey] = $input.val() ? [$input.val()] : [];
+                }
             }
             
             self.currentPage = 1;
@@ -128,11 +134,13 @@
             // Reset state variables
             self.selectedTermsByTaxonomy = {};
             self.selectedAcfFields = {};
-            self.settings.filters_repeater.forEach(filter => {
-                if (filter.filter_type === 'taxonomy' && filter.taxonomy_name) {
-                    self.selectedTermsByTaxonomy[filter.taxonomy_name] = [];
-                }
-            });
+            if (Array.isArray(self.settings.filters_repeater)) {
+                self.settings.filters_repeater.forEach(filter => {
+                    if (filter.filter_type === 'taxonomy' && filter.taxonomy_name) {
+                        self.selectedTermsByTaxonomy[filter.taxonomy_name] = [];
+                    }
+                });
+            }
 
             self.currentPage = 1;
             self.updateUrl(); // This will clear the URL params
@@ -225,10 +233,19 @@
                 $group.find('option, input').each(function() {
                     const $option = $(this);
                     const value = $option.val();
-                    if (value === '') return;
-                    const termData = availableTerms[value];
-                    const count = termData ? termData.count : 0;
-                    const name = termData ? termData.name : $option.text().replace(/\s\(\d+\)$/, '');
+                    if (value === '') {
+                        let allCount = 0;
+                        for (const term in availableTerms) {
+                            allCount += availableTerms[term];
+                        }
+                        const name = $option.text().replace(/\s\(\d+\)$/, '');
+                        const newText = `${name} (${allCount})`;
+                        if ($option.is('option')) $option.text(newText);
+                        else $option.siblings('span').text(newText);
+                        return;
+                    }
+                    const count = availableTerms[value] || 0;
+                    const name = $option.text().replace(/\s\(\d+\)$/, '');
                     const newText = `${name} (${count})`;
                     
                     if ($option.is('option')) $option.text(newText);
@@ -242,23 +259,30 @@
                 const $group = $(this);
                 const acfKey = $group.data('acf-field-key');
                 const availableAcf = availableFilterOptions[acfKey] || {};
-                if(availableAcf.values) {
-                     $group.find('option, input').each(function() {
-                        const $option = $(this);
-                        const value = $option.val();
-                        if (value === '') return;
-                        const acfData = availableAcf.values[value];
-                        const count = acfData ? acfData.count : 0;
-                        const name = acfData ? acfData.name : $option.text().replace(/\s\(\d+\)$/, '');
-                        const newText = `${name} (${count})`;
-                        
+                $group.find('option, input').each(function() {
+                    const $option = $(this);
+                    const value = $option.val();
+                    if (value === '') {
+                        let allCount = 0;
+                        for (const val in availableAcf) {
+                            allCount += availableAcf[val];
+                        }
+                        const name = $option.text().replace(/\s\(\d+\)$/, '');
+                        const newText = `${name} (${allCount})`;
                         if ($option.is('option')) $option.text(newText);
                         else $option.siblings('span').text(newText);
+                        return;
+                    }
+                    const count = availableAcf[value] || 0;
+                    const name = $option.text().replace(/\s\(\d+\)$/, '');
+                    const newText = `${name} (${count})`;
+                    
+                    if ($option.is('option')) $option.text(newText);
+                    else $option.siblings('span').text(newText);
 
-                        if (count === 0 && !$option.is(':checked')) $option.prop('disabled', true).parent().addClass('disabled');
-                        else $option.prop('disabled', false).parent().removeClass('disabled');
-                    });
-                }
+                    if (count === 0 && !$option.is(':checked')) $option.prop('disabled', true).parent().addClass('disabled');
+                    else $option.prop('disabled', false).parent().removeClass('disabled');
+                });
             });
             self.updateClearAllButtonVisibility();
         };
@@ -273,13 +297,12 @@
                 type: 'POST',
                 data: {
                     action: 'dgcpf_filter_posts',
-                    nonce: dgcpf_params.nonce,
-                    template_id: self.templateId,
-                    page: self.currentPage,
-                    ...self.settings,
-                    selected_terms_by_taxonomy: self.selectedTermsByTaxonomy,
-                    selected_acf_fields: self.selectedAcfFields,
-                    filters_data: self.settings.filters_repeater
+                    nonce: self.nonce,
+                    widget_id: self.widgetId,
+                    settings: JSON.stringify(self.settings),
+                    taxonomies: self.selectedTermsByTaxonomy,
+                    acf_fields: self.selectedAcfFields,
+                    page: self.currentPage
                 },
                 success: function (response) {
                     if (response.success) {

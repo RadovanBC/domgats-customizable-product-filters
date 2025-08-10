@@ -1,5 +1,5 @@
 <?php
-namespace DomGats\ProductFilter\Elementor\Widgets;
+namespace DomGats\ProductFilter\Widgets;
 
 use \WP_Query;
 use \Elementor\Controls_Manager;
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Filtered_Loop_Widget extends Widget_Base {
+class Widget extends Widget_Base {
 
     public function get_name() {
         return 'dgcpf_filtered_loop';
@@ -33,7 +33,7 @@ class Filtered_Loop_Widget extends Widget_Base {
 
     public function get_script_depends() {
         return [
-            'dgcpf-filtered-loop-widget-js',
+            'dgcpf-frontend-js',
             'flickity-js',
             'imagesloaded',
         ];
@@ -41,7 +41,7 @@ class Filtered_Loop_Widget extends Widget_Base {
 
     public function get_style_depends() {
         return [
-            'dgcpf-filtered-loop-widget-css',
+            'dgcpf-frontend-css',
             'flickity-css',
         ];
     }
@@ -1314,6 +1314,7 @@ class Filtered_Loop_Widget extends Widget_Base {
         $this->add_render_attribute( 'widget_container', 'class', 'dgcpf-filtered-loop-widget-container' );
         $this->add_render_attribute( 'widget_container', 'data-settings', wp_json_encode( $settings ) );
         $this->add_render_attribute( 'widget_container', 'data-widget-id', $this->get_id() );
+        $this->add_render_attribute( 'widget_container', 'data-nonce', wp_create_nonce( 'dgcpf_filter_posts_' . $this->get_id() ) );
         $this->add_render_attribute( 'widget_container', 'data-template-id', $template_id );
 
         $layout_type_class = 'dgcpf-' . $settings['layout_type'];
@@ -1347,22 +1348,22 @@ class Filtered_Loop_Widget extends Widget_Base {
 
                         if ( 'dropdown' === $display_as ) {
                             echo '<select class="dgcpf-filter-dropdown" aria-labelledby="label_' . esc_attr($widget_id . '_' . $taxonomy_name) . '"><option value="">' . esc_html__( 'All', 'custom-product-filters' ) . '</option>';
-                            foreach ( $terms as $term ) echo '<option value="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</option>';
+                            foreach ( $terms as $term ) echo '<option value="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . ' (0)</option>';
                             echo '</select>';
                         } elseif ( 'checkbox' === $display_as ) {
                             echo '<div class="dgcpf-filter-checkboxes" role="group" aria-labelledby="label_' . esc_attr($widget_id . '_' . $taxonomy_name) . '">';
                             foreach ( $terms as $term_index => $term ) {
                                 $input_id = 'tax_' . esc_attr($widget_id . '_' . $taxonomy_name . '_' . $term->slug);
-                                echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="checkbox" class="dgcpf-filter-checkbox" value="' . esc_attr( $term->slug ) . '"> <span>' . esc_html( $term->name ) . '</span></label>';
+                                echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="checkbox" class="dgcpf-filter-checkbox" value="' . esc_attr( $term->slug ) . '"> <span>' . esc_html( $term->name ) . ' (0)</span></label>';
                             }
                             echo '</div>';
                         } elseif ( 'radio' === $display_as ) {
                             echo '<div class="dgcpf-filter-radio-buttons" role="radiogroup" aria-labelledby="label_' . esc_attr($widget_id . '_' . $taxonomy_name) . '">';
                             $input_id_all = 'tax_' . esc_attr($widget_id . '_' . $taxonomy_name . '_all');
-                            echo '<label for="' . $input_id_all . '"><input id="' . $input_id_all . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_' . esc_attr( $widget_id . '_' . $taxonomy_name ) . '" value="" checked> <span>' . esc_html__( 'All', 'custom-product-filters' ) . '</span></label>';
+                            echo '<label for="' . $input_id_all . '"><input id="' . $input_id_all . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_' . esc_attr( $widget_id . '_' . $taxonomy_name ) . '" value="" checked> <span>' . esc_html__( 'All', 'custom-product-filters' ) . ' (0)</span></label>';
                             foreach ( $terms as $term_index => $term ) {
                                 $input_id = 'tax_' . esc_attr($widget_id . '_' . $taxonomy_name . '_' . $term->slug);
-                                echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_' . esc_attr( $widget_id . '_' . $taxonomy_name ) . '" value="' . esc_attr( $term->slug ) . '"> <span>' . esc_html( $term->name ) . '</span></label>';
+                                echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_' . esc_attr( $widget_id . '_' . $taxonomy_name ) . '" value="' . esc_attr( $term->slug ) . '"> <span>' . esc_html( $term->name ) . ' (0)</span></label>';
                             }
                             echo '</div>';
                         }
@@ -1381,22 +1382,22 @@ class Filtered_Loop_Widget extends Widget_Base {
 
                             if ( 'dropdown' === $display_as ) {
                                 echo '<select class="dgcpf-filter-dropdown" aria-labelledby="label_' . esc_attr($widget_id . '_' . $acf_field_key) . '"><option value="">' . esc_html__( 'All', 'custom-product-filters' ) . '</option>';
-                                foreach ( $choices as $value => $label ) echo '<option value="' . esc_attr( $value ) . '">' . esc_html( $label ) . '</option>';
+                                foreach ( $choices as $value => $label ) echo '<option value="' . esc_attr( $value ) . '">' . esc_html( $label ) . ' (0)</option>';
                                 echo '</select>';
                             } elseif ( 'checkbox' === $display_as ) {
                                 echo '<div class="dgcpf-filter-checkboxes" role="group" aria-labelledby="label_' . esc_attr($widget_id . '_' . $acf_field_key) . '">';
                                 foreach ( $choices as $value => $label ) {
                                     $input_id = 'acf_' . esc_attr($widget_id . '_' . $acf_field_key . '_' . $value);
-                                    echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="checkbox" class="dgcpf-filter-checkbox" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . '</span></label>';
+                                    echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="checkbox" class="dgcpf-filter-checkbox" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . ' (0)</span></label>';
                                 }
                                 echo '</div>';
                             } elseif ( 'radio' === $display_as ) {
                                 echo '<div class="dgcpf-filter-radio-buttons" role="radiogroup" aria-labelledby="label_' . esc_attr($widget_id . '_' . $acf_field_key) . '">';
                                 $input_id_all = 'acf_' . esc_attr($widget_id . '_' . $acf_field_key . '_all');
-                                echo '<label for="' . $input_id_all . '"><input id="' . $input_id_all . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $widget_id . '_' . $acf_field_key ) . '" value="" checked> <span>' . esc_html__( 'All', 'custom-product-filters' ) . '</span></label>';
+                                echo '<label for="' . $input_id_all . '"><input id="' . $input_id_all . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $widget_id . '_' . $acf_field_key ) . '" value="" checked> <span>' . esc_html__( 'All', 'custom-product-filters' ) . ' (0)</span></label>';
                                 foreach ( $choices as $value => $label ) {
                                     $input_id = 'acf_' . esc_attr($widget_id . '_' . $acf_field_key . '_' . $value);
-                                    echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $widget_id . '_' . $acf_field_key ) . '" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . '</span></label>';
+                                    echo '<label for="' . $input_id . '"><input id="' . $input_id . '" type="radio" class="dgcpf-filter-radio" name="dgcpf_filter_acf_' . esc_attr( $widget_id . '_' . $acf_field_key ) . '" value="' . esc_attr( $value ) . '"> <span>' . esc_html( $label ) . ' (0)</span></label>';
                                 }
                                 echo '</div>';
                             }

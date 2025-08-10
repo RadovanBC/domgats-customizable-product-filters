@@ -1,6 +1,8 @@
 (function($) {
     $(window).on('elementor:init', function() {
-        elementor.hooks.addAction('panel/open_editor/widget/dgcpf_filtered_loop', function(panel, model) {
+        elementor.hooks.addAction('panel/open_editor/widget/dgcpf_filtered_loop', function (panel, model)
+        {
+            
             let isApplyingPreset = false;
 
             function applyPreset(presetKey) {
@@ -49,6 +51,8 @@
             // --- Start ACF Meta Query Repeater Logic ---
             panel.on('change', 'select[data-setting="acf_meta_key"]', function() {
                 const $select = $(this);
+                console.log($(this));
+                alert($(this).text());
                 const selectedLabel = $select.find('option:selected').text();
                 const repeaterItemIndex = $select.closest('.elementor-repeater-row').data('model-cid');
                 
