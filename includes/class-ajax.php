@@ -256,7 +256,10 @@ class Ajax {
                         $temp_args['tax_query'][] = ['taxonomy' => $taxonomy_name, 'field' => 'slug', 'terms' => $term->slug];
                         
                         $query = new \WP_Query($temp_args);
-                        $available_options[$taxonomy_name][$term->slug] = $query->found_posts;
+                        $available_options[$taxonomy_name][$term->slug] = [
+                            'count' => $query->found_posts,
+                            'label' => $term->name,
+                        ];
                     }
                 }
             } elseif ($filter_type === 'acf' && function_exists('get_field_object')) {
@@ -283,7 +286,10 @@ class Ajax {
                         $temp_args['meta_query'][] = ['key' => $acf_field_key, 'value' => $value, 'compare' => '='];
                         
                         $query = new \WP_Query($temp_args);
-                        $available_options[$acf_field_key][$value] = $query->found_posts;
+                        $available_options[$acf_field_key][$value] = [
+                            'count' => $query->found_posts,
+                            'label' => $label,
+                        ];
                     }
                 }
             }

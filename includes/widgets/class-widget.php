@@ -338,7 +338,7 @@ class Widget extends Widget_Base {
             [
                 'label'   => esc_html__( 'ACF Field', 'custom-product-filters' ),
                 'type'    => Controls_Manager::SELECT,
-                'options' => $this->_get_all_acf_field_keys(),
+                'options' => $this->_get_all_acf_choice_field_keys(),
                 'frontend_available' => true,
             ]
         );
@@ -387,7 +387,7 @@ class Widget extends Widget_Base {
                 'label'   => esc_html__( 'ACF Meta Queries', 'custom-product-filters' ),
                 'type'    => Controls_Manager::REPEATER,
                 'fields'  => $acf_repeater->get_controls(),
-                'title_field' => '{{{ acf_field_label || acf_meta_key }}}',
+                'title_field' => '.',
                 'separator' => 'before',
                 'condition' => [ '_is_acf_active' => '1' ],
                 'frontend_available' => true,
@@ -1170,6 +1170,30 @@ class Widget extends Widget_Base {
                     }
                 }
                 $options[ $taxonomy->name ] = $label;
+            }
+        }
+        return $options;
+    }
+
+    private function _get_all_acf_choice_field_keys() {
+        static $options = null;
+
+        if ( $options !== null ) {
+            return $options;
+        }
+
+        if ( !$this->_is_acf_active() ) {
+            $options = ['' => esc_html__('ACF plugin not active', 'custom-product-filters')];
+            return $options;
+        }
+        $options = [ '' => esc_html__( 'Select an ACF field', 'custom-product-filters' ) ];
+        $field_groups = acf_get_field_groups();
+        foreach ( $field_groups as $group ) {
+            $fields = acf_get_fields( $group['key'] );
+            foreach ( $fields as $field ) {
+                if ( in_array( $field['type'], ['select', 'checkbox', 'radio', 'true_false'] ) ) {
+                    $options[ $field['key'] ] = $field['label'];
+                }
             }
         }
         return $options;

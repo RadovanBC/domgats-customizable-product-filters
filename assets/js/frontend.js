@@ -236,7 +236,7 @@
                     if (value === '') {
                         let allCount = 0;
                         for (const term in availableTerms) {
-                            allCount += availableTerms[term];
+                            allCount += availableTerms[term].count;
                         }
                         const name = $option.text().replace(/\s\(\d+\)$/, '');
                         const newText = `${name} (${allCount})`;
@@ -244,9 +244,11 @@
                         else $option.siblings('span').text(newText);
                         return;
                     }
-                    const count = availableTerms[value] || 0;
-                    const name = $option.text().replace(/\s\(\d+\)$/, '');
-                    const newText = `${name} (${count})`;
+                    const optionData = availableTerms[value];
+                    const count = optionData ? optionData.count : 0;
+                    const label = optionData ? optionData.label : $option.text().replace(/\s\(\d+\)$/, '');
+
+                    const newText = `${label} (${count})`;
                     
                     if ($option.is('option')) $option.text(newText);
                     else $option.siblings('span').text(newText);
@@ -265,7 +267,7 @@
                     if (value === '') {
                         let allCount = 0;
                         for (const val in availableAcf) {
-                            allCount += availableAcf[val];
+                            allCount += availableAcf[val].count;
                         }
                         const name = $option.text().replace(/\s\(\d+\)$/, '');
                         const newText = `${name} (${allCount})`;
@@ -273,9 +275,12 @@
                         else $option.siblings('span').text(newText);
                         return;
                     }
-                    const count = availableAcf[value] || 0;
-                    const name = $option.text().replace(/\s\(\d+\)$/, '');
-                    const newText = `${name} (${count})`;
+
+                    const optionData = availableAcf[value];
+                    const count = optionData ? optionData.count : 0;
+                    const label = optionData ? optionData.label : $option.text().replace(/\s\(\d+\)$/, '');
+
+                    const newText = `${label} (${count})`;
                     
                     if ($option.is('option')) $option.text(newText);
                     else $option.siblings('span').text(newText);
