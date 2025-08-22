@@ -437,3 +437,4 @@ FodyWeavers.xsd
 *.msp
 when setting up a new plugin and installing composer.txt
 file-tree.txt
+*.zip
